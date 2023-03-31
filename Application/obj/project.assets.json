@@ -27,19 +27,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\natal\\.nuget\\packages\\": {}
+    "C:\\Users\\babic\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\natal\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj",
+      "projectUniqueName": "C:\\Users\\babic\\Sep\\greenhouse-backend\\Application\\Application.csproj",
       "projectName": "Application",
-      "projectPath": "C:\\Users\\natal\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj",
-      "packagesPath": "C:\\Users\\natal\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\natal\\RiderProjects\\greenhouse-backend\\Application\\obj\\",
+      "projectPath": "C:\\Users\\babic\\Sep\\greenhouse-backend\\Application\\Application.csproj",
+      "packagesPath": "C:\\Users\\babic\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\babic\\Sep\\greenhouse-backend\\Application\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\natal\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\babic\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -51,8 +51,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\natal\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj": {
-              "projectPath": "C:\\Users\\natal\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj"
+            "C:\\Users\\babic\\Sep\\greenhouse-backend\\Domain\\Domain.csproj": {
+              "projectPath": "C:\\Users\\babic\\Sep\\greenhouse-backend\\Domain\\Domain.csproj"
             }
           }
         }
@@ -82,7 +82,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\natal\\.dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.403\\RuntimeIdentifierGraph.json"
       }
     }
   }

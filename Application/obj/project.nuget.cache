@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UrPCUdB0xbU4JzYDCVbRYOB80SChtzpv2I4nEURb2hkp4NzUKWg9wI1jFMiFHxEfwogu2mFIyWT0n8mN+2kGTQ==",
+  "dgSpecHash": "dd2MX6EhycqtalGwlOUFTHjLCKuvMQfZfFNO/x9PI/F6ylmU5MbfP/jKMrUQVkwy8xUNUnoc0ilza0CGq+i0jA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\natal\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj",
+  "projectFilePath": "C:\\Users\\babic\\Sep\\greenhouse-backend\\Application\\Application.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
