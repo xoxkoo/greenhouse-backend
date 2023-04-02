@@ -1,8 +1,13 @@
 using Application.DaoInterfaces;
 
-namespace FileData.DAOs;
+namespace EfcDataAccess.DAOs;
 
 public class TemperatureEfcDao : ITemperatureDao
 {
-    
+	private readonly Context _context;
+
+	public TemperatureEfcDao(Context context)
+	{
+		_context = context;
+	}
 }
