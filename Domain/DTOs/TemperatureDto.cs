@@ -2,8 +2,12 @@ namespace Domain.DTOs;
 
 public class TemperatureDto
 {
-	public int TemperatureId;
+    public float value{ get; set; }
+    public DateTime Date { get; set; }
 
-	public DateTime Date;
-	public float Value;
+    public TemperatureDto(float value, DateTime date)
+    {
+        this.value = value;
+        Date = date;
+    }
 }
