@@ -2,14 +2,14 @@ namespace Domain.DTOs;
 
 public class SearchMeasurementDto
 {
-    public DateTime? startTime;
-    public DateTime? endTime;
-    public Boolean current;
+    public DateTime? StartTime;
+    public DateTime? EndTime;
+    public Boolean Current;
 
     public SearchMeasurementDto(DateTime? startTime, DateTime? endTime, bool current)
     {
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.current = current;
+        StartTime = startTime;
+        EndTime = endTime;
+        Current = current;
     }
 }

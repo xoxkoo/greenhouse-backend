@@ -1,4 +1,5 @@
-using Domain.Models;
+
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EfcDataAccess;
