@@ -16,7 +16,11 @@ public class TemperatureEfcDao : ITemperatureDao
 	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
 	{
 		IQueryable<Temperature> tempQuery= _context.Temperatures.AsQueryable();
-		if (dto.EndTime !=null && dto.StartTime != null)
+		if (dto.Current)
+		{
+			tempQuery = tempQuery.OrderByDescending(t => t.Date).Take(1).AsQueryable();
+		}
+		else if (dto.EndTime !=null &&dto.StartTime != null)
 		{
 			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime && t.Date <= dto.EndTime).AsQueryable() ;
 		}
