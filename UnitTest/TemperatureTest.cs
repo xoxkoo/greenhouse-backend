@@ -19,7 +19,7 @@ public class TemperatureTest
 
 
         //Initializing new object with incorrect dates
-        SearchMeasurementDto dto = new SearchMeasurementDto(new DateTime(2004,7,2,10,2,3), new DateTime(2003,5,7,1,6,35),false);
+        SearchMeasurementDto dto = new SearchMeasurementDto(false, new DateTime(2004,7,2,10,2,3), new DateTime(2003,5,7,1,6,35));
 
         //Assert
         var expectedErrorMessage = "Start date cannot be before the end date";

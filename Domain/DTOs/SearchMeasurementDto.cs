@@ -4,9 +4,9 @@ public class SearchMeasurementDto
 {
     public DateTime? StartTime;
     public DateTime? EndTime;
-    public Boolean Current;
+    public readonly bool Current;
 
-    public SearchMeasurementDto(DateTime? startTime, DateTime? endTime, bool current)
+    public SearchMeasurementDto(bool current, DateTime? startTime = null, DateTime? endTime = null)
     {
         StartTime = startTime;
         EndTime = endTime;

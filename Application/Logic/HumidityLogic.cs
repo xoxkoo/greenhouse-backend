@@ -13,7 +13,7 @@ public class HumidityLogic : IHumidityLogic
         _humidityDao = humidityDao;
     }
 
-    public Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto dto)
+    public async Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto dto)
     {
         if (dto.StartTime>dto.EndTime)
         {
@@ -28,6 +28,9 @@ public class HumidityLogic : IHumidityLogic
         {
             dto.EndTime=DateTime.MinValue;
         }
-        return _humidityDao.GetHumidityAsync(dto);
+
+        var res = await _humidityDao.GetHumidityAsync(dto);
+        Console.WriteLine(res.FirstOrDefault().HumidityId);
+        return await _humidityDao.GetHumidityAsync(dto);
     }
 }

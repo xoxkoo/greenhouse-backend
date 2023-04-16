@@ -98,22 +98,6 @@
           "build/net6.0/Microsoft.EntityFrameworkCore.Design.props": {}
         }
       },
-      "Microsoft.EntityFrameworkCore.InMemory/7.0.4": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "7.0.4"
-        },
-        "compile": {
-          "lib/net6.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
-            "related": ".xml"
-          }
-        }
-      },
       "Microsoft.EntityFrameworkCore.Relational/7.0.4": {
         "type": "package",
         "dependencies": {
@@ -684,20 +668,6 @@
         "lib/net6.0/Microsoft.EntityFrameworkCore.Design.xml",
         "microsoft.entityframeworkcore.design.7.0.4.nupkg.sha512",
         "microsoft.entityframeworkcore.design.nuspec"
-      ]
-    },
-    "Microsoft.EntityFrameworkCore.InMemory/7.0.4": {
-      "sha512": "enWK5KFD21mq6z1qs5i2PsGQbfud5hLF9erQvPCSC0HCSTQUuOqIxccUEbxu4QRrdqpjwVofZs+yNSM5qoe6bg==",
-      "type": "package",
-      "path": "microsoft.entityframeworkcore.inmemory/7.0.4",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "lib/net6.0/Microsoft.EntityFrameworkCore.InMemory.dll",
-        "lib/net6.0/Microsoft.EntityFrameworkCore.InMemory.xml",
-        "microsoft.entityframeworkcore.inmemory.7.0.4.nupkg.sha512",
-        "microsoft.entityframeworkcore.inmemory.nuspec"
       ]
     },
     "Microsoft.EntityFrameworkCore.Relational/7.0.4": {
@@ -1326,7 +1296,6 @@
       "Application >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 7.0.4",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.4",
-      "Microsoft.EntityFrameworkCore.InMemory >= 7.0.4",
       "Microsoft.EntityFrameworkCore.Sqlite >= 7.0.4"
     ]
   },
@@ -1378,10 +1347,6 @@
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
-            "target": "Package",
-            "version": "[7.0.4, )"
-          },
-          "Microsoft.EntityFrameworkCore.InMemory": {
             "target": "Package",
             "version": "[7.0.4, )"
           },
