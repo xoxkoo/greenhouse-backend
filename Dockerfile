@@ -1,0 +1,44 @@
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+WORKDIR /app
+EXPOSE 5060
+
+ENV ASPNETCORE_URLS=http://+:5060
+
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["Application/Application.csproj", "Application/"]
+COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
+COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
+COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
+
+#RUN dotnet restore
+COPY . .
+
+WORKDIR "/src/Domain"
+RUN dotnet build "Domain.csproj" -c Release -o /app
+
+WORKDIR "/src/Application"
+RUN dotnet build "Application.csproj" -c Release -o /app
+
+WORKDIR "/src/UnitTest"
+RUN dotnet build "UnitTest.csproj" -c Release -o /app
+
+WORKDIR "/src/WebAPI"
+RUN dotnet build "WebAPI.csproj" -c Release -o /app
+
+WORKDIR "/src/EfcDataAccess"
+RUN dotnet build "EfcDataAccess.csproj" -c Release -o /app
+
+FROM build AS publish
+RUN dotnet publish -c Release -o /app 
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "WebAPI.dll"]
