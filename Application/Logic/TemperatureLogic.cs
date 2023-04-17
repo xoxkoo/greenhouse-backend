@@ -14,7 +14,7 @@ public class TemperatureLogic : ITemperatureLogic
         _temperatureDao = temperatureDao;
     }
 
-    public Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
+    public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
     {
         if (dto.StartTime>dto.EndTime)
         {
@@ -30,6 +30,6 @@ public class TemperatureLogic : ITemperatureLogic
             dto.EndTime=DateTime.MinValue;
         }
 
-        return _temperatureDao.GetAsync(dto);
+        return await _temperatureDao.GetAsync(dto);
     }
 }

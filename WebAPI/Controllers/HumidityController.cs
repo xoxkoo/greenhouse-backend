@@ -3,9 +3,9 @@ using Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
+
 [ApiController]
 [Route("[controller]")]
-
 public class HumidityController:ControllerBase
 {
     private readonly IHumidityLogic _logic;
@@ -14,14 +14,16 @@ public class HumidityController:ControllerBase
     {
         _logic = logic;
     }
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<HumidityDto>>> GetAsync([FromQuery] DateTime? startTime,[FromQuery] DateTime? endTime, [FromQuery] Boolean current)
+    public async Task<ActionResult<IEnumerable<HumidityDto>>> GetAsync([FromQuery] bool current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
     {
         try
         {
-            SearchMeasurementDto parameters = new SearchMeasurementDto(startTime,endTime,current);
-            var temperatures = await _logic.GetAsync(parameters);
-            return Ok(temperatures);
+            SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime,endTime);
+            var humidities = await _logic.GetAsync(parameters);
+
+            return Ok(humidities);
         }
         catch (Exception e)
         {
