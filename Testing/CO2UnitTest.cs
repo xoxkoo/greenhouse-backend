@@ -27,6 +27,21 @@ public class CO2UnitTest
         Assert.AreEqual(expectedErrorMessage, ex.Result.Message);
     }
     [TestMethod]
+    public void GetCO2IncorrectCurrent()
+    {
+        //Initializing Logic class
+        ICO2Logic logic = new CO2Logic(new CO2EfcDao(new Context()));
+
+        
+        //Initializing new object with incorrect dates
+        SearchMeasurementDto dto = new SearchMeasurementDto(new DateTime(2004,7,2,10,2,3), new DateTime(2003,5,7,1,6,35),true);
+
+        //Assert
+        var expectedErrorMessage = "Start date cannot be before the end date";
+        Task<Exception> ex = Assert.ThrowsExceptionAsync<Exception>(() => logic.GetAsync(dto));
+        Assert.AreEqual(expectedErrorMessage, ex.Result.Message);
+    }
+    [TestMethod]
     public void GetCO2CorrectNotCurrent()
     {
         //Initializing Logic class

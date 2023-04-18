@@ -15,6 +15,11 @@ public class CO2Logic : ICO2Logic
 
     public Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto)
     {
+        if (dto.current)
+        {
+            dto.startTime = null;
+            dto.endTime = null;
+        }
         if (dto.startTime > dto.endTime)
         {
             throw new Exception("Start date cannot be before the end date");
