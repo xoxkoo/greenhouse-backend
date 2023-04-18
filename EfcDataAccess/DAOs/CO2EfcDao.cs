@@ -1,4 +1,8 @@
 using Application.DaoInterfaces;
+using Domain.DTOs;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
 namespace EfcDataAccess.DAOs;
 
 public class CO2EfcDao : ICO2Dao
@@ -9,4 +13,6 @@ public class CO2EfcDao : ICO2Dao
 	{
 		_context = context;
 	}
+
+
 }

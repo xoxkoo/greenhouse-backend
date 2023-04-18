@@ -1,6 +1,6 @@
 using Application.DaoInterfaces;
 using Domain.DTOs;
-using Domain.Models;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EfcDataAccess.DAOs;
@@ -16,9 +16,13 @@ public class TemperatureEfcDao : ITemperatureDao
 	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
 	{
 		IQueryable<Temperature> tempQuery= _context.Temperatures.AsQueryable();
-		if (dto.endTime !=null &&dto.startTime != null)
+		if (dto.Current)
 		{
-			tempQuery = tempQuery.Where(t => t.Date >= dto.startTime && t.Date <= dto.endTime).AsQueryable() ;
+			tempQuery = tempQuery.OrderByDescending(t => t.Date).Take(1).AsQueryable();
+		}
+		else if (dto.EndTime !=null &&dto.StartTime != null)
+		{
+			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime && t.Date <= dto.EndTime).AsQueryable() ;
 		}
 		IEnumerable<TemperatureDto> result = await tempQuery
 			.Select(t => new TemperatureDto(t.Value, t.Date))

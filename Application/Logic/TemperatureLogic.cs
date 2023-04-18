@@ -1,7 +1,7 @@
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.Models;
+
 
 namespace Application.Logic;
 
@@ -14,22 +14,22 @@ public class TemperatureLogic : ITemperatureLogic
         _temperatureDao = temperatureDao;
     }
 
-    public Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
+    public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
     {
-        if (dto.startTime>dto.endTime)
+        if (dto.StartTime>dto.EndTime)
         {
             throw new Exception("Start date cannot be before the end date");
         }
 
-        if (dto.endTime==null)
+        if (dto.EndTime==null)
         {
-            dto.endTime=DateTime.MaxValue;
+            dto.EndTime=DateTime.MaxValue;
         }
-        if (dto.startTime==null)
+        if (dto.StartTime==null)
         {
-            dto.endTime=DateTime.MinValue;
+            dto.EndTime=DateTime.MinValue;
         }
-        
-        return _temperatureDao.GetAsync(dto);
+
+        return await _temperatureDao.GetAsync(dto);
     }
 }
