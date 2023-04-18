@@ -12,4 +12,10 @@ public class CO2
 
 	private CO2()
 	{}
+
+	public CO2(DateTime date, int value)
+	{
+		Date = date;
+		Value = value;
+	}
 }

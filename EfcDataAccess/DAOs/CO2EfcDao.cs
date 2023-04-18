@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess.DAOs;
 
@@ -45,5 +46,12 @@ public class CO2EfcDao : ICO2Dao
 				.ToListAsync();
 		}
 		return result;
+	}
+
+	public async Task<CO2> SaveAsync(CO2 co2)
+	{
+		EntityEntry<CO2> newCO2 = await _context.CO2s.AddAsync(co2);
+		await _context.SaveChangesAsync();
+		return newCO2.Entity;
 	}
 }

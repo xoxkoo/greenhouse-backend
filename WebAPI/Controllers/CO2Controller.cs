@@ -1,8 +1,8 @@
-using Application.DaoInterfaces;
+
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace WebAPI.Controllers;
 
@@ -25,6 +25,20 @@ public class CO2Controller:ControllerBase
             SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime, endTime);
             var co2s = await Logic.GetAsync(parameters);
             return Ok(co2s);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    [HttpPost]
+    public async Task<ActionResult<CO2>> CreateAsync([FromBody]CO2CreateDto dto)
+    {
+        try
+        {
+            CO2CreateDto created = await Logic.SaveAsync(dto);
+            return Created($"/co2s/{created}", created);
         }
         catch (Exception e)
         {
