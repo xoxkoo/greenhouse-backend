@@ -20,20 +20,8 @@ COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
 #RUN dotnet restore
 COPY . .
 
-WORKDIR "/src/Domain"
-RUN dotnet build "Domain.csproj" -c Release -o /app
-
-WORKDIR "/src/Application"
-RUN dotnet build "Application.csproj" -c Release -o /app
-
-WORKDIR "/src/UnitTest"
-RUN dotnet build "UnitTest.csproj" -c Release -o /app
-
 WORKDIR "/src/WebAPI"
 RUN dotnet build "WebAPI.csproj" -c Release -o /app
-
-WORKDIR "/src/EfcDataAccess"
-RUN dotnet build "EfcDataAccess.csproj" -c Release -o /app
 
 FROM build AS publish
 RUN dotnet publish -c Release -o /app 
