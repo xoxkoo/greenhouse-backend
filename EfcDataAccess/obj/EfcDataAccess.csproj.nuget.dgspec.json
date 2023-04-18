@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj": {}
+    "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj": {}
   },
   "projects": {
-    "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj": {
+    "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\babic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Application\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\babic\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -26,8 +26,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj"
+              "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj"
               }
             }
           }
@@ -61,17 +61,17 @@
         }
       }
     },
-    "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj": {
+    "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\babic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Domain\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\babic\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -114,17 +114,17 @@
         }
       }
     },
-    "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj": {
+    "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj",
+        "projectUniqueName": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj",
         "projectName": "EfcDataAccess",
-        "projectPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj",
-        "packagesPath": "C:\\Users\\babic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\obj\\",
+        "projectPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj",
+        "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\babic\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -136,8 +136,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj": {
-                "projectPath": "C:\\Users\\babic\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj"
+              "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj": {
+                "projectPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj"
               }
             }
           }
