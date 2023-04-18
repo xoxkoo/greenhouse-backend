@@ -15,22 +15,22 @@ public class CO2Logic : ICO2Logic
 
     public Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto)
     {
-        if (dto.current)
+        if (dto.Current)
         {
-            dto.startTime = null;
-            dto.endTime = null;
+            dto.StartTime = null;
+            dto.EndTime = null;
         }
-        if (dto.startTime > dto.endTime)
+        if (dto.StartTime > dto.EndTime)
         {
             throw new Exception("Start date cannot be before the end date");
         }
-        if (dto.endTime==null && dto.current == false)
+        if (dto.EndTime==null && dto.Current == false)
         {
-            dto.endTime=DateTime.MaxValue;
+            dto.EndTime=DateTime.MaxValue;
         }
-        if (dto.startTime==null && dto.current == false)
+        if (dto.StartTime==null && dto.Current == false)
         {
-            dto.endTime=DateTime.MinValue;
+            dto.EndTime=DateTime.MinValue;
         }
 
         return _co2Dao.GetAsync(dto);

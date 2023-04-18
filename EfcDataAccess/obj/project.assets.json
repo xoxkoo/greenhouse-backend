@@ -1300,19 +1300,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/antondurcak/.nuget/packages/": {}
+    "C:\\Users\\mateu\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/EfcDataAccess/EfcDataAccess.csproj",
+      "projectUniqueName": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj",
       "projectName": "EfcDataAccess",
-      "projectPath": "/Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/EfcDataAccess/EfcDataAccess.csproj",
-      "packagesPath": "/Users/antondurcak/.nuget/packages/",
-      "outputPath": "/Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/EfcDataAccess/obj/",
+      "projectPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\EfcDataAccess.csproj",
+      "packagesPath": "C:\\Users\\mateu\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\EfcDataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/antondurcak/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\mateu\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -1324,8 +1324,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/Application/Application.csproj": {
-              "projectPath": "/Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/Application/Application.csproj"
+            "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj": {
+              "projectPath": "C:\\Users\\mateu\\RiderProjects\\greenhouse-backend\\Application\\Application.csproj"
             }
           }
         }
@@ -1371,7 +1371,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.203/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

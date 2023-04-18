@@ -2,7 +2,6 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Xml;
 using Application.DaoInterfaces;
 using Domain.DTOs;
-using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 using Domain.DTOs;
@@ -24,14 +23,14 @@ public class CO2EfcDao : ICO2Dao
 	{
 		IQueryable<CO2> tempQuery = _context.CO2s.AsQueryable();
 		IEnumerable<CO2Dto> result;
-		if (dto.endTime !=null &&dto.startTime != null && dto.current != true)
+		if (dto.EndTime !=null &&dto.StartTime != null && dto.Current != true)
 		{
-			tempQuery = tempQuery.Where(c => c.Date >= dto.startTime && c.Date <= dto.endTime).AsQueryable();
+			tempQuery = tempQuery.Where(c => c.Date >= dto.StartTime && c.Date <= dto.EndTime).AsQueryable();
 			result = await tempQuery
 				.Select(c => new CO2Dto(c.Date, c.Value))
 				.ToListAsync();
 		}
-		else if (dto.current)
+		else if (dto.Current)
 		{
 			result = await tempQuery
 				.Select(c => new CO2Dto(c.Date, c.Value))
