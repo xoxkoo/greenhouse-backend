@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Text;
 
 
-namespace Socket
+namespace Socket     
 {
     class WebSocketClient
     {
