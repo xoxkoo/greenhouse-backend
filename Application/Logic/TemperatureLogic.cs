@@ -1,6 +1,8 @@
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
+using Domain.Entities;
 
 
 namespace Application.Logic;
@@ -31,5 +33,12 @@ public class TemperatureLogic : ITemperatureLogic
         }
 
         return await _temperatureDao.GetAsync(dto);
+    }
+
+    public async Task<TemperatureDto> SaveAsync(TemperatureCreateDto dto)
+    {
+        //call converter
+        //return await _temperatureDao.SaveAsync(Temperature);
+        return null;
     }
 }

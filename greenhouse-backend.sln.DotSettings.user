@@ -1,21 +1,19 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=010539d8_002Da331_002D4888_002Da0c2_002D0eb04d81177f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="HumidityControllerTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.HumidityControllerTests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3c9ef011_002Da03e_002D4e72_002Da18b_002D18d6f90a01c2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="HumidityControllerTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.HumidityControllerTests&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3c9ef011_002Da03e_002D4e72_002Da18b_002D18d6f90a01c2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="HumidityControllerTests #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.HumidityControllerTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.TemperatureControllerTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.TemperatureLogicTest.SaveAsyncTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=4fcd3fa1_002Da319_002D4487_002Da089_002D104947d9c292/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetTemperature" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;ProjectFile&gt;A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE/f:CO2UnitTest.cs&lt;/ProjectFile&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a81fce90_002Df0f1_002D44f3_002Da85b_002D4c5d82efbeed/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="GetAsyncTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.HumidityControllerTests.GetAsyncTest&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a81fce90_002Df0f1_002D44f3_002Da85b_002D4c5d82efbeed/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GetAsyncTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.HumidityControllerTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f6b15449_002D3f19_002D492a_002Da19e_002D9918c9ad8ff2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CO2UnitTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Or&gt;&#xD;

@@ -46,10 +46,10 @@ public class HumidityControllerTests
 		var result = Assert.IsType<OkObjectResult>(response.Result);
 		var humidity = Assert.IsAssignableFrom<IEnumerable<HumidityDto>>(result.Value);
 
-		var firstHumidity = humidity.FirstOrDefault();
+		//var firstHumidity = humidity.FirstOrDefault();
 
 
-		Console.WriteLine(humidity.FirstOrDefault().HumidityId);
+		//Console.WriteLine(humidity.FirstOrDefault().HumidityId);
 
 		// Assert.NotNull(firstHumidity);
 		// Assert.Equal(dto.Date, firstHumidity.Date);
