@@ -11,6 +11,6 @@ public class Humidity
 	public DateTime Date { get; set; }
 	public int Value { get; set; }
 
-	private Humidity()
-	{}
+	// private Humidity()
+	// {}
 }

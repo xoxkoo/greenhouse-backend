@@ -2,6 +2,7 @@ using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess.DAOs;
 
@@ -42,5 +43,18 @@ public class HumidityEfcDao : IHumidityDao
 			}).ToListAsync();
 
 		return result;
+	}
+
+	public async Task<HumidityDto> CreateHumidityAsync(Humidity humidity)
+	{
+		EntityEntry<Humidity> entity = await _context.Humidities.AddAsync(humidity);
+		await _context.SaveChangesAsync();
+
+		return new HumidityDto
+		{
+			Date = entity.Entity.Date,
+			HumidityId = entity.Entity.HumidityId,
+			Value = entity.Entity.Value
+		};
 	}
 }

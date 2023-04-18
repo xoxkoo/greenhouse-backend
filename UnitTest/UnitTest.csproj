@@ -21,4 +21,8 @@
       <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="LogicTests" />
+    </ItemGroup>
+
 </Project>
