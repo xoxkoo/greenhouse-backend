@@ -1,6 +1,7 @@
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.Entities;
 
 namespace Application.Logic;
 
@@ -29,8 +30,19 @@ public class HumidityLogic : IHumidityLogic
             dto.EndTime=DateTime.MinValue;
         }
 
-        var res = await _humidityDao.GetHumidityAsync(dto);
-        Console.WriteLine(res.FirstOrDefault().HumidityId);
         return await _humidityDao.GetHumidityAsync(dto);
+    }
+
+    public async Task<HumidityDto> CreateAsync(HumidityCreationDto dto)
+    {
+	    //TODO add validation
+
+	    var entity = new Humidity()
+	    {
+		    Date = dto.Date,
+		    Value = dto.Value
+	    };
+
+	    return await _humidityDao.CreateHumidityAsync(entity);
     }
 }

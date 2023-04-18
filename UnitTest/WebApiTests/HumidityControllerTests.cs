@@ -38,6 +38,9 @@ public class HumidityControllerTests
 		};
 
 		logic
+			.Setup(x => x.CreateAsync(new HumidityCreationDto() { Date = DateTime.Now, Value = 10 }));
+
+		logic
 			.Setup(x => x.GetAsync(new SearchMeasurementDto(true, null, null)))
 			.ReturnsAsync(new List<HumidityDto>{dto});
 
