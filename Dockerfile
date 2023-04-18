@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 5060
 
@@ -9,18 +9,24 @@ ENV ASPNETCORE_URLS=http://+:5060
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["Application/Application.csproj", "Application/"]
+COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
+COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
-RUN dotnet restore "EfcDataAccess/EfcDataAccess.csproj"
+
+#RUN dotnet restore
 COPY . .
-WORKDIR "/src/EfcDataAccess"
-RUN dotnet build "EfcDataAccess.csproj" -c Release -o /app/build
+
+WORKDIR "/src/WebAPI"
+RUN dotnet build "WebAPI.csproj" -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish "EfcDataAccess.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app 
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "EfcDataAccess.dll"]
+COPY --from=publish /app .
+ENTRYPOINT ["dotnet", "WebAPI.dll"]
