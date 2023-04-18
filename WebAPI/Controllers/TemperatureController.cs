@@ -1,6 +1,5 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -15,12 +14,13 @@ public class TemperatureController:ControllerBase
     {
         Logic = logic;
     }
+
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetAsync([FromQuery] DateTime? startTime,[FromQuery] DateTime? endTime, [FromQuery] Boolean current)
+    public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetAsync([FromQuery] bool current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
     {
         try
         {
-            SearchMeasurementDto parameters = new SearchMeasurementDto(startTime,endTime,current);
+            SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime,endTime);
             var temperatures = await Logic.GetAsync(parameters);
             return Ok(temperatures);
         }
