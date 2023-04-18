@@ -17,7 +17,7 @@ namespace EfcDataAccess.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.4");
 
-            modelBuilder.Entity("Domain.Models.CO2", b =>
+            modelBuilder.Entity("Domain.Entities.CO2", b =>
                 {
                     b.Property<int>("CO2Id")
                         .ValueGeneratedOnAdd()
@@ -34,7 +34,7 @@ namespace EfcDataAccess.Migrations
                     b.ToTable("CO2s");
                 });
 
-            modelBuilder.Entity("Domain.Models.Humidity", b =>
+            modelBuilder.Entity("Domain.Entities.Humidity", b =>
                 {
                     b.Property<int>("HumidityId")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace EfcDataAccess.Migrations
                     b.ToTable("Humidities");
                 });
 
-            modelBuilder.Entity("Domain.Models.Temperature", b =>
+            modelBuilder.Entity("Domain.Entities.Temperature", b =>
                 {
                     b.Property<int>("TemperatureId")
                         .ValueGeneratedOnAdd()

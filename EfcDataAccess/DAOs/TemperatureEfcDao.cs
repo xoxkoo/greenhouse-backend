@@ -24,6 +24,7 @@ public class TemperatureEfcDao : ITemperatureDao
 		{
 			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime && t.Date <= dto.EndTime).AsQueryable() ;
 		}
+		
 		IEnumerable<TemperatureDto> result = await tempQuery
 			.Select(t => new TemperatureDto(t.Value, t.Date))
 			.ToListAsync();
