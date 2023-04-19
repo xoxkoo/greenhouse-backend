@@ -18,7 +18,7 @@ public class TemperatureControllerTest
     {
         logic = new Mock<ITemperatureLogic>();
         logic
-        	.Setup(x => x.SaveAsync(It.IsAny<TemperatureCreateDto>()))
+        	.Setup(x => x.CreateAsync(It.IsAny<TemperatureCreateDto>()))
         	.ReturnsAsync(new TemperatureDto());
 
         controller = new TemperatureController(logic.Object);
@@ -38,11 +38,11 @@ public class TemperatureControllerTest
             value = 10
         };
         logic
-            .Setup(x => x.SaveAsync(dto))
+            .Setup(x => x.CreateAsync(dto))
             .ReturnsAsync(mockTemp);
         
         // var response =
-        await logic.Object.SaveAsync(dto);
+        await logic.Object.CreateAsync(dto);
         var response = controller.GetAsync(false);
         // var createdResult = response.Result as CreatedResult;
         // Assert.IsNotNull(createdResult);

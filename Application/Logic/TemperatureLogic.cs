@@ -35,7 +35,7 @@ public class TemperatureLogic : ITemperatureLogic
         return await _temperatureDao.GetAsync(dto);
     }
 
-    public async Task<TemperatureDto> SaveAsync(TemperatureCreateDto dto)
+    public async Task<TemperatureDto> CreateAsync(TemperatureCreateDto dto)
     {
         //call converter
         //return await _temperatureDao.SaveAsync(Temperature);

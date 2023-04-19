@@ -37,7 +37,7 @@ public class CO2Controller:ControllerBase
     {
         try
         {
-            CO2CreateDto created = await Logic.SaveAsync(dto);
+            CO2CreateDto created = await Logic.CreateAsync(dto);
             return Created($"/co2s/{created}", created);
         }
         catch (Exception e)
