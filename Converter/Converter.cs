@@ -1,5 +1,6 @@
 ﻿namespace Converter;
 
-public class Class1
+public class Converter
 {
+    
 }

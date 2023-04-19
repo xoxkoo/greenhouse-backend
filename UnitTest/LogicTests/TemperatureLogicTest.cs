@@ -18,7 +18,7 @@ public class TemperatureLogicTest
     {
         logic = new Mock<ITemperatureLogic>();
         logic
-            .Setup(x => x.SaveAsync(It.IsAny<TemperatureCreateDto>()))
+            .Setup(x => x.CreateAsync(It.IsAny<TemperatureCreateDto>()))
             .ReturnsAsync(new TemperatureDto());
         
     }
@@ -37,11 +37,11 @@ public class TemperatureLogicTest
             value = 10
         };
         logic
-            .Setup(x => x.SaveAsync(dto))
+            .Setup(x => x.CreateAsync(dto))
             .ReturnsAsync(mockTemp);
         
         // var response =
-        var response = logic.Object.SaveAsync(dto);
+        var response = logic.Object.CreateAsync(dto);
         Console.WriteLine(response.Result.value);
     }
 }

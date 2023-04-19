@@ -37,10 +37,15 @@ public class CO2Logic : ICO2Logic
         return _co2Dao.GetAsync(dto);
     }
 
-    public async Task<CO2CreateDto> SaveAsync(CO2CreateDto dto)
+    public async Task<CO2CreateDto> CreateAsync(CO2CreateDto dto)
     {
         CO2 co2 = new CO2(dto.Date, dto.Value);
         CO2 created = await _co2Dao.SaveAsync(co2);
-        return new CO2CreateDto(created.Date, created.Value);
+        CO2CreateDto createdCo2 = new CO2CreateDto
+        {
+            Date = created.Date,
+            Value = created.Value
+        };
+        return createdCo2;
     }
 }
