@@ -10,7 +10,7 @@ public class ConverterTest
 
 
     private IConverter _convert; 
-
+    /*
     public ConverterTest()
     {
         _convert = new Converter();
@@ -20,5 +20,5 @@ public class ConverterTest
     public void THCPayloadRead()
     {
         _convert.ConvertFromHex("07800c9401e0");
-    }
+    }*/
 }

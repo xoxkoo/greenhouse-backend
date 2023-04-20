@@ -33,11 +33,11 @@ public class CO2Controller:ControllerBase
         }
     }
     [HttpPost]
-    public async Task<ActionResult<CO2>> CreateAsync([FromBody]CO2CreateDto dto)
+    public async Task<ActionResult<CO2Dto>> CreateAsync([FromBody]CO2CreateDto dto)
     {
         try
         {
-            CO2CreateDto created = await Logic.CreateAsync(dto);
+            CO2Dto created = await Logic.CreateAsync(dto);
             return Created($"/co2s/{created}", created);
         }
         catch (Exception e)

@@ -6,5 +6,5 @@ namespace Application.LogicInterfaces;
 public interface ICO2Logic
 {
     public Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto);
-    public Task<CO2CreateDto> CreateAsync(CO2CreateDto dto);
+    public Task<CO2Dto> CreateAsync(CO2CreateDto dto);
 }
