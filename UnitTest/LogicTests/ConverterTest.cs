@@ -1,20 +1,20 @@
 ﻿using Application.Logic;
 using Application.LogicInterfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Testing.Utils;
 
 namespace Testing.WebApiTests;
 
 [TestClass]
-public class ConverterTest
+public class ConverterTest : DbTestBase
 {
-
-
     private IConverter _convert; 
-
-    public ConverterTest()
-    {
-        _convert = new Converter();
-    }
+    
+    
+    // public ConverterTest()
+    // {
+    //     _convert = new Converter();
+    // }
 
     [TestMethod]
     public void THCPayloadRead()

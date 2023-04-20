@@ -22,7 +22,6 @@ namespace Socket
                     Uri serverUri = new Uri("wss://iotnet.teracom.dk/app?token=vnoUcQAAABFpb3RuZXQudGVyYWNvbS5ka-iuwG5H1SHPkGogk2YUH3Y=");
                     await webSocket.ConnectAsync(serverUri, CancellationToken.None);
                     Console.WriteLine("connected :)");
-
                 }
                 catch (Exception e)
                 {
