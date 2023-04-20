@@ -4,7 +4,6 @@ using Application.LogicInterfaces;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
