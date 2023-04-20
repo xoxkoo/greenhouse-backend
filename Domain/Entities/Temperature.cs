@@ -10,7 +10,5 @@ public class Temperature
 
 	public DateTime Date { get; set; }
 	public float Value { get; set; }
-
-	private Temperature()
-	{}
+	
 }

@@ -15,14 +15,14 @@ public class CO2LogicTest : DbTestBase
 {
     private readonly Mock<ICO2Logic> logic;
 
-    public CO2LogicTest()
-    {
-        logic = new Mock<ICO2Logic>();
-        logic
-            .Setup(x => x.CreateAsync(It.IsAny<CO2CreateDto>()))
-            .ReturnsAsync(new CO2Dto());
-        
-    }
+    // public CO2LogicTest()
+    // {
+    //     logic = new Mock<ICO2Logic>();
+    //     logic
+    //         .Setup(x => x.CreateAsync(It.IsAny<CO2CreateDto>()))
+    //         .ReturnsAsync(new CO2Dto());
+    //     
+    // }
 
     [TestMethod]
     public async Task CO2CreateAsyncTest()
