@@ -1,0 +1,14 @@
+﻿version: '3.4'
+
+services:
+  socket:
+    image: socket
+    build: ./BlazorWASM
+    ports:
+      - 5001:5001
+  webapi:
+    image: webapi
+    build: ./WebAPI
+    ports:
+      - 5000:5000
+
