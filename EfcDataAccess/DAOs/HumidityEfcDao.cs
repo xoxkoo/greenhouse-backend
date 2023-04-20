@@ -39,7 +39,6 @@ public class HumidityEfcDao : IHumidityDao
 			{
 				Date = h.Date,
 				Value = h.Value,
-				HumidityId = h.HumidityId
 			}).ToListAsync();
 
 		return result;
@@ -53,7 +52,6 @@ public class HumidityEfcDao : IHumidityDao
 		return new HumidityDto
 		{
 			Date = entity.Entity.Date,
-			HumidityId = entity.Entity.HumidityId,
 			Value = entity.Entity.Value
 		};
 	}

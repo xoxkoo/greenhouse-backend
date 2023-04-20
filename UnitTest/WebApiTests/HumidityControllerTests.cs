@@ -1,5 +1,6 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

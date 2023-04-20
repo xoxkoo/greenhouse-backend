@@ -26,23 +26,12 @@ public class ConverterTest : DbTestBase
 	    co2logic = new Mock<ICO2Logic>();
 	    humidityLogic = new Mock<IHumidityLogic>();
         converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object);
-
-        // converter.Setup(x => x.ConvertFromHex(It.IsAny<String>()));
     }
 
     [TestMethod]
     public void THCPayloadRead()
     {
-
-	    // tempLogic.Setup(x => x.CreateAsync(It.IsAny<TemperatureCreateDto>()))
-		   //  ;
-	    // co2logic.Setup(x => x.CreateAsync(It.IsAny<CO2CreateDto>()))
-		   //  ;
-	    // humidityLogic.Setup(x => x.CreateAsync(It.IsAny<HumidityCreationDto>()))
-		   //  ;
-
-	    // converter.Setup(x => x.ConvertFromHex("07800c9401e0"));
-        converter.ConvertFromHex("07800c9401e0");
+	    converter.ConvertFromHex("07800c9401e0");
 
         // Assert
         tempLogic.Verify(x => x.CreateAsync(It.Is<TemperatureCreateDto>(dto =>
@@ -56,10 +45,5 @@ public class ConverterTest : DbTestBase
         humidityLogic.Verify(x => x.CreateAsync(It.Is<HumidityCreationDto>(dto =>
 	        dto.Value == 20
         )), Times.Once);
-        // var response = tempLogic
-	       //  .Setup(x => x.GetAsync(new SearchMeasurementDto(false, null, null)))
-	       //  .ReturnsAsync(list);
-        // Console.WriteLine(response);
-        // // int temp =
     }
 }
