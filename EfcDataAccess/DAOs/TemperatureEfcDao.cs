@@ -21,11 +21,13 @@ public class TemperatureEfcDao : ITemperatureDao
 		{
 			tempQuery = tempQuery.OrderByDescending(t => t.Date).Take(1).AsQueryable();
 		}
-		else if (dto.EndTime !=null &&dto.StartTime != null)
+		if (dto.EndTime !=null &&dto.StartTime != null)
 		{
 			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime && t.Date <= dto.EndTime).AsQueryable() ;
 		}
-
+		Console.WriteLine(dto.EndTime);
+		Console.WriteLine(dto.StartTime);
+		Console.WriteLine(DateTime.Now);
 		IEnumerable<TemperatureDto> result = await tempQuery
 			.Select(t => new TemperatureDto(){Date = t.Date,value = t.Value})
 			.ToListAsync();

@@ -79,6 +79,8 @@ public class Converter : IConverter
             Date = DateTime.Now,
             Value = Convert.ToInt32(humidity, 2)
         };
+        
+        Console.WriteLine($"{tempDto.value}, {humidityDto.Value}, {co2Dto.Value}");
 
         await temperatureLogic.CreateAsync(tempDto);
         await co2Logic.CreateAsync(co2Dto);

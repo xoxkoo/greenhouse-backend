@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Application.Logic;
 using Application.LogicInterfaces;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
-
+using Newtonsoft.Json;
 
 namespace Socket
 {
@@ -28,7 +30,6 @@ namespace Socket
                     Uri serverUri = new Uri("wss://iotnet.teracom.dk/app?token=vnoUcQAAABFpb3RuZXQudGVyYWNvbS5ka-iuwG5H1SHPkGogk2YUH3Y=");
                     await webSocket.ConnectAsync(serverUri, CancellationToken.None);
                     Console.WriteLine("connected :)");
-
                 }
                 catch (Exception e)
                 {
@@ -53,7 +54,9 @@ namespace Socket
                     if (receiveResult.MessageType == WebSocketMessageType.Text)
                     {
                         string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
-                        await converter.ConvertFromHex(message);
+                        dynamic response = JsonConvert.DeserializeObject(message);
+                        Console.WriteLine(response["data"]);
+                        await converter.ConvertFromHex(response["data"].ToString());
                         Console.WriteLine($"Received message: {message}");
                     }
                 }

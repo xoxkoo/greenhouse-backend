@@ -10,7 +10,7 @@ namespace Application.Logic;
 public class TemperatureLogic : ITemperatureLogic
 {
     private readonly ITemperatureDao _temperatureDao;
-
+    private IConverter converter;
     public TemperatureLogic(ITemperatureDao temperatureDao)
     {
         _temperatureDao = temperatureDao;
@@ -37,8 +37,12 @@ public class TemperatureLogic : ITemperatureLogic
 
     public async Task<TemperatureDto> CreateAsync(TemperatureCreateDto dto)
     {
-        //call converter
-        //return await _temperatureDao.SaveAsync(Temperature);
-        return null;
+
+        Temperature temperature = new Temperature
+        {
+            Date = DateTime.Now,
+            Value = dto.value
+        };
+        return await _temperatureDao.SaveAsync(temperature);
     }
 }

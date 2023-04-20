@@ -28,13 +28,13 @@ public class CO2EfcDao : ICO2Dao
 		{
 			tempQuery = tempQuery.Where(c => c.Date >= dto.StartTime && c.Date <= dto.EndTime).AsQueryable();
 			result = await tempQuery
-				.Select(c => new CO2Dto(c.Date, c.Value))
+				.Select(c => new CO2Dto(){Date = c.Date, Value = c.Value})
 				.ToListAsync();
 		}
 		else if (dto.Current)
 		{
 			result = await tempQuery
-				.Select(c => new CO2Dto(c.Date, c.Value))
+				.Select(c => new CO2Dto(){Date = c.Date, Value = c.Value})
 				.ToListAsync();
 			result = result.OrderByDescending(c => c.Date);
 			result = result.Take(1).ToList();
@@ -42,16 +42,21 @@ public class CO2EfcDao : ICO2Dao
 		else
 		{
 			result = await tempQuery
-				.Select(c => new CO2Dto(c.Date, c.Value))
+				.Select(c => new CO2Dto(){Date = c.Date, Value = c.Value})
 				.ToListAsync();
 		}
 		return result;
 	}
 
-	public async Task<CO2> SaveAsync(CO2 co2)
+	public async Task<CO2Dto> SaveAsync(CO2 co2)
 	{
-		EntityEntry<CO2> newCO2 = await _context.CO2s.AddAsync(co2);
+		EntityEntry<CO2> entity = await _context.CO2s.AddAsync(co2);
 		await _context.SaveChangesAsync();
-		return newCO2.Entity;
+		return new CO2Dto()
+		{
+			Date = entity.Entity.Date,
+			CO2Id = entity.Entity.CO2Id,
+			Value = entity.Entity.Value
+		};
 	}
 }
