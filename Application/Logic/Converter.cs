@@ -42,28 +42,27 @@ public class Converter : IConverter
     public async Task ConvertFromHex(string payload)
     {
         string valueInBinary = HexStringToBinary(payload);
-        Console.WriteLine(valueInBinary);
-        //000001111000000000001100100101000000000111100000
+
+        //000001 111000000000001100100101000000000111100000
         string id = valueInBinary.Substring(0, 6);
         switch (id)
         {
             case "000001":
                 ReadTHCPayload(valueInBinary.Substring(6));
                 break;
-            //TODO 
+            //TODO
             //handle rest of payloads
         }
     }
 
     private async void ReadTHCPayload(string data)
     {
-        Console.WriteLine(data);
         //TODO handle flags
         string flags = data.Substring(0, 8);
         string temperature = data.Substring(8, 11);
         string humidity = data.Substring(19, 7);
         string co2 = data.Substring(26, 12);
-        
+
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
             Date = DateTime.Now,
@@ -89,13 +88,13 @@ public class Converter : IConverter
     public string HexStringToBinary(string hex) {
         StringBuilder result = new StringBuilder();
         foreach (char c in hex) {
-            //TODO 
+            //TODO
             //Check for exceptions
             // This will crash for non-hex characters. You might want to handle that differently.
             result.Append(hexCharacterToBinary[char.ToLower(c)]);
         }
         return result.ToString();
     }
-    
-    
+
+
 }
