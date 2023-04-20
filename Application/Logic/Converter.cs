@@ -63,10 +63,12 @@ public class Converter : IConverter
         string humidity = data.Substring(19, 7);
         string co2 = data.Substring(26, 12);
 
+        float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
+
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
             Date = DateTime.Now,
-            value = Convert.ToInt32(temperature, 2)
+            value = (float)MathF.Round(tmpValue, 1)
         };
 
         CO2CreateDto co2Dto = new CO2CreateDto
@@ -79,7 +81,7 @@ public class Converter : IConverter
             Date = DateTime.Now,
             Value = Convert.ToInt32(humidity, 2)
         };
-        
+
         Console.WriteLine($"{tempDto.value}, {humidityDto.Value}, {co2Dto.Value}");
 
         await temperatureLogic.CreateAsync(tempDto);

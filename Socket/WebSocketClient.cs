@@ -19,9 +19,10 @@ namespace Socket
         public static async Task Main()
         {
 
+
                 ClientWebSocket webSocket = new ClientWebSocket();
-                Context context = new Context();
-                IConverter converter = new Converter(new TemperatureLogic(new TemperatureEfcDao(context)), new CO2Logic(new CO2EfcDao(context)), new HumidityLogic(new HumidityEfcDao(context)));
+                // Context context = new Context();
+                IConverter converter;
 
                 // Connect to the WebSocket server
                 try
@@ -54,10 +55,12 @@ namespace Socket
                     if (receiveResult.MessageType == WebSocketMessageType.Text)
                     {
                         string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
+                        Console.WriteLine($"Received message: {message}");
+
                         dynamic response = JsonConvert.DeserializeObject(message);
                         Console.WriteLine(response["data"]);
+
                         await converter.ConvertFromHex(response["data"].ToString());
-                        Console.WriteLine($"Received message: {message}");
                     }
                 }
 
