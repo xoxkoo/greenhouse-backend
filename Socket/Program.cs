@@ -31,12 +31,7 @@ class Program
 
 		WebSocketClient socket = container.Resolve<WebSocketClient>();
 
-		Thread thread = new Thread(async () =>
-		{
-			// await socket.Connect();
-			// await socket.Send("Hello server!");
-			await socket.Run();
-		});
+		Thread thread = new Thread( new ThreadStart(socket.Run));
 
 		thread.Start();
 		// socket.Start();

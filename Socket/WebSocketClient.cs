@@ -26,7 +26,7 @@ namespace Socket
             _converter = converter;
         }
 
-        public async Task Run()
+        private async Task ConnectAndListen()
         {
             try
             {
@@ -43,7 +43,6 @@ namespace Socket
                 throw;
             }
 
-            Console.WriteLine('a');
 
             byte[] receiveBuffer = new byte[1024];
             while (_webSocket.State == WebSocketState.Open)
@@ -55,16 +54,29 @@ namespace Socket
 		            string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
 		            Console.WriteLine($"Received message: {message}");
 
-		            // todo validation
-		            dynamic response = JsonConvert.DeserializeObject(message);
-		            Console.WriteLine(response["data"]);
+		            try
+		            {
+						dynamic? response = JsonConvert.DeserializeObject(message);
+						if (response != null)
+						{
+							if ( response["data"].Equals(""))
+							{
+								Console.WriteLine(response["data"]);
+								var converterResponse = await _converter.ConvertFromHex(response["data"].ToString());
+								Console.WriteLine($"Convertor: {converterResponse}");
+							}
 
-		            // todo print that data was saved
-		            await _converter.ConvertFromHex(response["data"].ToString());
+						}
+		            }
+		            catch (Exception e)
+		            {
+			            Console.WriteLine("Object was not deserialized: " + e);
+			            throw;
+		            }
+
 	            }
             }
 
-            Console.WriteLine('b');
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
         }
 
@@ -88,15 +100,11 @@ namespace Socket
             await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
-        // public static void StartWebSocketClient()
-        // {
-	       //  // Run the WebSocket client in a separate thread
-	       //  Thread webSocketThread = new Thread(async () =>
-	       //  {
-		      //   await WebSocketClient.Connect();
-	       //  });
-        //
-	       //  webSocketThread.Start();
-        // }
+        public void Run()
+        {
+	        var task = Task.Run(ConnectAndListen);
+	        task.Wait();
+        }
+
     }
 }
