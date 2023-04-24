@@ -1,6 +1,7 @@
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 
 namespace Application.Logic;
@@ -13,7 +14,7 @@ public class CO2Logic : ICO2Logic
     {
         _co2Dao = co2Dao;
     }
-    
+
     public Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto)
     {
         if (dto.Current)
@@ -53,6 +54,7 @@ public class CO2Logic : ICO2Logic
             Date = dto.Date,
             Value = dto.Value
         };
+        Console.WriteLine("v");
         return await _co2Dao.SaveAsync(entity);
     }
 }

@@ -20,7 +20,7 @@ public class Context : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlite(@"Data Source = C:\Users\babic\RiderProjects\greenhouse-backend\EfcDataAccess\Greenhouse.db");
+		optionsBuilder.UseSqlite(@"Data Source = /Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/EfcDataAccess/Greenhouse.db");
 	}
 
 }

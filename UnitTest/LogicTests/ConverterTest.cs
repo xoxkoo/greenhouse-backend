@@ -26,40 +26,47 @@ public class ConverterTest : DbTestBase
 	    co2logic = new Mock<ICO2Logic>();
 	    humidityLogic = new Mock<IHumidityLogic>();
         converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object);
-
-        // converter.Setup(x => x.ConvertFromHex(It.IsAny<String>()));
     }
 
     [TestMethod]
-    public void THCPayloadRead()
+    public async Task THCPayload_SavedToDB()
     {
-
-	    // tempLogic.Setup(x => x.CreateAsync(It.IsAny<TemperatureCreateDto>()))
-		   //  ;
-	    // co2logic.Setup(x => x.CreateAsync(It.IsAny<CO2CreateDto>()))
-		   //  ;
-	    // humidityLogic.Setup(x => x.CreateAsync(It.IsAny<HumidityCreationDto>()))
-		   //  ;
-
-	    // converter.Setup(x => x.ConvertFromHex("07800c9401e0"));
-        converter.ConvertFromHex("07800c9401e0");
+	    await converter.ConvertFromHex("07817b1f4ff0");
 
         // Assert
         tempLogic.Verify(x => x.CreateAsync(It.Is<TemperatureCreateDto>(dto =>
-	        dto.value == 25
+	        // tolerance because of rounding problems
+	        Math.Abs(dto.value - 25.8) < 0.1
         )), Times.Once);
 
         co2logic.Verify(x => x.CreateAsync(It.Is<CO2CreateDto>(dto =>
-	        dto.Value == 30
+	        dto.Value == 1279
         )), Times.Once);
 
         humidityLogic.Verify(x => x.CreateAsync(It.Is<HumidityCreationDto>(dto =>
-	        dto.Value == 20
+	        dto.Value == 31
         )), Times.Once);
-        // var response = tempLogic
-	       //  .Setup(x => x.GetAsync(new SearchMeasurementDto(false, null, null)))
-	       //  .ReturnsAsync(list);
-        // Console.WriteLine(response);
-        // // int temp =
     }
+
+    [TestMethod]
+    public async Task THCPayload_ResponseStringIsCorrect()
+    {
+	    string result = await converter.ConvertFromHex("07817b1f4ff0");
+
+	    Assert.AreEqual("25.8, 31, 1279", result);
+    }
+
+    [TestMethod]
+    public void THCPayload_ThrowErrorWhenNotHexValue()
+    {
+	    Assert.ThrowsExceptionAsync<Exception>(() => converter.ConvertFromHex("t7800c9401e0"));
+    }
+
+    [TestMethod]
+    public async Task THCPayload_IncorrectValue()
+    {
+	    Assert.ThrowsExceptionAsync<Exception>(() => converter.ConvertFromHex(""));
+	    Assert.ThrowsExceptionAsync<Exception>(() => converter.ConvertFromHex("    "));
+    }
+
 }
