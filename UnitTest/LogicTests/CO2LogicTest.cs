@@ -3,6 +3,7 @@ using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 using EfcDataAccess.DAOs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
