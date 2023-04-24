@@ -3,6 +3,12 @@ name: CI/CD
 on: push
 
 jobs:
+  tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Tests 
+        run: dotnet test
   build:
     name: Building image
     runs-on: ubuntu-latest
