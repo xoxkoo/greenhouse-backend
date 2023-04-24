@@ -2,13 +2,15 @@
 
 services:
   socket:
-    image: socket
-    build: ./BlazorWASM
+    image: 'socket:latest'
+    build: 
+      context: ./
     ports:
       - 5001:5001
   webapi:
-    image: webapi
-    build: ./WebAPI
+    image: 'webapi:latest'
+    build:
+      context: ./
     ports:
       - 5000:5000
 
