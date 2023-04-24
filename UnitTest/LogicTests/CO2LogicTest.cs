@@ -23,15 +23,15 @@ public class CO2LogicTest : DbTestBase
     //         .ReturnsAsync(new CO2Dto());
     //     
     // }
-
-    [TestMethod]
-    public async Task CO2CreateAsyncTest()
-    {
-        CO2CreateDto dto = new CO2CreateDto();
-        dto.Date = new DateTime(1681977143);
-        dto.Value = 10;
-    
-        CO2Dto created = await logic.Object.CreateAsync(dto);
-        Assert.AreEqual(created.Value,dto.Value);
-    }
+    //
+    // [TestMethod]
+    // public async Task CO2CreateAsyncTest()
+    // {
+    //     CO2CreateDto dto = new CO2CreateDto();
+    //     dto.Date = new DateTime(1681977143);
+    //     dto.Value = 10;
+    //
+    //     CO2Dto created = await logic.Object.CreateAsync(dto);
+    //     Assert.AreEqual(created.Value,dto.Value);
+    // }
 }

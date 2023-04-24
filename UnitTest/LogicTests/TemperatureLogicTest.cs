@@ -32,19 +32,22 @@ public class TemperatureLogicTest : DbTestBase
     [TestMethod]
     public async Task SaveAsyncTest()
     {
-        dao.Setup(dao => dao.SaveAsync(It.IsAny<Temperature>()))
-            .ReturnsAsync(new TemperatureDto { TemperatureId = 1, Date = DateTime.Now, value = 10 });
+        //Arrange
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<Temperature>()))
+            .ReturnsAsync(new TemperatureDto { TemperatureId = 1, Date = DateTime.Now, Value = 10 });
   
         var dto = new TemperatureCreateDto()
         {
             value = 10
         };
         
+        //Act
         var createdTemperature = await logic.CreateAsync(dto);
         
+        //Assert
         Assert.IsNotNull(createdTemperature);
         Assert.AreEqual(1, createdTemperature.TemperatureId);
-        Assert.AreEqual(10, createdTemperature.value);
+        Assert.AreEqual(dto.value, createdTemperature.Value);
         Assert.IsTrue(createdTemperature.Date > DateTime.Now.AddSeconds(-1));
     }
 
@@ -52,22 +55,22 @@ public class TemperatureLogicTest : DbTestBase
     [TestMethod]
     public async Task GetAsyncTest()
     {
-        var searchMeasurementDto = new SearchMeasurementDto(true, new DateTime(2023, 1, 1), new DateTime(2023, 4, 19));
-        var tempDto = new TemperatureDto { Date = new DateTime(2023, 04, 10), value = 10, TemperatureId = 1 };
-        dao.Setup(dao => dao.GetAsync(searchMeasurementDto))
-            .ReturnsAsync(new List<TemperatureDto> { tempDto });
-
-
-        var temperatures = await logic.GetAsync(searchMeasurementDto);
+        //Arrange
+        var searchMeasurementDto = new SearchMeasurementDto(true,  new DateTime(2023, 1, 1), new DateTime(2023, 4, 19));
+        var tempDto = new TemperatureDto { Date = new DateTime(2001, 1, 10), Value = 10, TemperatureId = 1 };
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<TemperatureDto>{tempDto});
         
-        // assert
+        //Act
+        var temperatures = await logic.GetAsync(searchMeasurementDto);
+
+        // Assert
         Assert.IsNotNull(temperatures);
         Assert.AreEqual(1, temperatures.Count());
         Assert.AreEqual(tempDto.TemperatureId, temperatures.First().TemperatureId);
         Assert.AreEqual(tempDto.Date, temperatures.First().Date);
-        Assert.AreEqual(tempDto.value, temperatures.First().value);
-        
-
-
+        Assert.AreEqual(tempDto.Value, temperatures.First().Value);
     }
+
+
 }

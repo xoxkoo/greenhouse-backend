@@ -35,7 +35,7 @@ public class TemperatureControllerTest
         {
             TemperatureId = 1,
             Date = DateTime.Now,
-            value = 10
+            Value = 10
         };
         logic
             .Setup(x => x.CreateAsync(dto))

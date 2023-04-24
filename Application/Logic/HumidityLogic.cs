@@ -13,6 +13,19 @@ public class HumidityLogic : IHumidityLogic
     {
         _humidityDao = humidityDao;
     }
+    
+    public async Task<HumidityDto> CreateAsync(HumidityCreationDto dto)
+    {
+        //TODO add validation
+
+        var entity = new Humidity()
+        {
+            Date = dto.Date,
+            Value = dto.Value
+        };
+
+        return await _humidityDao.CreateAsync(entity);
+    }
 
     public async Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto dto)
     {
@@ -33,16 +46,5 @@ public class HumidityLogic : IHumidityLogic
         return await _humidityDao.GetHumidityAsync(dto);
     }
 
-    public async Task<HumidityDto> CreateAsync(HumidityCreationDto dto)
-    {
-	    //TODO add validation
 
-	    var entity = new Humidity()
-	    {
-		    Date = dto.Date,
-		    Value = dto.Value
-	    };
-
-	    return await _humidityDao.CreateHumidityAsync(entity);
-    }
 }

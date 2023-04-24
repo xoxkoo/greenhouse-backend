@@ -14,6 +14,16 @@ public class CO2Logic : ICO2Logic
         _co2Dao = co2Dao;
     }
     
+    public async Task<CO2Dto> CreateAsync(CO2CreateDto dto)
+    {
+        var entity = new CO2()
+        {
+            Date = dto.Date,
+            Value = dto.Value
+        };
+        return await _co2Dao.CreateAsync(entity);
+    }
+    
     public Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto)
     {
         if (dto.Current)
@@ -37,13 +47,5 @@ public class CO2Logic : ICO2Logic
         return _co2Dao.GetAsync(dto);
     }
 
-    public async Task<CO2Dto> CreateAsync(CO2CreateDto dto)
-    {
-        var entity = new CO2()
-        {
-            Date = dto.Date,
-            Value = dto.Value
-        };
-        return await _co2Dao.SaveAsync(entity);
-    }
+
 }

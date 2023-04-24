@@ -16,6 +16,16 @@ public class TemperatureLogic : ITemperatureLogic
         _temperatureDao = temperatureDao;
     }
 
+    public async Task<TemperatureDto> CreateAsync(TemperatureCreateDto dto)
+    {
+
+        Temperature temperature = new Temperature
+        {
+            Date = DateTime.Now,
+            Value = dto.value
+        };
+        return await _temperatureDao.CreateAsync(temperature);
+    }
     public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
     {
         if (dto.StartTime>dto.EndTime)
@@ -35,14 +45,5 @@ public class TemperatureLogic : ITemperatureLogic
         return await _temperatureDao.GetAsync(dto);
     }
 
-    public async Task<TemperatureDto> CreateAsync(TemperatureCreateDto dto)
-    {
 
-        Temperature temperature = new Temperature
-        {
-            Date = DateTime.Now,
-            Value = dto.value
-        };
-        return await _temperatureDao.SaveAsync(temperature);
-    }
 }

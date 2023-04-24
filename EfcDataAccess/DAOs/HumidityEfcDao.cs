@@ -15,6 +15,23 @@ public class HumidityEfcDao : IHumidityDao
 		_context = context;
 	}
 
+	public async Task<HumidityDto> CreateAsync(Humidity humidity)
+	{
+		if (humidity == null)
+		{
+			throw new ArgumentNullException(nameof(humidity), "Humidity object cannot be null");
+		}
+		EntityEntry<Humidity> entity = await _context.Humidities.AddAsync(humidity);
+		await _context.SaveChangesAsync();
+
+		return new HumidityDto
+		{
+			Date = entity.Entity.Date,
+			HumidityId = entity.Entity.HumidityId,
+			Value = entity.Entity.Value
+		};
+	}
+	
 	public async Task<IEnumerable<HumidityDto>> GetHumidityAsync(SearchMeasurementDto searchMeasurement)
 	{
 
@@ -33,6 +50,15 @@ public class HumidityEfcDao : IHumidityDao
 		{
 			list = list.Where(h => h.Date >= searchMeasurement.StartTime && h.Date <= searchMeasurement.EndTime);
 		}
+		else if (searchMeasurement.StartTime != null)
+		{
+			list = list.Where(c => c.Date >= searchMeasurement.StartTime).AsQueryable();
+			
+		}
+		else if (searchMeasurement.EndTime != null)
+		{
+			list = list.Where(c => c.Date <= searchMeasurement.EndTime).AsQueryable();
+		}
 
 		IEnumerable<HumidityDto> result = await list.Select(h =>
 			new HumidityDto
@@ -45,16 +71,5 @@ public class HumidityEfcDao : IHumidityDao
 		return result;
 	}
 
-	public async Task<HumidityDto> CreateHumidityAsync(Humidity humidity)
-	{
-		EntityEntry<Humidity> entity = await _context.Humidities.AddAsync(humidity);
-		await _context.SaveChangesAsync();
 
-		return new HumidityDto
-		{
-			Date = entity.Entity.Date,
-			HumidityId = entity.Entity.HumidityId,
-			Value = entity.Entity.Value
-		};
-	}
 }
