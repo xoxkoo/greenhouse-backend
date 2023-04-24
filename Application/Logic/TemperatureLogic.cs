@@ -41,7 +41,7 @@ public class TemperatureLogic : ITemperatureLogic
         Temperature temperature = new Temperature
         {
             Date = DateTime.Now,
-            Value = dto.value
+            Value = dto.Value
         };
         return await _temperatureDao.SaveAsync(temperature);
     }

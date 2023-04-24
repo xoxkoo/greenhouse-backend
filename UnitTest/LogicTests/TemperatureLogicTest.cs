@@ -37,7 +37,7 @@ public class TemperatureLogicTest : DbTestBase
   
         var dto = new TemperatureCreateDto()
         {
-            value = 10
+            Value = 10
         };
         
         var createdTemperature = await logic.CreateAsync(dto);
