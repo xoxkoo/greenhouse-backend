@@ -34,7 +34,7 @@ public class TemperatureLogicTest : DbTestBase
     {
         //Arrange
         dao.Setup(dao => dao.CreateAsync(It.IsAny<Temperature>()))
-            .ReturnsAsync(new TemperatureDto { TemperatureId = 1, Date = DateTime.Now, Value = 10 });
+            .ReturnsAsync(new TemperatureDto { TemperatureId = 1, Date = DateTime.Now, value = 10 });
   
         var dto = new TemperatureCreateDto()
         {
@@ -47,7 +47,7 @@ public class TemperatureLogicTest : DbTestBase
         //Assert
         Assert.IsNotNull(createdTemperature);
         Assert.AreEqual(1, createdTemperature.TemperatureId);
-        Assert.AreEqual(dto.value, createdTemperature.Value);
+        Assert.AreEqual(dto.value, createdTemperature.value);
         Assert.IsTrue(createdTemperature.Date > DateTime.Now.AddSeconds(-1));
     }
 
@@ -57,7 +57,7 @@ public class TemperatureLogicTest : DbTestBase
     {
         //Arrange
         var searchMeasurementDto = new SearchMeasurementDto(true,  new DateTime(2023, 1, 1), new DateTime(2023, 4, 19));
-        var tempDto = new TemperatureDto { Date = new DateTime(2001, 1, 10), Value = 10, TemperatureId = 1 };
+        var tempDto = new TemperatureDto { Date = new DateTime(2001, 1, 10), value = 10, TemperatureId = 1 };
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<TemperatureDto>{tempDto});
         
@@ -69,7 +69,7 @@ public class TemperatureLogicTest : DbTestBase
         Assert.AreEqual(1, temperatures.Count());
         Assert.AreEqual(tempDto.TemperatureId, temperatures.First().TemperatureId);
         Assert.AreEqual(tempDto.Date, temperatures.First().Date);
-        Assert.AreEqual(tempDto.Value, temperatures.First().Value);
+        Assert.AreEqual(tempDto.value, temperatures.First().value);
     }
 
 

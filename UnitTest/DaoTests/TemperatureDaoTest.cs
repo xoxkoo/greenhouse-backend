@@ -45,7 +45,7 @@ public class TemperatureDaoTest : DbTestBase
         
         Assert.IsNotNull(createdTemperature);
         Assert.AreEqual(1, createdTemperature.TemperatureId);
-        Assert.AreEqual(temperature.Value, createdTemperature.Value);
+        Assert.AreEqual(temperature.Value, createdTemperature.value);
         Assert.AreEqual(temperature.Date, createdTemperature.Date);
     }
 
@@ -85,11 +85,11 @@ public class TemperatureDaoTest : DbTestBase
         Assert.IsNotNull(results);
         Assert.AreEqual(3, results.Count);
         Assert.AreEqual(temperatures[0].Date, results[0].Date);
-        Assert.AreEqual(temperatures[0].Value, results[0].Value);
+        Assert.AreEqual(temperatures[0].Value, results[0].value);
         Assert.AreEqual(temperatures[1].Date, results[1].Date);
-        Assert.AreEqual(temperatures[1].Value, results[1].Value);
+        Assert.AreEqual(temperatures[1].Value, results[1].value);
         Assert.AreEqual(temperatures[2].Date, results[2].Date);
-        Assert.AreEqual(temperatures[2].Value, results[2].Value);
+        Assert.AreEqual(temperatures[2].Value, results[2].value);
     }
     
     //B - Boundary
@@ -105,7 +105,7 @@ public class TemperatureDaoTest : DbTestBase
         var createdTemperature = await dao.CreateAsync(temperature);
         
         Assert.IsNotNull(createdTemperature);
-        Assert.AreEqual(temperature.Value, createdTemperature.Value);
+        Assert.AreEqual(temperature.Value, createdTemperature.value);
         Assert.AreEqual(temperature.Date, createdTemperature.Date);
     }
     
@@ -121,7 +121,7 @@ public class TemperatureDaoTest : DbTestBase
         var createdTemperature = await dao.CreateAsync(temperature);
         
         Assert.IsNotNull(createdTemperature);
-        Assert.AreEqual(temperature.Value, createdTemperature.Value);
+        Assert.AreEqual(temperature.Value, createdTemperature.value);
         Assert.AreEqual(temperature.Date, createdTemperature.Date);
     }
     
@@ -199,7 +199,7 @@ public class TemperatureDaoTest : DbTestBase
         //Act
         Assert.IsNotNull(temperatureFromDb);
         Assert.AreEqual(1, temperatureFromDb.First().TemperatureId);
-        Assert.AreEqual(temperature.Value, temperatureFromDb.First().Value);
+        Assert.AreEqual(temperature.Value, temperatureFromDb.First().value);
         Assert.AreEqual(temperature.Date, temperatureFromDb.First().Date);
     }
     
@@ -224,9 +224,9 @@ public class TemperatureDaoTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
         Assert.AreEqual(temp1.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.Value);
+        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.value);
         Assert.AreEqual(temp2.Date, result.Last().Date);
-        Assert.AreEqual(temp2.Value, result.Last().Value);
+        Assert.AreEqual(temp2.Value, result.Last().value);
     }
     
     [TestMethod]
@@ -248,7 +248,7 @@ public class TemperatureDaoTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
         Assert.AreEqual(temp1.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.Value);
+        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.value);
     }
     
     
@@ -271,7 +271,7 @@ public class TemperatureDaoTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
         Assert.AreEqual(temp2.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp2.Value, result.FirstOrDefault()?.Value);
+        Assert.AreEqual(temp2.Value, result.FirstOrDefault()?.value);
     }
     
     [TestMethod]
@@ -294,9 +294,9 @@ public class TemperatureDaoTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
         Assert.AreEqual(temp1.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.Value);
+        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.value);
         Assert.AreEqual(temp2.Date, result.Last().Date);
-        Assert.AreEqual(temp2.Value, result.LastOrDefault().Value);
+        Assert.AreEqual(temp2.Value, result.LastOrDefault().value);
     }
     
     

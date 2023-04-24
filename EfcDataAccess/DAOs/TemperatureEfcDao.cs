@@ -41,7 +41,7 @@ public class TemperatureEfcDao : ITemperatureDao
 		{
 			Date = entity.Entity.Date,
 			TemperatureId = entity.Entity.TemperatureId,
-			Value = entity.Entity.Value
+			value = entity.Entity.Value
 		};
 		return dto;
 	}
@@ -67,7 +67,7 @@ public class TemperatureEfcDao : ITemperatureDao
 		}
 		
 		IEnumerable<TemperatureDto> result = await tempQuery
-			.Select(t => new TemperatureDto(){Date = t.Date,TemperatureId = t.TemperatureId,Value = t.Value})
+			.Select(t => new TemperatureDto(){Date = t.Date,TemperatureId = t.TemperatureId,value = t.Value})
 			.ToListAsync();
 		return result;
 	}
