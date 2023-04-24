@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Application.DaoInterfaces;
+﻿using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
@@ -28,7 +27,7 @@ public class CO2LogicTest : DbTestBase
     [TestMethod]
     public async Task CO2CreateAsyncTest()
     {
-        dao.Setup(dao => dao.SaveAsync(It.IsAny<CO2>()))
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<CO2>()))
             .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100 });
         CO2CreateDto dto = new CO2CreateDto
         {
@@ -43,7 +42,7 @@ public class CO2LogicTest : DbTestBase
     [TestMethod]
     public async Task CO2CreateAsyncIncorrectTest()
     {
-        dao.Setup(dao => dao.SaveAsync(It.IsAny<CO2>()))
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<CO2>()))
             .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100 });
         CO2CreateDto dto = new CO2CreateDto
         {

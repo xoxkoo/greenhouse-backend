@@ -26,6 +26,4 @@ public class TemperatureTest
         Task<Exception> ex = Assert.ThrowsExceptionAsync<Exception>(() => logic.GetAsync(dto));
         Assert.AreEqual(expectedErrorMessage, ex.Result.Message);
     }
-
-
 }

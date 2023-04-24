@@ -36,7 +36,7 @@ public class ConverterTest : DbTestBase
         // Assert
         tempLogic.Verify(x => x.CreateAsync(It.Is<TemperatureCreateDto>(dto =>
 	        // tolerance because of rounding problems
-	        Math.Abs(dto.value - 25.8) < 0.1
+	        Math.Abs(dto.Value - 25.8) < 0.1
         )), Times.Once);
 
         co2logic.Verify(x => x.CreateAsync(It.Is<CO2CreateDto>(dto =>

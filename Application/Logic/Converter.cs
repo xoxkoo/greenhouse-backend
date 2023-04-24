@@ -71,7 +71,7 @@ public class Converter : IConverter
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
             Date = DateTime.Now,
-            value = (float)MathF.Round(tmpValue, 1)
+            Value = (float)MathF.Round(tmpValue, 1)
         };
 
         CO2CreateDto co2Dto = new CO2CreateDto
@@ -89,7 +89,7 @@ public class Converter : IConverter
         await humidityLogic.CreateAsync(humidityDto);
         await temperatureLogic.CreateAsync(tempDto);
 
-        return $"{tempDto.value}, {humidityDto.Value}, {co2Dto.Value}";
+        return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 
     private string HexStringToBinary(string hex) {
