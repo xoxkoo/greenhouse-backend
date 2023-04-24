@@ -6,7 +6,7 @@ namespace Testing.Utils;
 
 public class DbTestBase
 {
-	public DbContext DbContext { get; private set; }
+	public Context DbContext { get; private set; }
 
 	[TestInitialize]
 	public virtual void TestInit()

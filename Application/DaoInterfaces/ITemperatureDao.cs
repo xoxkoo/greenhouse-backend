@@ -8,5 +8,5 @@ namespace Application.DaoInterfaces;
 public interface ITemperatureDao
 {
     Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto);
-    public Task<TemperatureDto> SaveAsync(Temperature temperature);
+    public Task<TemperatureDto> CreateAsync(Temperature temperature);
 }
