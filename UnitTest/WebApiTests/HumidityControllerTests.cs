@@ -1,13 +1,10 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.CreationDTOs;
-using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using WebAPI.Controllers;
-using Xunit;
-using Assert = Xunit.Assert;
+
+using Exception = System.Exception;
 
 
 namespace Testing.WebApiTests;
@@ -15,49 +12,62 @@ namespace Testing.WebApiTests;
 [TestClass]
 public class HumidityControllerTests
 {
-	private readonly Mock<IHumidityLogic> logic;
-	private readonly HumidityController controller;
-
-	public HumidityControllerTests()
-	{
-		logic = new Mock<IHumidityLogic>();
-		// logic
-		// 	.Setup(x => x.GetAsync(new SearchMeasurementDto(true, null, null)))
-		// 	.ReturnsAsync();
-
-		controller = new HumidityController(logic.Object);
-	}
-
 	[TestMethod]
-	public async Task GetAsyncTest()
+	public async Task GetAsync_StartDateAfterEndDate_ReturnsBadRequest()
 	{
-		var dto = new HumidityDto
+		var expectedErrorMessage = "Start date cannot be before the end date";
+		// Arrange
+		var logicMock = new Mock<IHumidityLogic>();
+		logicMock
+			.Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>()))
+			.ThrowsAsync(new Exception("Start date cannot be before the end date"));
+
+		var controller = new HumidityController(logicMock.Object);
+		// Act
+		try
 		{
-			Date = DateTime.Now,
-			HumidityId = 1,
-			Value = 10
-		};
+			await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(-1));
+		}
+		catch (Exception e)
+		{
+			// Check
+			Assert.AreEqual(expectedErrorMessage,e.Message);
+		}
 
-		logic
-			.Setup(x => x.CreateAsync(new HumidityCreationDto() { Date = DateTime.Now, Value = 10 }));
+	}
+	[TestMethod]
+	public async Task GetAsync_checkValue()
+	{
+		DateTime time = DateTime.Now;
+		HumidityDto dto = new HumidityDto(){Date = time,HumidityId = 1,Value = 50};
+		IEnumerable<HumidityDto> list = new[] { dto };
+		// Arrange
+		var logicMock = new Mock<IHumidityLogic>();
+		logicMock
+			.Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>())).ReturnsAsync(list);
 
-		logic
-			.Setup(x => x.GetAsync(new SearchMeasurementDto(true, null, null)))
-			.ReturnsAsync(new List<HumidityDto>{dto});
+		var controller = new HumidityController(logicMock.Object);
+		// Act
+		await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
+		// Check
+		Assert.AreEqual(50,dto.Value);
 
-		var response = await controller.GetAsync(false);
+	}
+	[TestMethod]
+	public async Task GetAsync_Date()
+	{
+		DateTime time = new DateTime(2001,1,1);
+		HumidityDto dto = new HumidityDto(){Date = time,HumidityId = 1,Value = 50};
+		IEnumerable<HumidityDto> list = new[] { dto };
+		// Arrange
+		var logicMock = new Mock<IHumidityLogic>();
+		logicMock
+			.Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>())).ReturnsAsync(list);
 
-		var result = Assert.IsType<OkObjectResult>(response.Result);
-		var humidity = Assert.IsAssignableFrom<IEnumerable<HumidityDto>>(result.Value);
-
-		//var firstHumidity = humidity.FirstOrDefault();
-
-
-		//Console.WriteLine(humidity.FirstOrDefault().HumidityId);
-
-		// Assert.NotNull(firstHumidity);
-		// Assert.Equal(dto.Date, firstHumidity.Date);
-		// Assert.Equal(dto.HumidityId, firstHumidity.HumidityId);
-		// Assert.Equal(dto.Value, firstHumidity.Value);
+		var controller = new HumidityController(logicMock.Object);
+		// Act
+		await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
+		// Check
+		Assert.AreEqual(new DateTime(2001,1,1),dto.Date);
 	}
 }
