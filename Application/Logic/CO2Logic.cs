@@ -39,6 +39,15 @@ public class CO2Logic : ICO2Logic
 
     public async Task<CO2Dto> CreateAsync(CO2CreateDto dto)
     {
+        if (dto.Date == null || dto.Value == null)
+        {
+            throw new Exception("Dto parameters are null");
+        }
+
+        if (dto.Value < 0 || dto.Value > 1000)
+        {
+            throw new Exception("Wrong CO2 value, must be between 0 and 1000.");
+        }
         var entity = new CO2()
         {
             Date = dto.Date,
