@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs;
+﻿namespace Domain.DTOs.CreationDTOs;
 
 public class CO2CreateDto
 {

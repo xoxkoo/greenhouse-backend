@@ -1,6 +1,7 @@
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 
 namespace Application.Logic;

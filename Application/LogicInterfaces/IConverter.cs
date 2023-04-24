@@ -2,5 +2,5 @@
 
 public interface IConverter
 {
-    Task ConvertFromHex(string payload);
+    Task<string> ConvertFromHex(string payload);
 }

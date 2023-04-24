@@ -70,6 +70,5 @@ public class HumidityEfcDao : IHumidityDao
 
 		return result;
 	}
-
-
+	
 }
