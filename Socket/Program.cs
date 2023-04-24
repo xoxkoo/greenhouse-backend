@@ -4,8 +4,8 @@ using Application.LogicInterfaces;
 using Autofac;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
-using Microsoft.EntityFrameworkCore;
-using Socket;
+
+namespace Socket;
 
 class Program
 {
@@ -34,7 +34,7 @@ class Program
 		Thread thread = new Thread( new ThreadStart(socket.Run));
 
 		thread.Start();
-		// socket.Start();
+
 	}
 
 }

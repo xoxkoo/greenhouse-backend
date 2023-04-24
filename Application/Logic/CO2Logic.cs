@@ -45,6 +45,7 @@ public class CO2Logic : ICO2Logic
             Date = dto.Date,
             Value = dto.Value
         };
+        Console.WriteLine("v");
         return await _co2Dao.SaveAsync(entity);
     }
 }

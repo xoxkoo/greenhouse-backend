@@ -16,7 +16,7 @@ namespace Socket
 {
     public class WebSocketClient
     {
-        private ClientWebSocket _webSocket;
+        private readonly ClientWebSocket _webSocket;
         private readonly IConverter _converter;
 
         public WebSocketClient(IConverter converter)
@@ -26,23 +26,35 @@ namespace Socket
             _converter = converter;
         }
 
+        /**
+         * Connect to the websocket server with  uri
+         */
+        private async Task Connect()
+        {
+	        try
+	        {
+		        Console.WriteLine("Connecting to WebSocket server...");
+		        Uri serverUri = new Uri("wss://iotnet.teracom.dk/app?token=vnoUcQAAABFpb3RuZXQudGVyYWNvbS5ka-iuwG5H1SHPkGogk2YUH3Y=");
+
+		        await _webSocket.ConnectAsync(serverUri, CancellationToken.None);
+
+		        Console.WriteLine("Connected :)");
+	        }
+	        catch (Exception e)
+	        {
+		        Console.WriteLine(e);
+		        throw;
+	        }
+        }
+
+
+        /**
+         * Listen and receive message from the websocket server
+         */
         private async Task ConnectAndListen()
         {
-            try
-            {
-                Console.WriteLine("Connecting to WebSocket server...");
-                Uri serverUri = new Uri("wss://iotnet.teracom.dk/app?token=vnoUcQAAABFpb3RuZXQudGVyYWNvbS5ka-iuwG5H1SHPkGogk2YUH3Y=");
 
-                await _webSocket.ConnectAsync(serverUri, CancellationToken.None);
-
-                Console.WriteLine("Connected :)");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
+			await Connect();
 
             byte[] receiveBuffer = new byte[1024];
             while (_webSocket.State == WebSocketState.Open)
@@ -56,12 +68,14 @@ namespace Socket
 
 		            try
 		            {
+			            // deserialize message into object
 						dynamic? response = JsonConvert.DeserializeObject(message);
 						if (response != null)
 						{
-							if ( response["data"].Equals(""))
+							if (! response["data"].Equals(""))
 							{
-								Console.WriteLine(response["data"]);
+
+								// call convertor method to convert data from hexadecimal representation
 								var converterResponse = await _converter.ConvertFromHex(response["data"].ToString());
 								Console.WriteLine($"Convertor: {converterResponse}");
 							}
@@ -82,24 +96,15 @@ namespace Socket
 
         public async Task Send(string message)
         {
-	        try
-	        {
-		        _webSocket = new ClientWebSocket();
-		        Console.WriteLine("Connecting to WebSocket server...");
-		        Uri serverUri = new Uri("wss://iotnet.teracom.dk/app?token=vnoUcQAAABFpb3RuZXQudGVyYWNvbS5ka-iuwG5H1SHPkGogk2YUH3Y=");
-		        await _webSocket.ConnectAsync(serverUri, CancellationToken.None);
-		        Console.WriteLine("Connected :)");
-	        }
-	        catch (Exception e)
-	        {
-		        Console.WriteLine(e);
-		        throw;
-	        }
+	        await Connect();
 
-            byte[] sendBuffer = Encoding.ASCII.GetBytes(message);
+            byte[] sendBuffer = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(message));
             await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
+        /**
+         * Start websocket client
+         */
         public void Run()
         {
 	        var task = Task.Run(ConnectAndListen);

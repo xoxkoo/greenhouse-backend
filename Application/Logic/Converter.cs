@@ -39,23 +39,26 @@ public class Converter : IConverter
         this.humidityLogic = humidityLogic;
     }
 
-    public async Task ConvertFromHex(string payload)
+    public async Task<string> ConvertFromHex(string payload)
     {
         string valueInBinary = HexStringToBinary(payload);
+        string response = "";
 
         //000001 111000000000001100100101000000000111100000
         string id = valueInBinary.Substring(0, 6);
         switch (id)
         {
             case "000001":
-                ReadTHCPayload(valueInBinary.Substring(6));
+                response = await ReadTHCPayload(valueInBinary.Substring(6));
                 break;
             //TODO
             //handle rest of payloads
         }
+
+        return response;
     }
 
-    private async void ReadTHCPayload(string data)
+    private async Task<string> ReadTHCPayload(string data)
     {
         //TODO handle flags
         string flags = data.Substring(0, 8);
@@ -82,20 +85,34 @@ public class Converter : IConverter
             Value = Convert.ToInt32(humidity, 2)
         };
 
-        Console.WriteLine($"{tempDto.value}, {humidityDto.Value}, {co2Dto.Value}");
-
-        await temperatureLogic.CreateAsync(tempDto);
         await co2Logic.CreateAsync(co2Dto);
         await humidityLogic.CreateAsync(humidityDto);
+        await temperatureLogic.CreateAsync(tempDto);
+
+        return $"{tempDto.value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 
-    public string HexStringToBinary(string hex) {
+    private string HexStringToBinary(string hex) {
         StringBuilder result = new StringBuilder();
+
+        if (hex is not string)
+        {
+	        throw new Exception("Hex value must be a string!");
+        }
+
+        if (hex.Trim().Length == 0)
+        {
+			throw new Exception("Empty value is not allowed!");
+        }
+
         foreach (char c in hex) {
-            //TODO
-            //Check for exceptions
-            // This will crash for non-hex characters. You might want to handle that differently.
-            result.Append(hexCharacterToBinary[char.ToLower(c)]);
+
+            if (! hexCharacterToBinary.ContainsKey(c))
+            {
+	            throw new Exception($"Invalid character in hex value: {c}");
+            }
+
+	        result.Append(hexCharacterToBinary[char.ToLower(c)]);
         }
         return result.ToString();
     }
