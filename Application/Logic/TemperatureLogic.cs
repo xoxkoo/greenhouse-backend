@@ -24,7 +24,7 @@ public class TemperatureLogic : ITemperatureLogic
             Date = DateTime.Now,
             Value = dto.Value
         };
-        return await _temperatureDao.SaveAsync(temperature);
+        return await _temperatureDao.CreateAsync(temperature);
     }
     public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
     {
