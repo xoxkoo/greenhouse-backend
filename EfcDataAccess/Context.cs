@@ -15,7 +15,7 @@ public class Context : DbContext
 
 	public Context()
 	{
-		
+
 	}
 
 	public Context(DbContextOptions<Context> options) : base(options)
@@ -24,7 +24,7 @@ public class Context : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlite("Data Source = C:/Users/natal/RiderProjects/greenhouse-backend/EfcDataAccess/Greenhouse.db");
+		optionsBuilder.UseSqlite("Data Source = /Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/EfcDataAccess/Greenhouse.db");
 	}
 
 }
