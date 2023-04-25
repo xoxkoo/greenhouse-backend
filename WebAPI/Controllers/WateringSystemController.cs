@@ -1,5 +1,6 @@
 ﻿using Application.DaoInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -16,15 +17,17 @@ public class WateringSystemController:ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ValveStateDto>> PostAsync([FromBody] bool current, [FromBody] int time)
+    public async Task<ActionResult<ValveStateDto>> PostAsync([FromBody] bool state, [FromBody] int time)
     {
         try
         {
-            ValveStateDto valveStateDto = new ValveStateDto();
-            return Ok(valveStateDto);
+            //figure out which dto to use
+            ValveStateCreationDto valveStateCreationDto = new ValveStateCreationDto(){Toggle = state,duration = time};
+            Logic.CreateAsync(valveStateCreationDto);
+            return Ok(valveStateCreationDto);
         }
         catch (Exception e)
-        {
+        {   
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }

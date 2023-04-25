@@ -8,6 +8,7 @@ namespace Application.Logic;
 public class WateringSystemLogic : IWateringSystemLogic
 {
     private readonly IWateringSystemDao _wateringSystemDao;
+    
 
     public WateringSystemLogic(IWateringSystemDao wateringSystemDao)
     {
@@ -20,6 +21,8 @@ public class WateringSystemLogic : IWateringSystemLogic
         {
             Toggle = dto.Toggle
         };
+        //call converter
+        //call socket 
         return await _wateringSystemDao.CreateAsync(entity);
     }
 }

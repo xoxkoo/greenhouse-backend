@@ -3,9 +3,10 @@ using System.Text;
 using Application.LogicInterfaces;
 using Newtonsoft.Json;
 
+
 namespace Socket
 {
-    public class WebSocketClient
+    public class WebSocketClient 
     {
         private readonly ClientWebSocket _webSocket;
         private readonly IConverter _converter;
@@ -103,4 +104,5 @@ namespace Socket
         }
 
     }
+    
 }
