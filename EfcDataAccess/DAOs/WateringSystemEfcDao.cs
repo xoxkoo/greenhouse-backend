@@ -16,6 +16,16 @@ public class WateringSystemDao : IWateringSystemDao
 
     public async Task<ValveStateDto> CreateAsync(ValveState valveState)
     {
+        IQueryable<ValveState> tempQuery= _context.ValveState.AsQueryable();
+        ValveStateDto result = tempQuery.Select(v => new ValveStateDto() { Toggle = v.Toggle }).FirstOrDefault();
+        if (result.Toggle.Equals(true)&& valveState.Toggle.Equals(true))
+        {
+            throw new ArgumentException("The valve is already on");
+        }
+        if (result.Toggle.Equals(false)&& valveState.Toggle.Equals(false))
+        {
+            throw new Exception("The valve is already closed");
+        }
         EntityEntry<ValveState> entity = await _context.ValveState.AddAsync(valveState);
         await _context.SaveChangesAsync();
         ValveStateDto dto = new ValveStateDto()
@@ -30,6 +40,6 @@ public class WateringSystemDao : IWateringSystemDao
         IQueryable<ValveState> tempQuery= _context.ValveState.AsQueryable();
         ValveStateDto result = tempQuery.Select(v => new ValveStateDto() { Toggle = v.Toggle }).FirstOrDefault();
         return result;
-        //missing await
+       
     }
 }

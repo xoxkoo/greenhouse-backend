@@ -17,6 +17,18 @@ public class WateringSystemLogic : IWateringSystemLogic
 
     public async Task<ValveStateDto> CreateAsync(ValveStateCreationDto dto)
     {
+        if (dto.duration.Equals(null))
+        {
+            throw new Exception("duration has to be set");
+        }
+        if (dto.Toggle.Equals(null))
+        {
+            throw new Exception("Toggle has to be set");
+        }
+        if (dto.duration<=0)
+        {
+            throw new Exception("Duration cannot be 0 or less");
+        }
         var entity = new ValveState()
         {
             Toggle = dto.Toggle
