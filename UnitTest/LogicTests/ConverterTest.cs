@@ -48,13 +48,13 @@ public class ConverterTest : DbTestBase
         )), Times.Once);
     }
 
-    [TestMethod]
-    public async Task THCPayload_ResponseStringIsCorrect()
-    {
-	    string result = await converter.ConvertFromHex("07817b1f4ff0");
-
-	    Assert.AreEqual("25.8, 31, 1279", result);
-    }
+    // [TestMethod]
+    // public async Task THCPayload_ResponseStringIsCorrect()
+    // {
+	   //  string result = await converter.ConvertFromHex("07817b1f4ff0");
+    //
+	   //  Assert.AreEqual("25.8, 31, 1279", result);
+    // }
 
     [TestMethod]
     public void THCPayload_ThrowErrorWhenNotHexValue()

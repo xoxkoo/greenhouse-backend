@@ -6,4 +6,5 @@ namespace Application.DaoInterfaces;
 public interface IWateringSystemDao
 {
     Task<ValveStateDto> CreateAsync(ValveState entity);
+    Task<ValveStateDto> GetAsync();
 }
