@@ -17,12 +17,12 @@ public class WateringSystemController:ControllerBase
     }
     /** Creates a new object ValveStateCreationDto that is sent to the logic, the query returns ok message*/
     [HttpPost]
-    public async Task<ActionResult<ValveStateDto>> PostAsync([FromBody] bool state, int time)
+    public async Task<ActionResult<ValveStateDto>> PostAsync([FromBody] ValveStateCreationDto dto)
     {
         try
         {
-            ValveStateCreationDto valveStateCreationDto = new ValveStateCreationDto(){Toggle = state,duration = time};
-            await Logic.CreateAsync(valveStateCreationDto);
+           // ValveStateCreationDto valveStateCreationDto = new ValveStateCreationDto(){Toggle = dto.Toggle,duration = dto.duration};
+            await Logic.CreateAsync(dto);
             return Ok();
         }
         catch (Exception e)

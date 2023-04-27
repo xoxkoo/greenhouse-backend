@@ -25,7 +25,7 @@ public class WateringSystemTest
 
         try
         {
-            await controller.PostAsync(true,2);
+            await controller.PostAsync(dto);
         }
         catch (Exception e)
         {
@@ -49,7 +49,7 @@ public class WateringSystemTest
 
         try
         {
-            await controller.PostAsync(true,2);
+            await controller.PostAsync(dto);
         }
         catch (Exception e)
         {
@@ -73,7 +73,7 @@ public class WateringSystemTest
 
         try
         {
-            await controller.PostAsync(true,2);
+            await controller.PostAsync(dto);
         }
         catch (Exception e)
         {
