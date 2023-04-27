@@ -41,11 +41,12 @@ public class WateringSystemLogicTest : DbTestBase
             Assert.AreEqual(expectedValues, e.Message);
         }
     }
+    //TODO fix
     [TestMethod]
     public async Task WateringSystemDurationNullTest()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<ValveState>()))
-            .ReturnsAsync(new ValveStateDto() {Toggle = true});
+            .ReturnsAsync(new ValveStateDto() {});
         ValveStateCreationDto dto = new ValveStateCreationDto()
         {
         };

@@ -20,9 +20,9 @@ public class WateringSystemDao : IWateringSystemDao
         ValveStateDto result = tempQuery.Select(v => new ValveStateDto() { Toggle = v.Toggle }).FirstOrDefault();
         if (result.Toggle.Equals(true)&& valveState.Toggle.Equals(true))
         {
-            throw new ArgumentException("The valve is already on");
+            throw new Exception("The valve is already on");
         }
-        if (result.Toggle.Equals(false)&& valveState.Toggle.Equals(false))
+        else if (result.Toggle.Equals(false)&& valveState.Toggle.Equals(false))
         {
             throw new Exception("The valve is already closed");
         }

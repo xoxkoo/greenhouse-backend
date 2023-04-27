@@ -21,23 +21,28 @@ public class WateringSystemDaoTest : DbTestBase
     public async Task ValveIsAlreadyOpen()
     {
         //Arrange
-        ValveState valve = new ValveState(){Toggle = true};
-        var expectedErrorMessage = "The valve is already on";
+        ValveState valve = new ValveState { Toggle = true };
         await DbContext.ValveState.AddAsync(valve);
+        await DbContext.SaveChangesAsync();
+        var expectedErrorMessage = "The valve is already on";
 
         //Act and Assert
-        await Assert.ThrowsExceptionAsync<ArgumentException>(async () => await dao.CreateAsync(valve), expectedErrorMessage);
+        var exception = await Assert.ThrowsExceptionAsync<Exception>(async () => await dao.CreateAsync(valve));
+        Assert.AreEqual(expectedErrorMessage, exception.Message);
     }
+
     [TestMethod]
     public async Task ValveIsAlreadyClosed()
     {
         //Arrange
-        ValveState valve = new ValveState(){Toggle = true};
-        var expectedErrorMessage = "The valve is already closed";
+        ValveState valve = new ValveState { Toggle = false };
         await DbContext.ValveState.AddAsync(valve);
+        await DbContext.SaveChangesAsync();
+        var expectedErrorMessage = "The valve is already closed";
 
         //Act and Assert
-        await Assert.ThrowsExceptionAsync<ArgumentException>(async () => await dao.CreateAsync(valve), expectedErrorMessage);
+        var exception = await Assert.ThrowsExceptionAsync<Exception>(async () => await dao.CreateAsync(valve));
+        Assert.AreEqual(expectedErrorMessage, exception.Message);
     }
 
 }
