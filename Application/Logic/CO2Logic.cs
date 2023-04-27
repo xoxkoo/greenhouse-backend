@@ -44,7 +44,6 @@ public class CO2Logic : ICO2Logic
         {
             dto.EndTime=DateTime.MinValue;
         }
-
         return _co2Dao.GetAsync(dto);
     }
 
