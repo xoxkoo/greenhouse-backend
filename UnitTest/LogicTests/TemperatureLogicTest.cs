@@ -71,6 +71,79 @@ public class TemperatureLogicTest : DbTestBase
         Assert.AreEqual(tempDto.Date, temperatures.First().Date);
         Assert.AreEqual(tempDto.value, temperatures.First().value);
     }
-
+    
+    
+    
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentTrueCorrectTest()
+    {
+        TemperatureDto tempDto = new TemperatureDto { TemperatureId = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), value = 100};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<TemperatureDto>{tempDto});
+        SearchMeasurementDto search = new SearchMeasurementDto(true);
+        IEnumerable<TemperatureDto> temps = await logic.GetAsync(search);
+        Assert.IsNotNull(temps.First());
+        Assert.AreEqual(1, temps.First().TemperatureId);
+        Assert.AreEqual(dao.Object.GetAsync(search).Result.First(), temps.First());
+    }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentTrueIncorrectDateTest()
+    {
+        TemperatureDto tempDto = new TemperatureDto { TemperatureId = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), value = 100};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<TemperatureDto>{tempDto});
+        SearchMeasurementDto search = new SearchMeasurementDto(true, new DateTime(2024,04,5), new DateTime(2022,04,05));
+        var expectedErrorMessage = "Start date cannot be before the end date";
+        try
+        {
+            IEnumerable<TemperatureDto> temps = await logic.GetAsync(search);
+        }
+        catch (Exception e)
+        {
+            Assert.AreEqual(expectedErrorMessage, e.Message);
+        }
+    }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentTrue_EmptyDatabase()
+    {
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<TemperatureDto>());
+        SearchMeasurementDto search = new SearchMeasurementDto(true, null, null);
+        IEnumerable<TemperatureDto> temps = await logic.GetAsync(search);
+        Assert.AreEqual(0, temps.Count());
+    }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentFalseCorrectDateTest()
+    {
+        TemperatureDto tempDto = new TemperatureDto { TemperatureId = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), value = 100};
+        TemperatureDto tempDto1 = new TemperatureDto { TemperatureId = 2, Date = new DateTime(2023, 4, 20, 19, 50, 0), value = 80};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<TemperatureDto>{tempDto, tempDto1});
+        SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2022,04,05),new DateTime(2024,04,5));
+        IEnumerable<TemperatureDto> temps = await logic.GetAsync(search);
+        Assert.AreEqual(2, temps.Count());
+    }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentFalseCorrectDateTest2()
+    {
+        TemperatureDto tempDto = new TemperatureDto { TemperatureId = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), value = 100};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<TemperatureDto>{tempDto});
+        SearchMeasurementDto search = new SearchMeasurementDto(false, null,new DateTime(2024,04,5));
+        IEnumerable<TemperatureDto> temps = await logic.GetAsync(search);
+        Assert.AreEqual(1, temps.Count());
+        Assert.AreEqual(tempDto, temps.FirstOrDefault());
+    }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentFalseCorrectDateTest3()
+    {
+        TemperatureDto tempDto = new TemperatureDto { TemperatureId = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), value = 100};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<TemperatureDto>{tempDto});
+        SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2023, 04, 5), null);
+        IEnumerable<TemperatureDto> temps = await logic.GetAsync(search);
+        Assert.AreEqual(1, temps.Count());
+        Assert.AreEqual(tempDto, temps.FirstOrDefault());
+    }
 
 }
