@@ -65,7 +65,7 @@ public class Converter : IConverter
     {
 
 	    // max allowed count is 7
-	    if (intervals.Schedule.Count() > 7)
+	    if (intervals.Intervals.Count() > 7)
 	    {
 		    throw new Exception("Too many intervals");
 	    }
@@ -75,7 +75,7 @@ public class Converter : IConverter
 
 
 	    // loop through the intervals and convert
-	    foreach (var interval in intervals.Schedule)
+	    foreach (var interval in intervals.Intervals)
 	    {
 
 		    int startHours = interval.StartTime.Hours;

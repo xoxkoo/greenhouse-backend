@@ -75,7 +75,7 @@ public class ConverterTest : DbTestBase
 	    var intervals = GetIntervals(7);
 
 
-	    string result = _converter.ConvertIntervalToHex(new ScheduleDto(){Schedule = intervals});
+	    string result = _converter.ConvertIntervalToHex(new ScheduleDto(){Intervals = intervals});
 	    string expected = "09cf04073c101cf04073c101cf04073c101cf0400";
 
 
@@ -89,7 +89,7 @@ public class ConverterTest : DbTestBase
 	    var intervals = GetIntervals(12);
 
 	    Assert.ThrowsException<Exception>(() =>
-		    _converter.ConvertIntervalToHex(new ScheduleDto() { Schedule = intervals }));
+		    _converter.ConvertIntervalToHex(new ScheduleDto() { Intervals = intervals }));
     }
 
     [TestMethod]
@@ -100,7 +100,7 @@ public class ConverterTest : DbTestBase
 		    { DayOfWeek = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(0) + TimeSpan.FromMinutes(0), EndTime = TimeSpan.FromHours(0) + TimeSpan.FromMinutes(0) };
 	    intervals.Add(interval);
 
-	    string result = _converter.ConvertIntervalToHex(new ScheduleDto(){Schedule = intervals});
+	    string result = _converter.ConvertIntervalToHex(new ScheduleDto(){Intervals = intervals});
 
 	    Assert.AreEqual(result, "0800000");
     }
@@ -113,7 +113,7 @@ public class ConverterTest : DbTestBase
 		    { DayOfWeek = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59), EndTime = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59) };
 	    intervals.Add(interval);
 
-	    string result = _converter.ConvertIntervalToHex(new ScheduleDto(){Schedule = intervals});
+	    string result = _converter.ConvertIntervalToHex(new ScheduleDto(){Intervals = intervals});
 
 	    Assert.AreEqual(result, "0afddfb");
     }
