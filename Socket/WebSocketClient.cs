@@ -1,4 +1,5 @@
-﻿using System.Net.WebSockets;
+﻿using System.Globalization;
+using System.Net.WebSockets;
 using System.Text;
 using Application.LogicInterfaces;
 using Newtonsoft.Json;
@@ -58,6 +59,7 @@ namespace Socket
 	            if (receiveResult.MessageType == WebSocketMessageType.Text)
 	            {
 		            string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
+		            Console.WriteLine($"Received message: {message}");
 
 		            //todo maybe this should be handled differently
 		            // check for the object that we want to receive
@@ -111,25 +113,30 @@ namespace Socket
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
         }
 
-        public async Task Send(string message)
+        public async Task Send(string hexData)
         {
 	        await Connect();
 
-	        var json = JsonConvert.SerializeObject(new
+	        if (_webSocket.State == WebSocketState.Open)
 	        {
-		        emd = "tx",
-		        EUI = "0004A30B00E7E072",
-		        port = 1,
-		        confirmed = true,
-		        data = "0102AABB"
-	        });
+		        var json = JsonConvert.SerializeObject(new
+		        {
+			        cmd = "rx",
+			        EUI = "0004A30B00E7E072",
+			        port = 6,
+			        confirmed = true,
+			        data = hexData
+		        });
 
-	        var buffer = Encoding.UTF8.GetBytes(json);
-	        var segment = new ArraySegment<byte>(buffer);
-	        await _webSocket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+		        byte[] sendBuffer = Encoding.UTF8.GetBytes(json);
+		        await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
 
-            byte[] sendBuffer = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(json));
-            await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
+		        Console.WriteLine("Message sent!");
+	        }
+	        else
+	        {
+		        Console.WriteLine("WebSocket connection is not open!");
+	        }
         }
 
         /**

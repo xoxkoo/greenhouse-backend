@@ -31,10 +31,20 @@ class RunWebSocket
 
 		WebSocketClient socket = container.Resolve<WebSocketClient>();
 
-		await socket.Send("");
+		try
+		{
+
+			// await socket.Connect();
+			await socket.Send("07817fff7");
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+			throw;
+		}
 
 		// Thread thread = new Thread( new ThreadStart(socket.Run));
-
+		//
 		// thread.Start();
 
 	}
