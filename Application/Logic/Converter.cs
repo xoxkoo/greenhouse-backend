@@ -51,11 +51,54 @@ public class Converter : IConverter
             case "000001":
                 response = await ReadTHCPayload(valueInBinary.Substring(6));
                 break;
-            //TODO
-            //handle rest of payloads
         }
 
         return response;
+    }
+
+    /**
+     * Convert schedule into hexadecimal payload
+     *
+     * @param intervals
+     */
+    public string ConvertIntervalToHex(ScheduleDto intervals)
+    {
+
+	    // max allowed count is 7
+	    if (intervals.Schedule.Count() > 7)
+	    {
+		    throw new Exception("Too many intervals");
+	    }
+
+	    // set the ide to be 2 (2 -> 10 in binary)
+	    string payloadBinary = "10";
+
+
+	    // loop through the intervals and convert
+	    foreach (var interval in intervals.Schedule)
+	    {
+
+		    int startHours = interval.StartTime.Hours;
+		    int startMinutes = interval.StartTime.Minutes;
+		    Console.WriteLine(startHours);
+
+		    int endHours = interval.EndTime.Hours;
+		    int endMinutes = interval.EndTime.Minutes;
+
+		    // convert start and end hours and minutes to hexadecimal
+		    // hours should be 5 bits, minutes 6 bits
+		    payloadBinary += IntToBinary(startHours, 5);
+		    payloadBinary += IntToBinary(startMinutes, 6);
+		    payloadBinary += IntToBinary(endHours, 5);
+		    payloadBinary += IntToBinary(endMinutes, 6);
+
+		    Console.WriteLine(IntToBinary(startHours, 5));
+
+	    }
+
+	    // return the hex value of payload
+	    // prepend 0 in the beginning, because provided binary string length must be a Dividable of 8
+	    return '0' + BinaryStringToHex(payloadBinary).ToLower();
     }
 
     private async Task<string> ReadTHCPayload(string data)
@@ -90,6 +133,51 @@ public class Converter : IConverter
         await temperatureLogic.CreateAsync(tempDto);
 
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
+    }
+
+    private string BinaryStringToHex(string binary)
+    {
+	    if (string.IsNullOrEmpty(binary))
+	    {
+		    throw new ArgumentException("The binary string cannot be null or empty.");
+	    }
+
+	    binary = PadToMultipleOf8(binary);
+
+	    if (binary.Length % 8 != 0)
+	    {
+		    throw new ArgumentException("The binary string length must be a multiple of 8.");
+	    }
+
+	    byte[] binaryData = new byte[binary.Length / 8];
+	    for (int i = 0; i < binaryData.Length; i++)
+	    {
+		    binaryData[i] = Convert.ToByte(binary.Substring(i * 8, 8), 2);
+	    }
+
+	    return BitConverter.ToString(binaryData).Replace("-", "");
+    }
+
+    /**
+     * Appends 0s to the end of a string to make its length divisible by 8.
+     */
+    private string PadToMultipleOf8(string value)
+    {
+	    const int multiple = 8; // Define the multiple we want to pad to.
+
+	    int currentLength = value.Length;
+	    int desiredLength = (currentLength + multiple - 1) / multiple * multiple; // Round up to nearest multiple of 8.
+
+	    return value.PadRight(desiredLength, '0');
+    }
+
+    private string IntToBinary(int number, int totalSize)
+    {
+	    string binary = Convert.ToString(number, 2);
+
+	    // prepend a zero to the binary string so the total length of the binary string is totalSize
+	    return binary.PadLeft((totalSize - binary.Length) + binary.Length, '0');
+
     }
 
     private string HexStringToBinary(string hex) {

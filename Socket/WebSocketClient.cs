@@ -56,39 +56,65 @@ namespace Socket
 
 			await Connect();
 
-            byte[] receiveBuffer = new byte[1024];
+            byte[] receiveBuffer = new byte[256];
+
+	        Console.WriteLine("Listening...");
+
             while (_webSocket.State == WebSocketState.Open)
             {
-	            Console.WriteLine("Listening...");
+
 	            WebSocketReceiveResult receiveResult = await _webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
 	            if (receiveResult.MessageType == WebSocketMessageType.Text)
 	            {
 		            string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
-		            Console.WriteLine($"Received message: {message}");
 
-		            try
+		            //todo maybe this should be handled differently
+		            // check for the object that we want to receive
+		            if (message.Substring(1,10).Equals("\"cmd\":\"rx\""))
 		            {
-			            // deserialize message into object
-						dynamic? response = JsonConvert.DeserializeObject(message);
-						if (response != null)
-						{
-							if (! response["data"].Equals(""))
-							{
+			            Console.WriteLine($"Received message: {message}");
 
-								// call convertor method to convert data from hexadecimal representation
-								var converterResponse = await _converter.ConvertFromHex(response["data"].ToString());
-								Console.WriteLine($"Convertor: {converterResponse}");
-							}
+			            try
+			            {
+				            // deserialize message into object
+				            dynamic? response = JsonConvert.DeserializeObject(message);
+				            if (response != null)
+				            {
+					            // check if response[cmd] is equal to 'rx'
+					            // checking for response we need
+					            if (response["cmd"] == "rx")
+					            {
+						            if (! response["data"].Equals(""))
+						            {
 
-						}
+							            try
+							            {
+											// call convertor method to convert data from hexadecimal representation
+								            var converterResponse = await _converter.ConvertFromHex(response["data"].ToString());
+								            Console.WriteLine($"Convertor: {converterResponse}");
+							            }
+							            catch (Exception e)
+							            {
+								            Console.WriteLine(e);
+
+							            }
+						            }
+					            }
+
+				            }
+				            Console.WriteLine("Listening...");
+			            }
+			            catch (Exception e)
+			            {
+				            Console.WriteLine("Object was not deserialized: " + e);
+			            }
+
 		            }
-		            catch (Exception e)
-		            {
-			            Console.WriteLine("Object was not deserialized: " + e);
-			            throw;
-		            }
+
 
 	            }
+
+
             }
 
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);

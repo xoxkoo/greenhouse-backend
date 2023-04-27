@@ -23,7 +23,7 @@ public class CO2Controller:ControllerBase
     {
         try
         {
-            SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime, endTime);
+	        SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime, endTime);
             var co2s = await Logic.GetAsync(parameters);
             return Ok(co2s);
         }
