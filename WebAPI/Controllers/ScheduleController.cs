@@ -30,4 +30,19 @@ public class ScheduleController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ScheduleDto>>> GetAsync()
+    {
+        try
+        {
+            var schedules = await Logic.GetAsync();
+            return Ok(schedules);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
 }

@@ -8,12 +8,12 @@ namespace Application.Logic;
 
 public class ScheduleLogic : IScheduleLogic
 {
-    private readonly IScheduleDao _temperatureDao;
+    private readonly IScheduleDao _scheduleDao;
 
 
-    public ScheduleLogic(IScheduleDao temperatureDao)
+    public ScheduleLogic(IScheduleDao scheduleDao)
     {
-        _temperatureDao = temperatureDao;
+        _scheduleDao = scheduleDao;
     }
 
     public async Task<ScheduleDto> CreateAsync(ScheduleCreationDto dto)
@@ -71,6 +71,16 @@ public class ScheduleLogic : IScheduleLogic
             Intervals = intervals
         };
         
-        return await _temperatureDao.CreateAsync(schedule);
+        return await _scheduleDao.CreateAsync(schedule);
+    }
+
+    public async Task<IEnumerable<ScheduleDto>> GetAsync()
+    {
+        return await _scheduleDao.GetAsync();
+    }
+
+    public async Task<IEnumerable<IntervalToSendDto>> GetScheduleForDay(DayOfWeek dayOfWeek)
+    {
+        return await _scheduleDao.GetScheduleForDay(dayOfWeek);
     }
 }

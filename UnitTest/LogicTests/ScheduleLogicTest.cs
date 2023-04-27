@@ -249,5 +249,29 @@ public class ScheduleLogicTest
         //Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentException>(() => logic.CreateAsync(dto));
     }
+    
+    
+    //GetAsync() tests
+    [TestMethod]
+    public async Task TestGetSchedules_ReturnsSchedulesFromDao()
+    {
+        // Arrange
+        var expectedSchedules = new List<ScheduleDto>
+        {
+            new ScheduleDto { Id = 1, Intervals = new List<IntervalDto>() },
+            new ScheduleDto { Id = 2, Intervals = new List<IntervalDto>() },
+            new ScheduleDto { Id = 3, Intervals = new List<IntervalDto>() }
+        };
+        dao.Setup(d => d.GetAsync()).ReturnsAsync(expectedSchedules);
+
+        // Act
+        var result = await logic.GetAsync();
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(expectedSchedules.Count(), result.Count());
+        Assert.AreEqual(expectedSchedules.First().Id, result.First().Id);
+        Assert.AreEqual(expectedSchedules.First().Intervals.Count(), result.First().Intervals.Count());
+    }
 }
     

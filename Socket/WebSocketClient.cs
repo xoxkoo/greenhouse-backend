@@ -117,7 +117,7 @@ namespace Socket
 
 	        var json = JsonConvert.SerializeObject(new
 	        {
-		        emd = "tx",
+		        cmd = "tx",
 		        EUI = "0004A30B00E7E072",
 		        port = 1,
 		        confirmed = true,
@@ -126,7 +126,7 @@ namespace Socket
 
 	        var buffer = Encoding.UTF8.GetBytes(json);
 	        var segment = new ArraySegment<byte>(buffer);
-	        await _webSocket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
+	        //await _webSocket.SendAsync(segment, WebSocketMessageType.Text, true, CancellationToken.None);
 
             byte[] sendBuffer = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(json));
             await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);

@@ -85,4 +85,30 @@ public class ScheduleControllerTests
         ObjectResult statusCodeResult = (ObjectResult)result.Result;
         Assert.AreEqual(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
     }
+    
+    [TestMethod]
+    public async Task GetAsync_AllSchedules_Test()
+    {
+        // Arrange
+        var expectedSchedules = new List<ScheduleDto>
+        {
+            new ScheduleDto { Id = 1, Intervals = new List<IntervalDto>() },
+            new ScheduleDto { Id = 2, Intervals = new List<IntervalDto>() },
+            new ScheduleDto { Id = 3, Intervals = new List<IntervalDto>() }
+        };
+        logic.Setup(logic => logic.GetAsync()).ReturnsAsync(expectedSchedules);
+
+        // Act
+        var result = await _controller.GetAsync();
+
+        // Assert
+        var okObjectResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okObjectResult);
+        var actualSchedules = okObjectResult.Value as IEnumerable<ScheduleDto>;
+        Assert.IsNotNull(actualSchedules);
+        Assert.AreEqual(expectedSchedules.Count, actualSchedules.Count());
+        Assert.AreEqual(200, okObjectResult.StatusCode);
+        Assert.AreEqual(expectedSchedules.GetType(), actualSchedules.GetType());
+        Assert.IsTrue(actualSchedules.SequenceEqual(expectedSchedules));
+    }
 }

@@ -31,11 +31,11 @@ class RunWebSocket
 
 		WebSocketClient socket = container.Resolve<WebSocketClient>();
 
-		await socket.Send("");
+		await socket.Send("0102AABB");
 
-		// Thread thread = new Thread( new ThreadStart(socket.Run));
+		//Thread thread = new Thread( new ThreadStart(socket.Run));
 
-		// thread.Start();
+		//thread.Start();
 
 	}
 
