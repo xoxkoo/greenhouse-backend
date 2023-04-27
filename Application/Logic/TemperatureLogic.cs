@@ -18,7 +18,22 @@ public class TemperatureLogic : ITemperatureLogic
 
     public async Task<TemperatureDto> CreateAsync(TemperatureCreateDto dto)
     {
-
+        if (dto == null)
+        {
+            throw new ArgumentNullException(nameof(dto), "Temperature object cannot be null");
+        }
+        if (dto.Value < -50)
+        {
+            throw new ArgumentOutOfRangeException(nameof(dto.Value), "Value of temperature cannot be below -50°C");
+        }
+        if (dto.Value > 60)
+        {
+            throw new ArgumentOutOfRangeException(nameof(dto.Value), "Value of temperature cannot be above 60°C");
+        }
+        if (dto.Date > DateTime.Now)
+        {
+            throw new ArgumentOutOfRangeException(nameof(dto.Date), "Date of temperature cannot be in the future");
+        }
         Temperature temperature = new Temperature
         {
             Date = DateTime.Now,

@@ -17,7 +17,23 @@ public class HumidityLogic : IHumidityLogic
     
     public async Task<HumidityDto> CreateAsync(HumidityCreationDto dto)
     {
-        //TODO add validation
+        if (dto == null)
+        {
+            throw new ArgumentNullException(nameof(dto), "Humidity data cannot be null.");
+        }
+
+        if (dto.Value < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(dto.Value), "Humidity value cannot be negative.");
+        }
+        if (dto.Value > 100)
+        {
+            throw new ArgumentOutOfRangeException(nameof(dto.Value), "Humidity value cannot be bigger than 100 percent.");
+        }
+        if (dto.Date > DateTime.Now)
+        {
+            throw new ArgumentOutOfRangeException(nameof(dto.Date), "Date of humidity cannot be in the future");
+        }
 
         var entity = new Humidity()
         {

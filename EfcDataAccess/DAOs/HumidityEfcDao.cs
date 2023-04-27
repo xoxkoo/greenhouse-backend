@@ -17,13 +17,8 @@ public class HumidityEfcDao : IHumidityDao
 
 	public async Task<HumidityDto> CreateAsync(Humidity humidity)
 	{
-		if (humidity == null)
-		{
-			throw new ArgumentNullException(nameof(humidity), "Humidity object cannot be null");
-		}
 		EntityEntry<Humidity> entity = await _context.Humidities.AddAsync(humidity);
 		await _context.SaveChangesAsync();
-
 		return new HumidityDto
 		{
 			Date = entity.Entity.Date,

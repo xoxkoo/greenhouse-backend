@@ -22,24 +22,6 @@ public class CO2EfcDao : ICO2Dao
 
 	public async Task<CO2Dto> CreateAsync(CO2 co2)
 	{
-		if (co2 == null)
-		{
-			throw new ArgumentNullException(nameof(co2), "CO2 data cannot be null.");
-		}
-
-		if (co2.Value < 0)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Value), "CO2 value cannot be negative.");
-		}
-		if (co2.Value > 4095)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Value), "CO2 value cannot be bigger than 4095 ppm.");
-		}
-		if (co2.Date > DateTime.Now)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Date), "Date of temperature cannot be in the future");
-		}
-
 		EntityEntry<CO2> entity = await _context.CO2s.AddAsync(co2);
 		await _context.SaveChangesAsync();
 		return new CO2Dto()

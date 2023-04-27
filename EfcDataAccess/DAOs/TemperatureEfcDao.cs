@@ -17,22 +17,6 @@ public class TemperatureEfcDao : ITemperatureDao
 
 	public async Task<TemperatureDto> CreateAsync(Temperature temperature)
 	{
-		if (temperature == null)
-		{
-			throw new ArgumentNullException(nameof(temperature), "Temperature object cannot be null");
-		}
-		if (temperature.Value < -50)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Value), "Value of temperature cannot be below -50°C");
-		}
-		if (temperature.Value > 60)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Value), "Value of temperature cannot be above 60°C");
-		}
-		if (temperature.Date > DateTime.Now)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Date), "Date of temperature cannot be in the future");
-		}
 
 		EntityEntry<Temperature> entity = await _context.Temperatures.AddAsync(temperature);
 		await _context.SaveChangesAsync();
