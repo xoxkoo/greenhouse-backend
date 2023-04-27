@@ -82,5 +82,83 @@ public class ConverterTest : DbTestBase
 	    string result = converter.ConvertActionsPayloadToHex(dto, 16);
 	    Assert.AreEqual("120010", result);
     }
+    [TestMethod]
+    public async Task ActionsPayload_DurationOverLimit()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = true
+	    };
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1024));
 
+    }
+    [TestMethod]
+    public async Task ActionsPayload_DurationTooLow()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = true
+	    };
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, -1));
+    }
+    [TestMethod]
+    public void ActionsPayload_NullDto()
+    {
+        Assert.ThrowsException<NullReferenceException>(() => converter.ConvertActionsPayloadToHex(null, 1));
+    }
+    [TestMethod]
+    public void ActionsPayload_ZeroDuration()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = true
+	    };
+        Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1025));
+    }
+
+    [TestMethod]
+    public void ActionsPayload_ToggleFalseCorrectDuration()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = false
+	    };
+        Assert.AreEqual("100001", converter.ConvertActionsPayloadToHex(dto, 1));
+    }
+    [TestMethod]
+    public void ActionsPayload_ToggleTrueCorrectDuration()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = true
+	    };
+	    Assert.AreEqual("120001", converter.ConvertActionsPayloadToHex(dto, 1));
+    }
+    [TestMethod]
+    public void ActionsPayload_ToggleFalseIncorrectDuration()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = false
+	    };
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1024));
+    }
+    [TestMethod]
+    public void ActionsPayload_ToggleTrueIncorrectDuration()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = true
+	    };
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 100000));
+    }
+    [TestMethod]
+    public void ActionsPayload_ToggleTrueIncorrectNegativeDuration()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = true
+	    };
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, -1));
+    }
 }
