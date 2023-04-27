@@ -244,5 +244,38 @@ public class ScheduleDaoTest : DbTestBase
         }
     }
     
+    [TestMethod]
+    public async Task GetScheduleForDay_ReturnsIntervalsForDayOfWeek()
+    {
+        // Arrange
+        DayOfWeek testDayOfWeek = DayOfWeek.Monday;
+        
+        // Add some intervals to the database
+        await DbContext.Intervals.AddRangeAsync(new List<Interval>
+        {
+            new Interval { DayOfWeek = DayOfWeek.Monday, StartTime = new TimeSpan(10, 0, 0), EndTime = new TimeSpan(12, 0, 0) },
+            new Interval { DayOfWeek = DayOfWeek.Monday, StartTime = new TimeSpan(14, 0, 0), EndTime = new TimeSpan(16, 0, 0) },
+            new Interval { DayOfWeek = DayOfWeek.Tuesday, StartTime = new TimeSpan(10, 0, 0), EndTime = new TimeSpan(12, 0, 0) },
+            new Interval { DayOfWeek = DayOfWeek.Wednesday, StartTime = new TimeSpan(14, 0, 0), EndTime = new TimeSpan(16, 0, 0) },
+        });
+        await DbContext.SaveChangesAsync();
+
+        // Act
+        IEnumerable<IntervalToSendDto> result = await dao.GetScheduleForDay(testDayOfWeek);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Count());
+
+        IntervalToSendDto firstInterval = result.ElementAt(0);
+        Assert.AreEqual(new TimeSpan(10, 0, 0), firstInterval.StartTime);
+        Assert.AreEqual(new TimeSpan(12, 0, 0), firstInterval.EndTime);
+
+        IntervalToSendDto secondInterval = result.ElementAt(1);
+        Assert.AreEqual(new TimeSpan(14, 0, 0), secondInterval.StartTime);
+        Assert.AreEqual(new TimeSpan(16, 0, 0), secondInterval.EndTime);
+    }
+    
+    
 
 }

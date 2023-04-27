@@ -68,17 +68,22 @@ public class ScheduleEfcDao : IScheduleDao
     {
         IEnumerable<IntervalDto> result = await _context.Intervals
             .Where(i => i.DayOfWeek == dayOfWeek) // Filter by Monday
-            .Select(i => new IntervalDto() { DayOfWeek = i.DayOfWeek, StartTime = i.StartTime, EndTime = i.EndTime })
+            .Select(i => new IntervalDto()
+            {
+                StartTime = i.StartTime,
+                EndTime = i.EndTime
+            })
             .ToListAsync();
 
-        IEnumerable<IntervalToSendDto> filteredIntervals = new List<IntervalToSendDto>();
-        foreach (var interval in result)
+        List<IntervalToSendDto> filteredIntervals = new List<IntervalToSendDto>();
+        foreach (IntervalDto interval in result)
         {
             IntervalToSendDto dto = new IntervalToSendDto
             {
                 StartTime = interval.StartTime,
                 EndTime = interval.EndTime
             };
+            filteredIntervals.Add(dto);
         }
         return filteredIntervals;
     }
