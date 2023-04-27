@@ -1,4 +1,5 @@
-﻿using Application.Logic;
+﻿using Application.DaoInterfaces;
+using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
@@ -17,6 +18,7 @@ public class ConverterTest : DbTestBase
 	private readonly Mock<ITemperatureLogic> tempLogic;
 	private readonly Mock<IHumidityLogic> humidityLogic;
 	private readonly Mock<ICO2Logic> co2logic;
+	private readonly Mock<IWateringSystemLogic> waterLogic;
 	private readonly IConverter converter;
 
 
@@ -25,7 +27,8 @@ public class ConverterTest : DbTestBase
 	    tempLogic = new Mock<ITemperatureLogic>();
 	    co2logic = new Mock<ICO2Logic>();
 	    humidityLogic = new Mock<IHumidityLogic>();
-        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object);
+	    waterLogic = new Mock<IWateringSystemLogic>();
+        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, waterLogic.Object);
     }
 
     [TestMethod]
@@ -67,6 +70,18 @@ public class ConverterTest : DbTestBase
     {
 	    Assert.ThrowsExceptionAsync<Exception>(() => converter.ConvertFromHex(""));
 	    Assert.ThrowsExceptionAsync<Exception>(() => converter.ConvertFromHex("    "));
+    }
+
+    [TestMethod]
+    public async Task ActionsPayload_CorrectStringResponse()
+    {
+	    ValveStateDto dto = new ValveStateDto()
+	    {
+		    Toggle = true
+	    };
+	    string result = await converter.ActionsPayload(dto, 60);
+	    //Toogle = true, duration = 60 minutes
+	    Assert.AreEqual("413c", result);
     }
 
 }

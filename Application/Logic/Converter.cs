@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
@@ -31,12 +32,13 @@ public class Converter : IConverter
     private ITemperatureLogic temperatureLogic;
     private ICO2Logic co2Logic;
     private IHumidityLogic humidityLogic;
-
-    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic)
+    private IWateringSystemLogic wateringSystemLogic;
+    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IWateringSystemLogic wateringSystemLogic)
     {
         this.temperatureLogic = temperatureLogic;
         this.co2Logic = co2Logic;
         this.humidityLogic = humidityLogic;
+        this.wateringSystemLogic = wateringSystemLogic;
     }
 
     public async Task<string> ConvertFromHex(string payload)
@@ -58,6 +60,39 @@ public class Converter : IConverter
         return response;
     }
 
+    public async Task<string> ActionsPayload(ValveStateDto dto, int duration)
+    {
+        //  ID 6 bits
+        //  Actions 8bits - 7th bit water toggle
+        // Interval 10bits - 1023 minutes
+        StringBuilder result = new StringBuilder();
+        
+        int toogleBit = 0;
+        if (dto.Toggle)
+        {
+            toogleBit = 1;
+        }
+        
+        //ID for this payload is 4
+        result.Append(4);
+        
+        // 7th bit for water - either 0 or 1
+        if ((dto.Toggle && toogleBit != 1) || (!dto.Toggle && toogleBit != 0))
+        {
+            throw new Exception("Toggle bit error.");
+        }
+        result.Append(toogleBit);
+        
+        //validation for duration
+        if (duration < 0 || duration > 1023)
+        {
+            throw new Exception("Duration must be an integer between 0 and 1023.");
+        }
+        //Interval in minutes
+        result.Append(Convert.ToString(duration, 16));
+        
+        return result.ToString();
+    }
     private async Task<string> ReadTHCPayload(string data)
     {
         //TODO handle flags
