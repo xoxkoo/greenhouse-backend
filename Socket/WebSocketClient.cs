@@ -1,15 +1,6 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Net.WebSockets;
-using System.Threading.Tasks;
+﻿using System.Net.WebSockets;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using Application.Logic;
 using Application.LogicInterfaces;
-using EfcDataAccess;
-using EfcDataAccess.DAOs;
 using Newtonsoft.Json;
 
 namespace Socket

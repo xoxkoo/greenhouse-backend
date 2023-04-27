@@ -7,7 +7,7 @@ using EfcDataAccess.DAOs;
 
 namespace Socket;
 
-class Program
+class RunWebSocket
 {
 	static void Main(string[] args)
 	{
