@@ -78,7 +78,7 @@ public class CO2LogicTest : DbTestBase
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<CO2Dto>{tempDto});
         SearchMeasurementDto search = new SearchMeasurementDto(true, new DateTime(2024,04,5), new DateTime(2022,04,05));
-        var expectedErrorMessage = "tart date cannot be before the end date";
+        var expectedErrorMessage = "Start date cannot be before the end date";
         try
         {
             IEnumerable<CO2Dto> co2s = await logic.GetAsync(search);
@@ -88,4 +88,14 @@ public class CO2LogicTest : DbTestBase
             Assert.AreEqual(expectedErrorMessage, e.Message);
         }
     }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentTrue_EmptyDatabase()
+    {
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<CO2Dto>());
+        SearchMeasurementDto search = new SearchMeasurementDto(true, null, null);
+        IEnumerable<CO2Dto> co2s = await logic.GetAsync(search);
+        Assert.AreEqual(0, co2s.Count());
+    }
+    
 }
