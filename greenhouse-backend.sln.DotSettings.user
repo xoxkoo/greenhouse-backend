@@ -1,8 +1,33 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">/Users/antondurcak/Library/Caches/JetBrains/Rider2022.3/resharper-host/temp/Rider/vAny/CoverageData/_greenhouse-backend.448564199/Snapshot/snapshot.utdcvr</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f2ff9eb0_002Dac3c_002D4f29_002Dac3b_002D854a439346c8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="THCPayload_ThrowErrorWhenNotHexValue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ConverterTest&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.TemperatureLogicTest&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6a7c8967_002Da559_002D4eeb_002D8142_002D75c73e6cfbbd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="CreateAsync_Returns_Created" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ScheduleControllerTests.CreateAsync_Returns_Created&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ScheduleControllerTests.CreateAsync_InvalidDto_ReturnsInternalServerError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ScheduleControllerTests.CreateAsync_ExceptionThrown_ReturnsInternalServerError&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=99eb028e_002D60b3_002D4005_002D9ca7_002D1a8966a55954/@EntryIndexedValue">&lt;SessionState ContinuousTestingIsOn="True" ContinuousTestingMode="3" Name="TemperatureDaoTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b4688e0c_002D639d_002D45be_002D87b9_002D2ff95662cfbf/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;And&gt;&#xD;
+      &lt;Project Location="C:\Users\natal\RiderProjects\greenhouse-backend\UnitTest" Presentation="&amp;lt;UnitTest&amp;gt;" /&gt;&#xD;
+      &lt;Namespace&gt;Testing.DaoTests&lt;/Namespace&gt;&#xD;
+      &lt;TestAncestor&gt;&#xD;
+        &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.DaoTests.CO2DaoTest&lt;/TestId&gt;&#xD;
+      &lt;/TestAncestor&gt;&#xD;
+    &lt;/And&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ScheduleLogicTest.SaveAsyncTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ScheduleControllerTests.CreateAsync_Returns_Created&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f2ff9eb0_002Dac3c_002D4f29_002Dac3b_002D854a439346c8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="THCPayload_ThrowErrorWhenNotHexValue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ConverterTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.TemperatureLogicTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
