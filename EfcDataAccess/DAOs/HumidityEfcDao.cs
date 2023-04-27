@@ -32,7 +32,7 @@ public class HumidityEfcDao : IHumidityDao
 		};
 	}
 	
-	public async Task<IEnumerable<HumidityDto>> GetHumidityAsync(SearchMeasurementDto searchMeasurement)
+	public async Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
 
 		var list = _context.Humidities.AsQueryable();

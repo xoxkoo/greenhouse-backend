@@ -97,5 +97,37 @@ public class CO2LogicTest : DbTestBase
         IEnumerable<CO2Dto> co2s = await logic.GetAsync(search);
         Assert.AreEqual(0, co2s.Count());
     }
-    
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentFalseCorrectDateTest()
+    {
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100};
+        CO2Dto tempDto1 = new CO2Dto { CO2Id = 2, Date = new DateTime(2023, 4, 20, 19, 50, 0), Value = 80};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<CO2Dto>{tempDto, tempDto1});
+        SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2022,04,05),new DateTime(2024,04,5));
+        IEnumerable<CO2Dto> co2s = await logic.GetAsync(search);
+        Assert.AreEqual(2, co2s.Count());
+    }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentFalseCorrectDateTest2()
+    {
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), Value = 100};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<CO2Dto>{tempDto});
+        SearchMeasurementDto search = new SearchMeasurementDto(false, null,new DateTime(2024,04,5));
+        IEnumerable<CO2Dto> co2s = await logic.GetAsync(search);
+        Assert.AreEqual(1, co2s.Count());
+        Assert.AreEqual(tempDto, co2s.FirstOrDefault());
+    }
+    [TestMethod]
+    public async Task CO2GetAsyncCurrentFalseCorrectDateTest3()
+    {
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), Value = 100};
+        dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
+            .ReturnsAsync(new List<CO2Dto>{tempDto});
+        SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2023, 04, 5), null);
+        IEnumerable<CO2Dto> co2s = await logic.GetAsync(search);
+        Assert.AreEqual(1, co2s.Count());
+        Assert.AreEqual(tempDto, co2s.FirstOrDefault());
+    }
 }

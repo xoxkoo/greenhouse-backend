@@ -32,17 +32,17 @@ public class CO2Logic : ICO2Logic
             dto.StartTime = null;
             dto.EndTime = null;
         }
-        if (dto.StartTime > dto.EndTime)
+        else if (dto.StartTime > dto.EndTime)
         {
             throw new Exception("Start date cannot be before the end date");
         }
-        if (dto.EndTime==null && dto.Current == false)
+        else if (dto.EndTime==null && dto.Current == false)
         {
             dto.EndTime=DateTime.MaxValue;
         }
-        if (dto.StartTime==null && dto.Current == false)
+        else if (dto.StartTime==null && dto.Current == false)
         {
-            dto.EndTime=DateTime.MinValue;
+            dto.StartTime=DateTime.MinValue;
         }
         return _co2Dao.GetAsync(dto);
     }
