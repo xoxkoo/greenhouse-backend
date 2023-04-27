@@ -1,6 +1,7 @@
 ﻿using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess.DAOs;
@@ -16,30 +17,48 @@ public class WateringSystemDao : IWateringSystemDao
 
     public async Task<ValveStateDto> CreateAsync(ValveState valveState)
     {
-        IQueryable<ValveState> tempQuery= _context.ValveState.AsQueryable();
-        ValveStateDto result = tempQuery.Select(v => new ValveStateDto() { Toggle = v.Toggle }).FirstOrDefault();
-        if (result.Toggle.Equals(true)&& valveState.Toggle.Equals(true))
+        ValveState existingState = await _context.ValveState.FirstOrDefaultAsync();
+        if (existingState != null)
         {
-            throw new Exception("The valve is already on");
+            if (existingState.Toggle == valveState.Toggle)
+            {
+                throw new Exception($"The valve is already {valveState.Toggle}");
+            }
+            else
+            {
+                _context.ValveState.Remove(existingState); // remove the existing entity
+                await _context.SaveChangesAsync();
+                EntityEntry<ValveState> entity = await _context.ValveState.AddAsync(valveState); // add the new entity
+                await _context.SaveChangesAsync();
+                ValveStateDto dto = new ValveStateDto()
+                {
+                    Toggle = entity.Entity.Toggle
+                };
+                return dto;
+            }
         }
-        else if (result.Toggle.Equals(false)&& valveState.Toggle.Equals(false))
+        else
         {
-            throw new Exception("The valve is already closed");
+            EntityEntry<ValveState> entity = await _context.ValveState.AddAsync(valveState);
+            await _context.SaveChangesAsync();
+            ValveStateDto dto = new ValveStateDto()
+            {
+                Toggle = entity.Entity.Toggle
+            };
+            return dto;
         }
-        EntityEntry<ValveState> entity = await _context.ValveState.AddAsync(valveState);
-        await _context.SaveChangesAsync();
-        ValveStateDto dto = new ValveStateDto()
-        {
-            Toggle = entity.Entity.Toggle
-        };
-        return dto;
     }
+
+
+
 
     public async Task<ValveStateDto> GetAsync()
     {
-        IQueryable<ValveState> tempQuery= _context.ValveState.AsQueryable();
-        ValveStateDto result = tempQuery.Select(v => new ValveStateDto() { Toggle = v.Toggle }).FirstOrDefault();
-        return result;
-       
+        IQueryable<ValveState> tempQuery = _context.ValveState.AsQueryable();
+        ValveStateDto? resultDto = await tempQuery
+            .Select(v => new ValveStateDto() { Toggle = v.Toggle })
+            .FirstOrDefaultAsync();
+        return resultDto ?? new ValveStateDto(); // return a new instance of ValveStateDto if resultDto is null
     }
+
 }

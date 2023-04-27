@@ -24,7 +24,8 @@ public class Context : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlite("Data Source = ./Greenhouse.db");
+		var dataSource = Path.Combine(Environment.CurrentDirectory, "../EfcDataAccess/Greenhouse.db");
+		optionsBuilder.UseSqlite($"Data Source = {dataSource};");
 	}
 
 }

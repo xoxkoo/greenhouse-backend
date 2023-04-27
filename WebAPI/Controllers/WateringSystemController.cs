@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("[controller]/toggle")]
 public class WateringSystemController:ControllerBase
 {
     private readonly IWateringSystemLogic Logic;
@@ -21,7 +21,6 @@ public class WateringSystemController:ControllerBase
     {
         try
         {
-           // ValveStateCreationDto valveStateCreationDto = new ValveStateCreationDto(){Toggle = dto.Toggle,duration = dto.duration};
             await Logic.CreateAsync(dto);
             return Ok();
         }
