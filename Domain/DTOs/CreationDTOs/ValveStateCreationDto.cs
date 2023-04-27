@@ -3,5 +3,5 @@
 public class ValveStateCreationDto
 {
     public bool Toggle { get; set; }
-
+    public int duration { get; set; }
 }

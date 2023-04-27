@@ -11,7 +11,7 @@ public class Context : DbContext
 	public DbSet<CO2> CO2s { get; set; }
 	public DbSet<Schedule> Schedules { get; set; }
 	public DbSet<Interval> Intervals { get; set; }
-	//public DbSet<ValveState> ValveState { get; set; }
+	public DbSet<ValveState> ValveState { get; set; }
 
 	public Context()
 	{
@@ -24,7 +24,8 @@ public class Context : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlite("Data Source = C:/Users/IZO21/RiderProjects/greenhouse-backend/EfcDataAccess/Greenhouse.db");
+		var dataSource = Path.Combine(Environment.CurrentDirectory, "../EfcDataAccess/Greenhouse.db");
+		optionsBuilder.UseSqlite($"Data Source = {dataSource};");
 	}
 
 }
