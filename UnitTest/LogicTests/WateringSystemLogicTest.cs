@@ -60,4 +60,17 @@ public class WateringSystemLogicTest : DbTestBase
             Assert.AreEqual(expectedValues, e.Message);
         }
     }
+    [TestMethod]
+    public async Task GetReturnsExpectedValue()
+    {
+        dao.Setup(dao => dao.GetAsync())
+            .ReturnsAsync(new ValveStateDto() {Toggle = false});
+        ValveStateCreationDto dto = new ValveStateCreationDto()
+        {
+            duration = 2,
+            Toggle = false
+        };
+        ValveStateDto created = await logic.CreateAsync(dto);
+        Assert.AreEqual(created.Toggle, dto.Toggle);
+    }
 }

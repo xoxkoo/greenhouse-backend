@@ -1,4 +1,10 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=266a5d95_002D5158_002D4644_002D9282_002Dc20da82fe5da/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="WateringSystemDurationNullTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.WateringSystemLogicTest.WateringSystemDurationNullTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.WateringSystemLogicTest.GetReturnsExpectedValue&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9c3cbd29_002D0420_002D491d_002Db109_002Def9b4dc16f77/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>

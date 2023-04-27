@@ -25,7 +25,7 @@ public class WateringSystemLogic : IWateringSystemLogic
         {
             throw new Exception("Toggle has to be set");
         }
-        if (dto.duration<=0)
+        if (dto.Toggle.Equals(true)&&(dto.duration<=0))
         {
             throw new Exception("Duration cannot be 0 or less");
         }
@@ -35,6 +35,7 @@ public class WateringSystemLogic : IWateringSystemLogic
         };
         //in converter call socket USE STATECREATION NOT ENTITY
         // await _converter.ConvertToHex;
+        
         return await _wateringSystemDao.CreateAsync(entity);
     }
 
