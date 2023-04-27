@@ -24,7 +24,7 @@ public class WateringSystemDaoTest : DbTestBase
         ValveState valve = new ValveState { Toggle = true };
         await DbContext.ValveState.AddAsync(valve);
         await DbContext.SaveChangesAsync();
-        var expectedErrorMessage = "The valve is already on";
+        var expectedErrorMessage = "The valve is already True";
 
         //Act and Assert
         var exception = await Assert.ThrowsExceptionAsync<Exception>(async () => await dao.CreateAsync(valve));
@@ -38,7 +38,7 @@ public class WateringSystemDaoTest : DbTestBase
         ValveState valve = new ValveState { Toggle = false };
         await DbContext.ValveState.AddAsync(valve);
         await DbContext.SaveChangesAsync();
-        var expectedErrorMessage = "The valve is already closed";
+        var expectedErrorMessage = "The valve is already False";
 
         //Act and Assert
         var exception = await Assert.ThrowsExceptionAsync<Exception>(async () => await dao.CreateAsync(valve));
