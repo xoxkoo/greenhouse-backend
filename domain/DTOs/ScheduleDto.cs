@@ -2,5 +2,6 @@
 
 public class ScheduleDto
 {
-    public IEnumerable<IntervalDto> Schedule { get; set; }
+    public int Id { get; set; }
+    public IEnumerable<IntervalDto> Intervals { get; set; }
 }

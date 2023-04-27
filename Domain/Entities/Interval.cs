@@ -6,7 +6,7 @@ public class Interval
 {
 	[Key]
 	public int Id { get; set; }
-	public TimeSpan StartDate { get; set; }
-	public TimeSpan EndDate { get; set; }
+	public TimeSpan StartTime { get; set; }
+	public TimeSpan EndTime { get; set; }
 	public DayOfWeek DayOfWeek { get; set; }
 }
