@@ -8,7 +8,7 @@ using WebAPI.Controllers;
 
 namespace Testing.WebApiTests;
 [TestClass]
-public class WateringSystemTest
+public class WateringSystemControllerTest
 {
     [TestMethod]
     public async Task CheckDurationValue()
@@ -25,6 +25,29 @@ public class WateringSystemTest
 
         try
         {
+            await controller.PostAsync(dto);
+        }
+        catch (Exception e)
+        {
+            // Check
+            Assert.AreEqual(expectedErrorMessage,e.Message);
+        }
+    }
+    [TestMethod]
+    public async Task CheckDurationMinusValue()
+    {
+        var expectedErrorMessage = "Duration cannot be 0 or less";
+        ValveStateCreationDto dto = new ValveStateCreationDto(){duration = -1,Toggle = true};
+        // Arrange
+        var logicMock = new Mock<IWateringSystemLogic>();
+        logicMock
+            .Setup(x => x.CreateAsync(dto))
+            .ThrowsAsync(new Exception("Duration cannot be 0 or less"));
+
+        var controller = new WateringSystemController(logicMock.Object);
+
+        try
+        { 
             await controller.PostAsync(dto);
         }
         catch (Exception e)
@@ -82,7 +105,7 @@ public class WateringSystemTest
         }
     }
     [TestMethod]
-    public async Task GetAsync_checkValue()
+    public async Task GetAsync_checkValueTrue()
     {
         ValveStateDto dto = new ValveStateDto(){Toggle = true};
         // Arrange
@@ -92,6 +115,19 @@ public class WateringSystemTest
         var controller = new WateringSystemController(logicMock.Object);
         await controller.GetAsync();
         Assert.AreEqual(true,dto.Toggle);
+ 
+    }
+    [TestMethod]
+    public async Task GetAsync_checkValueFalse()
+    {
+        ValveStateDto dto = new ValveStateDto(){Toggle = false};
+        // Arrange
+        var logicMock = new Mock<IWateringSystemLogic>();
+        logicMock
+            .Setup(x => x.GetAsync()).ReturnsAsync(dto);
+        var controller = new WateringSystemController(logicMock.Object);
+        await controller.GetAsync();
+        Assert.AreEqual(false,dto.Toggle);
  
     }
 }
