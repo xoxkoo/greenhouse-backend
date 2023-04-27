@@ -79,9 +79,8 @@ public class ConverterTest : DbTestBase
 	    {
 		    Toggle = true
 	    };
-	    string result = await converter.ActionsPayload(dto, 60);
-	    //Toogle = true, duration = 60 minutes
-	    Assert.AreEqual("413c", result);
+	    string result = converter.ConvertActionsPayloadToHex(dto, 16);
+	    Assert.AreEqual("120010", result);
     }
 
 }

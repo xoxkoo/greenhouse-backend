@@ -59,39 +59,46 @@ public class Converter : IConverter
 
         return response;
     }
-
-    public async Task<string> ActionsPayload(ValveStateDto dto, int duration)
+    /**
+     * Convert actions payload into hexidecimal payload
+     * 
+     * @param actionsPayload
+     */
+    public string ConvertActionsPayloadToHex(ValveStateDto dto, int duration)
     {
         //  ID 6 bits
         //  Actions 8bits - 7th bit water toggle
         // Interval 10bits - 1023 minutes
         StringBuilder result = new StringBuilder();
         
-        int toogleBit = 0;
+        //ID for this payload is 4
+        result.Append("000100");
+
+        int toggleBit = 0;
+        // bit is 1 if toggle is true, 0 if false
         if (dto.Toggle)
         {
-            toogleBit = 1;
+            toggleBit = 1;
         }
-        
-        //ID for this payload is 4
-        result.Append(4);
-        
-        // 7th bit for water - either 0 or 1
-        if ((dto.Toggle && toogleBit != 1) || (!dto.Toggle && toogleBit != 0))
+
+        // Validation for toggle bit
+        if ((dto.Toggle && toggleBit != 1) || (!dto.Toggle && toggleBit != 0))
         {
             throw new Exception("Toggle bit error.");
         }
-        result.Append(toogleBit);
+        // 7th bit is either 0 or 1, total size 8 bits
+        result.Append(IntToBinaryRight(toggleBit, 8));
         
-        //validation for duration
+        // Validation for duration
         if (duration < 0 || duration > 1023)
         {
             throw new Exception("Duration must be an integer between 0 and 1023.");
         }
-        //Interval in minutes
-        result.Append(Convert.ToString(duration, 16));
+        // Interval in minutes, total size of 10 bits
+        result.Append(IntToBinaryLeft(duration, 10));
         
-        return result.ToString();
+        // Return a hex representation of provided binary payload
+        return BinaryStringToHex(result.ToString()).ToLower();
     }
     private async Task<string> ReadTHCPayload(string data)
     {
@@ -127,30 +134,83 @@ public class Converter : IConverter
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 
+    private string BinaryStringToHex(string binary)
+    {
+       if (string.IsNullOrEmpty(binary))
+       {
+          throw new ArgumentException("The binary string cannot be null or empty.");
+       }
+
+       binary = PadToMultipleOf8(binary);
+
+       if (binary.Length % 8 != 0)
+       {
+          throw new ArgumentException("The binary string length must be a multiple of 8.");
+       }
+
+       byte[] binaryData = new byte[binary.Length / 8];
+       for (int i = 0; i < binaryData.Length; i++)
+       {
+          binaryData[i] = Convert.ToByte(binary.Substring(i * 8, 8), 2);
+       }
+
+       return BitConverter.ToString(binaryData).Replace("-", "");
+    }
+
+    /**
+     * Appends 0s to the end of a string to make its length divisible by 8.
+     */
+    private string PadToMultipleOf8(string value)
+    {
+       const int multiple = 8; // Define the multiple we want to pad to.
+
+       int currentLength = value.Length;
+       int desiredLength = (currentLength + multiple - 1) / multiple * multiple; // Round up to nearest multiple of 8.
+
+       return value.PadRight(desiredLength, '0');
+    }
+
+    private string IntToBinaryLeft(int number, int totalSize)
+    {
+       string binary = Convert.ToString(number, 2);
+
+       // prepend a zero to the binary string so the total length of the binary string is totalSize
+       return binary.PadLeft((totalSize - binary.Length) + binary.Length, '0');
+
+    }
+    private string IntToBinaryRight(int number, int totalSize)
+    {
+        string binary = Convert.ToString(number, 2);
+
+        // prepend a zero to the binary string so the total length of the binary string is totalSize
+        return binary.PadRight((totalSize - binary.Length) + binary.Length, '0');
+
+    }
     private string HexStringToBinary(string hex) {
         StringBuilder result = new StringBuilder();
 
         if (hex is not string)
         {
-	        throw new Exception("Hex value must be a string!");
+           throw new Exception("Hex value must be a string!");
         }
 
         if (hex.Trim().Length == 0)
         {
-			throw new Exception("Empty value is not allowed!");
+         throw new Exception("Empty value is not allowed!");
         }
 
         foreach (char c in hex) {
 
             if (! hexCharacterToBinary.ContainsKey(c))
             {
-	            throw new Exception($"Invalid character in hex value: {c}");
+               throw new Exception($"Invalid character in hex value: {c}");
             }
 
-	        result.Append(hexCharacterToBinary[char.ToLower(c)]);
+           result.Append(hexCharacterToBinary[char.ToLower(c)]);
         }
         return result.ToString();
     }
+
 
 
 }
