@@ -81,4 +81,17 @@ public class WateringSystemTest
             Assert.AreEqual(expectedErrorMessage,e.Message);
         }
     }
+    [TestMethod]
+    public async Task GetAsync_checkValue()
+    {
+        ValveStateDto dto = new ValveStateDto(){Toggle = true};
+        // Arrange
+        var logicMock = new Mock<IWateringSystemLogic>();
+        logicMock
+            .Setup(x => x.GetAsync()).ReturnsAsync(dto);
+        var controller = new WateringSystemController(logicMock.Object);
+        await controller.GetAsync();
+        Assert.AreEqual(true,dto.Toggle);
+ 
+    }
 }
