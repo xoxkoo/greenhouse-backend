@@ -172,4 +172,77 @@ public class ScheduleDaoTest : DbTestBase
     }
     
     
+    //GetAsync() tests
+    //Z - Zero
+    [TestMethod]
+    public async Task TestGetAsync_ReturnsEmptyListWhenNoSchedules()
+    {
+        // Arrange
+
+        // Act
+        var result = await dao.GetAsync();
+
+        // Assert
+        Assert.AreEqual(0, result.Count());
+    }
+    
+    //M - Many
+    [TestMethod]
+    public async Task GetAsync_Test_ReturnsAllSchedules()
+    {
+        // Arrange
+        var expectedSchedules = new List<Schedule>
+        {
+            new Schedule { Id = 1, Intervals = new List<Interval>() },
+            new Schedule { Id = 2, Intervals = new List<Interval>() },
+            new Schedule { Id = 3, Intervals = new List<Interval>() }
+        };
+        DbContext.Schedules.AddRange(expectedSchedules);
+        await DbContext.SaveChangesAsync();
+
+        // Act
+        var result = await dao.GetAsync();
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(expectedSchedules.Count(), result.Count());
+        foreach (var expectedSchedule in expectedSchedules)
+        {
+            var actualSchedule = result.SingleOrDefault(s => s.Id == expectedSchedule.Id);
+            Assert.IsNotNull(actualSchedule);
+        }
+    }
+    
+    [TestMethod]
+    public async Task GetAsync_SchedulesWithIntervals_Test()
+    {
+        // Arrange
+        var intervals = new List<IntervalDto>
+        {
+            new IntervalDto { DayOfWeek = DayOfWeek.Monday, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(12, 0, 0) },
+            new IntervalDto { DayOfWeek = DayOfWeek.Wednesday, StartTime = new TimeSpan(14, 0, 0), EndTime = new TimeSpan(18, 0, 0) }
+        };
+        var expectedSchedules = new List<ScheduleDto>
+        {
+            new ScheduleDto { Id = 1, Intervals = intervals },
+            new ScheduleDto { Id = 2, Intervals = intervals }
+        };
+        DbContext.Schedules.AddRange(expectedSchedules.Select(s => new Schedule { Id = s.Id }));
+        DbContext.Intervals.AddRange(intervals.Select(i => new Interval { DayOfWeek = i.DayOfWeek, StartTime = i.StartTime, EndTime = i.EndTime }));
+        await DbContext.SaveChangesAsync();
+
+        // Act
+        var result = await dao.GetAsync();
+
+        // Assert
+        Assert.AreEqual(expectedSchedules.Count, result.Count());
+        foreach (var expectedSchedule in expectedSchedules)
+        {
+            var actualSchedule = result.SingleOrDefault(s => s.Id == expectedSchedule.Id);
+            Assert.IsNotNull(actualSchedule);
+            Assert.AreEqual(expectedSchedule.Id, actualSchedule.Id);
+        }
+    }
+    
+
 }

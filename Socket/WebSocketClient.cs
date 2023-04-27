@@ -59,7 +59,6 @@ namespace Socket
 	            if (receiveResult.MessageType == WebSocketMessageType.Text)
 	            {
 		            string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
-		            Console.WriteLine($"Received message: {message}");
 
 		            //todo maybe this should be handled differently
 		            // check for the object that we want to receive

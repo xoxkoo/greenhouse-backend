@@ -32,14 +32,14 @@ public class TemperatureLogic : ITemperatureLogic
         {
             throw new Exception("Start date cannot be before the end date");
         }
-
+        
         if (dto.EndTime==null)
         {
             dto.EndTime=DateTime.MaxValue;
         }
         if (dto.StartTime==null)
         {
-            dto.EndTime=DateTime.MinValue;
+            dto.StartTime=DateTime.MinValue;
         }
 
         return await _temperatureDao.GetAsync(dto);
