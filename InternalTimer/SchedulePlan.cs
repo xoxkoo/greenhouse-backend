@@ -14,6 +14,7 @@ public class SchedulePlan : IJob
 	public async Task Execute(IJobExecutionContext context)
 	{
 		Console.WriteLine($"Job executed at {DateTime.Now}");
-		// var intervals = _scheduleLogic. /
+		var intervals = await _scheduleLogic.GetScheduleForDay(DateTime.Now.DayOfWeek);
+		Console.WriteLine(intervals.Count());
 	}
 }

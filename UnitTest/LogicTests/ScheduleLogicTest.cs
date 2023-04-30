@@ -14,12 +14,14 @@ public class ScheduleLogicTest
 {
     public Mock<IScheduleDao> dao;
     private IScheduleLogic logic;
+    private Mock<IConverter> converter;
 
     [TestInitialize]
     public void TestInitialize()
     {
+	    converter = new Mock<IConverter>();
         dao = new Mock<IScheduleDao>();
-        logic = new ScheduleLogic(dao.Object);
+        logic = new ScheduleLogic(dao.Object, converter.Object);
     }
 
     //CreateAsync() tests
@@ -249,8 +251,8 @@ public class ScheduleLogicTest
         //Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentException>(() => logic.CreateAsync(dto));
     }
-    
-    
+
+
     //GetAsync() tests
     [TestMethod]
     public async Task TestGetSchedules_ReturnsSchedulesFromDao()
@@ -274,4 +276,3 @@ public class ScheduleLogicTest
         Assert.AreEqual(expectedSchedules.First().Intervals.Count(), result.First().Intervals.Count());
     }
 }
-    

@@ -9,11 +9,13 @@ namespace Application.Logic;
 public class ScheduleLogic : IScheduleLogic
 {
     private readonly IScheduleDao _scheduleDao;
+    private readonly IConverter _converter;
 
 
-    public ScheduleLogic(IScheduleDao scheduleDao)
+    public ScheduleLogic(IScheduleDao scheduleDao, IConverter converter)
     {
         _scheduleDao = scheduleDao;
+        _converter = converter;
     }
 
     public async Task<ScheduleDto> CreateAsync(ScheduleCreationDto dto)
@@ -52,25 +54,31 @@ public class ScheduleLogic : IScheduleLogic
                 throw new ArgumentException("Seconds value in start and end times cannot be 60 or more");
             }
         }
-        
+
         for (int i = 0; i < intervals.Count; i++)
         {
             for (int j = i + 1; j < intervals.Count; j++)
             {
-                if (intervals[i].DayOfWeek == intervals[j].DayOfWeek && 
-                    intervals[i].StartTime < intervals[j].EndTime && 
+                if (intervals[i].DayOfWeek == intervals[j].DayOfWeek &&
+                    intervals[i].StartTime < intervals[j].EndTime &&
                     intervals[j].StartTime < intervals[i].EndTime)
                 {
                     throw new ArgumentException("Intervals cannot overlap");
                 }
             }
         }
-        
+
         Schedule schedule = new Schedule
         {
             Intervals = intervals
         };
-        
+
+        ScheduleDto scheduleDto = new ScheduleDto() { Intervals = dto.Intervals };
+
+        string hexPayload = _converter.ConvertIntervalToHex(dto);
+
+        //TODO call socket
+
         return await _scheduleDao.CreateAsync(schedule);
     }
 
