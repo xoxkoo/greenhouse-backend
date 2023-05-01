@@ -6,6 +6,8 @@ using EfcDataAccess.DAOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// hello there
+
 // Add services to the container.
 
 builder.Services.AddControllers();
