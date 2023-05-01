@@ -1,5 +1,0 @@
-C:\Users\babic\Sep\greenhouse-backend\Application\bin\Release\net6.0\publish\Application.dll
-C:\Users\babic\Sep\greenhouse-backend\Application\bin\Release\net6.0\publish\Application.deps.json
-C:\Users\babic\Sep\greenhouse-backend\Application\bin\Release\net6.0\publish\Application.pdb
-C:\Users\babic\Sep\greenhouse-backend\Application\bin\Release\net6.0\publish\Domain.dll
-C:\Users\babic\Sep\greenhouse-backend\Application\bin\Release\net6.0\publish\Domain.pdb

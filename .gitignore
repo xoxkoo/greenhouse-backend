@@ -1,3 +1,9 @@
 /.idea/
+**/.vscode
 /**/obj
 /**/bin
+/EfcDataAccess/Greenhouse.db-shm
+/EfcDataAccess/Greenhouse.db-wal
+/EfcDataAccess/Greenhouse.db
+/EfcDataAccess/Migrations
+greenhouse-backend.sln.DotSettings.user

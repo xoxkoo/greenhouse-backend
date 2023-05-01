@@ -1,8 +1,8 @@
 using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
-using FileData;
-using FileData.DAOs;
+using EfcDataAccess;
+using EfcDataAccess.DAOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +31,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseCors(x => x
+	.AllowAnyMethod()
+	.AllowAnyHeader()
+	.SetIsOriginAllowed(origin => true)
+	.AllowCredentials());
+
 
 app.UseHttpsRedirection();
 
