@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Socket
 {
-    public class WebSocketClient
+    public class WebSocketClient : IWebSocketClient
     {
         private readonly ClientWebSocket _webSocket;
         private readonly IConverter _converter;

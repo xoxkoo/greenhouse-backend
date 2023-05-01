@@ -1,5 +1,6 @@
 ﻿using Application.DaoInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 using EfcDataAccess.DAOs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,18 +20,18 @@ public class ScheduleDaoTest : DbTestBase
     }
 
     //CreateAsync() tests
-    //Z - Zero 
+    //Z - Zero
     [TestMethod]
     public async Task CreateSchedule_NullException_Test()
     {
-        //Arrange 
+        //Arrange
         Schedule schedule = null;
 
         //Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => dao.CreateAsync(schedule));
     }
 
-    //O - One 
+    //O - One
     [TestMethod]
     public async Task CreateSchedule_One_Test()
     {
@@ -126,9 +127,9 @@ public class ScheduleDaoTest : DbTestBase
         Assert.AreEqual(schedules[1].Intervals.FirstOrDefault()!.StartTime, results[1].Intervals.First().StartTime);
         Assert.AreEqual(schedules[1].Intervals.FirstOrDefault()!.EndTime, results[1].Intervals.First().EndTime);
     }
-    
-    
-    //B - Boundary 
+
+
+    //B - Boundary
     //B - Boundary
     [TestMethod]
     public async Task CreateSchedule_Boundary_ValidInput_Test()
@@ -163,15 +164,15 @@ public class ScheduleDaoTest : DbTestBase
         Assert.AreEqual(schedule.Intervals.Last().StartTime, createdScheduleDto.Intervals.Last().StartTime);
         Assert.AreEqual(schedule.Intervals.Last().EndTime, createdScheduleDto.Intervals.Last().EndTime);
     }
-    
+
     //B + E - Boundary + Exceptional behavior
     [TestMethod]
     public async Task CreateSchedule_NullInput_Test()
     {
         await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => dao.CreateAsync(null));
     }
-    
-    
+
+
     //GetAsync() tests
     //Z - Zero
     [TestMethod]
@@ -185,7 +186,7 @@ public class ScheduleDaoTest : DbTestBase
         // Assert
         Assert.AreEqual(0, result.Count());
     }
-    
+
     //M - Many
     [TestMethod]
     public async Task GetAsync_Test_ReturnsAllSchedules()
@@ -212,7 +213,7 @@ public class ScheduleDaoTest : DbTestBase
             Assert.IsNotNull(actualSchedule);
         }
     }
-    
+
     [TestMethod]
     public async Task GetAsync_SchedulesWithIntervals_Test()
     {
@@ -243,6 +244,6 @@ public class ScheduleDaoTest : DbTestBase
             Assert.AreEqual(expectedSchedule.Id, actualSchedule.Id);
         }
     }
-    
+
 
 }

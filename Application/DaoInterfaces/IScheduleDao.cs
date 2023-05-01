@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs;
+using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 
 namespace Application.DaoInterfaces;

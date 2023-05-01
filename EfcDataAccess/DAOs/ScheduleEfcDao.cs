@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Application.DaoInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

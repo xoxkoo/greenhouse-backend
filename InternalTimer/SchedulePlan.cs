@@ -3,6 +3,7 @@ using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
 using Quartz;
+using Socket;
 
 namespace InternalTimer;
 
@@ -15,9 +16,11 @@ public class SchedulePlan : IJob
 		var scheduleLogic = context.JobDetail.JobDataMap.Get("scheduleLogic") as IScheduleLogic;
 		var converter = context.JobDetail.JobDataMap.Get("converter") as IConverter;
 		var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
-		var hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
-		//TODO add websocket and send data to LoraWan
+		string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
 
+		var socket = context.JobDetail.JobDataMap.Get("webSocketClient") as IWebSocketClient;
 
+		//TODO discuss if we want to use socket here or call the logic
+		socket.Send(hexPayload);
 	}
 }

@@ -4,6 +4,7 @@ using System.Net.Http.Json;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Domain.DTOs.ScheduleDTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,8 +18,8 @@ public class ScheduleControllerTests
 {
     private Mock<IScheduleLogic> logic;
     private ScheduleController _controller;
-    
-    
+
+
     [TestInitialize]
     public void TestInitialize()
     {
@@ -61,15 +62,15 @@ public class ScheduleControllerTests
         // Act
         ActionResult<ScheduleDto> response = await _controller.CreateAsync(dto);
         Debug.WriteLine(response);
-        
-        
+
+
         // Assert
         Assert.IsInstanceOfType(response.Result, typeof(CreatedResult));
         CreatedResult createdResult = (CreatedResult)response.Result;
         Assert.AreEqual("/schedule/" + fromLogic.Id, createdResult.Location);
         Assert.AreEqual(fromLogic, createdResult.Value);
     }
-    
+
     [TestMethod]
     public async Task CreateAsync_ExceptionThrown_ReturnsInternalServerError()
     {
@@ -85,7 +86,7 @@ public class ScheduleControllerTests
         ObjectResult statusCodeResult = (ObjectResult)result.Result;
         Assert.AreEqual(StatusCodes.Status500InternalServerError, statusCodeResult.StatusCode);
     }
-    
+
     [TestMethod]
     public async Task GetAsync_AllSchedules_Test()
     {

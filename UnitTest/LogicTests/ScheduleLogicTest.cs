@@ -3,6 +3,7 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

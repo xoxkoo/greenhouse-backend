@@ -10,6 +10,7 @@ using InternalTimer;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
+using Socket;
 
 namespace InternalTimer;
 
@@ -31,11 +32,13 @@ class Program
 		services.AddSingleton<ITemperatureLogic, TemperatureLogic>();
 		services.AddSingleton<ICO2Logic, CO2Logic>();
 		services.AddSingleton<IHumidityLogic, HumidityLogic>();
+		services.AddSingleton<IWebSocketClient, WebSocketClient>();
 
 		var serviceProvider = services.BuildServiceProvider();
 		var jobData = new JobDataMap();
 		jobData.Add("scheduleLogic", serviceProvider.GetService<IScheduleLogic>());
 		jobData.Add("converter", serviceProvider.GetService<IConverter>());
+		jobData.Add("webSocketClient", serviceProvider.GetService<IWebSocketClient>());
 
 		// create a Quartz scheduler
 		var scheduler = await StdSchedulerFactory.GetDefaultScheduler();

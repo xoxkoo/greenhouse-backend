@@ -2,6 +2,7 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 
 namespace Application.Logic;

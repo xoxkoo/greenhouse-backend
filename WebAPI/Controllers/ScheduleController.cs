@@ -1,6 +1,7 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Domain.DTOs.ScheduleDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -30,7 +31,7 @@ public class ScheduleController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ScheduleDto>>> GetAsync()
     {
