@@ -1,14 +1,17 @@
-﻿using Application.DaoInterfaces;
+﻿using System.Text.Json.Serialization;
+using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
 using Autofac;
+using Domain.DTOs.CreationDTOs;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using InternalTimer;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
-using Quartz.Simpl;
+
+namespace InternalTimer;
 
 class Program
 {
@@ -16,23 +19,34 @@ class Program
 	{
 
 		var services = new ServiceCollection();
-		// Add required services to the service collection
+
+		// Register your services here
+		services.AddScoped<Context>();
+		services.AddSingleton<IScheduleDao, ScheduleEfcDao>();
+		services.AddSingleton<ITemperatureDao, TemperatureEfcDao>();
+		services.AddSingleton<IHumidityDao, HumidityEfcDao>();
+		services.AddSingleton<ICO2Dao, CO2EfcDao>();
+		services.AddSingleton<IConverter, Converter>();
 		services.AddSingleton<IScheduleLogic, ScheduleLogic>();
+		services.AddSingleton<ITemperatureLogic, TemperatureLogic>();
+		services.AddSingleton<ICO2Logic, CO2Logic>();
+		services.AddSingleton<IHumidityLogic, HumidityLogic>();
 
 		var serviceProvider = services.BuildServiceProvider();
-		var schedulerFactory = serviceProvider.GetService<ISchedulerFactory>();
-		var scheduler = await schedulerFactory.GetScheduler();
+		var jobData = new JobDataMap();
+		jobData.Add("scheduleLogic", serviceProvider.GetService<IScheduleLogic>());
+		jobData.Add("converter", serviceProvider.GetService<IConverter>());
 
-		var scheduleLogic = new JobDataMap();
-		scheduleLogic.Add("scheduleLogic", serviceProvider.GetService<IScheduleLogic>());
-
+		// create a Quartz scheduler
+		var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 
 		// start the scheduler
 		await scheduler.Start();
 
 		// define a job
 		var job = JobBuilder.Create<SchedulePlan>()
-			.UsingJobData(scheduleLogic)
+			.UsingJobData(jobData)
+			// .UsingJobData("intervals", intervals)
 			.WithIdentity("myJob")
 			.Build();
 

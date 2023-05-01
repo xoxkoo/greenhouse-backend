@@ -6,5 +6,5 @@ namespace Application.LogicInterfaces;
 public interface IConverter
 {
     Task<string> ConvertFromHex(string payload);
-    string ConvertIntervalToHex(ScheduleCreationDto intervals);
+    string ConvertIntervalToHex(ScheduleToSendDto intervals);
 }

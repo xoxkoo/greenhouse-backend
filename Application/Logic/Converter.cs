@@ -61,7 +61,7 @@ public class Converter : IConverter
      *
      * @param intervals
      */
-    public string ConvertIntervalToHex(ScheduleCreationDto intervals)
+    public string ConvertIntervalToHex(ScheduleToSendDto intervals)
     {
 
 	    // max allowed count is 7

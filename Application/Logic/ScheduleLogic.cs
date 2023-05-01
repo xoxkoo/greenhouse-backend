@@ -73,12 +73,6 @@ public class ScheduleLogic : IScheduleLogic
             Intervals = intervals
         };
 
-        ScheduleDto scheduleDto = new ScheduleDto() { Intervals = dto.Intervals };
-
-        string hexPayload = _converter.ConvertIntervalToHex(dto);
-
-        //TODO call socket
-
         return await _scheduleDao.CreateAsync(schedule);
     }
 

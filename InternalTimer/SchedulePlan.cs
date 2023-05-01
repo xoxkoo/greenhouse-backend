@@ -1,5 +1,7 @@
 using Application.Logic;
 using Application.LogicInterfaces;
+using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Quartz;
 
 namespace InternalTimer;
@@ -8,10 +10,14 @@ public class SchedulePlan : IJob
 {
 	public async Task Execute(IJobExecutionContext context)
 	{
-		var scheduleLogic = context.JobDetail.JobDataMap.Get("scheduleLogic") as IScheduleLogic;
+		Console.WriteLine($"[{DateTime.Now}] job executed");
 
-		Console.WriteLine($"Job executed at {DateTime.Now}");
-		var intervals = await scheduleLogic.GetScheduleForDay(DateTime.Now.DayOfWeek);
-		// Console.WriteLine(intervals.Count());
+		var scheduleLogic = context.JobDetail.JobDataMap.Get("scheduleLogic") as IScheduleLogic;
+		var converter = context.JobDetail.JobDataMap.Get("converter") as IConverter;
+		var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
+		var hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
+		//TODO add websocket and send data to LoraWan
+
+
 	}
 }
