@@ -39,7 +39,7 @@ public class TemperatureLogic : ITemperatureLogic
         }
         if (dto.StartTime==null)
         {
-            dto.EndTime=DateTime.MinValue;
+            dto.StartTime=DateTime.MinValue;
         }
 
         return await _temperatureDao.GetAsync(dto);

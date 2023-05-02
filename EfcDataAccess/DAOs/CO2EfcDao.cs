@@ -49,46 +49,41 @@ public class CO2EfcDao : ICO2Dao
 			Value = entity.Entity.Value
 		};
 	}
-	
-	public async Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto)
+	public async Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
-		IQueryable<CO2> tempQuery = _context.CO2s.AsQueryable();
-		IEnumerable<CO2Dto> result;
-		if (dto.EndTime !=null &&dto.StartTime != null && dto.Current != true)
+		var list = _context.CO2s.AsQueryable();
+
+
+		// if current is requested, return just last
+		if (searchMeasurement.Current)
 		{
-			tempQuery = tempQuery.Where(c => c.Date >= dto.StartTime && c.Date <= dto.EndTime).AsQueryable();
-			result = await tempQuery
-				.Select(c => new CO2Dto(){CO2Id = c.CO2Id, Date = c.Date, Value = c.Value})
-				.ToListAsync();
+			list = list
+				.OrderByDescending(h => h.Date)
+				.Take(1);
 		}
-		else if (dto.Current)
+		// return co2s in interval
+		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
 		{
-			result = await tempQuery
-				.Select(c => new CO2Dto(){CO2Id = c.CO2Id, Date = c.Date, Value = c.Value})
-				.ToListAsync();
-			result = result.OrderByDescending(c => c.Date);
-			result = result.Take(1).ToList();
+			list = list.Where(c => c.Date >= searchMeasurement.StartTime && c.Date <= searchMeasurement.EndTime);
 		}
-		else if (dto.StartTime != null)
+		else if (searchMeasurement.StartTime != null)
 		{
-			tempQuery = tempQuery.Where(c => c.Date >= dto.StartTime).AsQueryable();
-			result = await tempQuery
-				.Select(c => new CO2Dto() { CO2Id = c.CO2Id, Date = c.Date, Value = c.Value })
-				.ToListAsync();
+			list = list.Where(c => c.Date >= searchMeasurement.StartTime).AsQueryable();
+			
 		}
-		else if (dto.EndTime != null)
+		else if (searchMeasurement.EndTime != null)
 		{
-			tempQuery = tempQuery.Where(c => c.Date <= dto.EndTime).AsQueryable();
-			result = await tempQuery
-				.Select(c => new CO2Dto() { CO2Id = c.CO2Id, Date = c.Date, Value = c.Value })
-				.ToListAsync();
+			list = list.Where(c => c.Date <= searchMeasurement.EndTime).AsQueryable();
 		}
-		else
-		{
-			result = await tempQuery
-				.Select(c => new CO2Dto(){CO2Id = c.CO2Id, Date = c.Date, Value = c.Value})
-				.ToListAsync();
-		}
+
+		IEnumerable<CO2Dto> result = await list.Select(c =>
+			new CO2Dto
+			{
+				Date = c.Date,
+				Value = c.Value,
+				CO2Id = c.CO2Id
+			}).ToListAsync();
+
 		return result;
 	}
 

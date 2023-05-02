@@ -6,6 +6,8 @@ using EfcDataAccess.DAOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// hello there
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -16,10 +18,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
 builder.Services.AddScoped<ICO2Logic, CO2Logic>();
+builder.Services.AddScoped<IWateringSystemLogic, WateringSystemLogic>();
 
 builder.Services.AddScoped<ITemperatureDao, TemperatureEfcDao>();
 builder.Services.AddScoped<IHumidityDao, HumidityEfcDao>();
 builder.Services.AddScoped<ICO2Dao, CO2EfcDao>();
+builder.Services.AddScoped<IWateringSystemDao, WateringSystemDao>();
 
 builder.Services.AddDbContext<Context>();
 
