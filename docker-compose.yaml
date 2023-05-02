@@ -13,4 +13,9 @@ services:
       context: ./
     ports:
       - 5000:5000
-
+  database:
+    image: 'database:latest'
+    build:
+      context: ./
+    ports:
+      - 5002:5002
