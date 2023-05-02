@@ -1,9 +1,10 @@
-﻿using System.Text;
+﻿
+
+using System.Text;
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
-using Domain.DTOs.PayloadDTOs;
 
 namespace Application.Logic;
 
@@ -200,19 +201,6 @@ public class Converter : IConverter
        return BitConverter.ToString(binaryData).Replace("-", "");
     }
 
-    /**
-     * Appends 0s to the end of a string to make its length divisible by 8.
-     */
-    private string PadToMultipleOf8(string value)
-    {
-       const int multiple = 8; // Define the multiple we want to pad to.
-
-       int currentLength = value.Length;
-       int desiredLength = (currentLength + multiple - 1) / multiple * multiple; // Round up to nearest multiple of 8.
-
-       return value.PadRight(desiredLength, '0');
-    }
-
     private string IntToBinaryLeft(int number, int totalSize)
     {
        string binary = Convert.ToString(number, 2);
@@ -228,28 +216,6 @@ public class Converter : IConverter
         // prepend a zero to the binary string so the total length of the binary string is totalSize
         return binary.PadRight((totalSize - binary.Length) + binary.Length, '0');
 
-    }
-    private string BinaryStringToHex(string binary)
-    {
-	    if (string.IsNullOrEmpty(binary))
-	    {
-		    throw new ArgumentException("The binary string cannot be null or empty.");
-	    }
-
-	    binary = PadToMultipleOf8(binary);
-
-	    if (binary.Length % 8 != 0)
-	    {
-		    throw new ArgumentException("The binary string length must be a multiple of 8.");
-	    }
-
-	    byte[] binaryData = new byte[binary.Length / 8];
-	    for (int i = 0; i < binaryData.Length; i++)
-	    {
-		    binaryData[i] = Convert.ToByte(binary.Substring(i * 8, 8), 2);
-	    }
-
-	    return BitConverter.ToString(binaryData).Replace("-", "");
     }
 
     /**

@@ -26,12 +26,14 @@ class Program
 		services.AddSingleton<IScheduleDao, ScheduleEfcDao>();
 		services.AddSingleton<ITemperatureDao, TemperatureEfcDao>();
 		services.AddSingleton<IHumidityDao, HumidityEfcDao>();
+		services.AddSingleton<IWateringSystemDao, WateringSystemDao>();
 		services.AddSingleton<ICO2Dao, CO2EfcDao>();
 		services.AddSingleton<IConverter, Converter>();
 		services.AddSingleton<IScheduleLogic, ScheduleLogic>();
 		services.AddSingleton<ITemperatureLogic, TemperatureLogic>();
 		services.AddSingleton<ICO2Logic, CO2Logic>();
 		services.AddSingleton<IHumidityLogic, HumidityLogic>();
+		services.AddSingleton<IWateringSystemLogic, WateringSystemLogic>();
 		services.AddSingleton<IWebSocketClient, WebSocketClient>();
 
 		var serviceProvider = services.BuildServiceProvider();

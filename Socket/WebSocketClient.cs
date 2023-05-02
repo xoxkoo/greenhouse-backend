@@ -121,7 +121,7 @@ namespace Socket
 	        {
 		        var json = JsonConvert.SerializeObject(new
 		        {
-			        cmd = "rx",
+			        cmd = "tx",
 			        EUI = "0004A30B00E7E072",
 			        port = 6,
 			        confirmed = true,

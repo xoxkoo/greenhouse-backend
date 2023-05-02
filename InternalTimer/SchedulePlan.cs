@@ -15,12 +15,23 @@ public class SchedulePlan : IJob
 
 		var scheduleLogic = context.JobDetail.JobDataMap.Get("scheduleLogic") as IScheduleLogic;
 		var converter = context.JobDetail.JobDataMap.Get("converter") as IConverter;
-		var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
-		string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
-
 		var socket = context.JobDetail.JobDataMap.Get("webSocketClient") as IWebSocketClient;
 
-		//TODO discuss if we want to use socket here or call the logic
-		socket.Send(hexPayload);
+		try
+		{
+			var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
+			string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
+			//TODO discuss if we want to use socket here or call the logic
+			socket?.Send(hexPayload);
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+
+		}
+
+
+
+
 	}
 }
