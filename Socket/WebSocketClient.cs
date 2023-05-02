@@ -4,6 +4,7 @@ using System.Text;
 using Application.LogicInterfaces;
 using Newtonsoft.Json;
 
+
 namespace Socket
 {
     public class WebSocketClient : IWebSocketClient

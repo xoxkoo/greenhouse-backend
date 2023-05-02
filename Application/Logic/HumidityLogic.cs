@@ -41,10 +41,10 @@ public class HumidityLogic : IHumidityLogic
         }
         if (dto.StartTime==null)
         {
-            dto.EndTime=DateTime.MinValue;
+            dto.StartTime=DateTime.MinValue;
         }
 
-        return await _humidityDao.GetHumidityAsync(dto);
+        return await _humidityDao.GetAsync(dto);
     }
 
 

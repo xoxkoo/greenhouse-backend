@@ -103,7 +103,7 @@ public class HumidityDaoTest : DbTestBase
         var search = new SearchMeasurementDto(false, null, null);
 
         // Act
-        var result = await dao.GetHumidityAsync(search);
+        var result = await dao.GetAsync(search);
 
         // Assert
         Assert.IsNotNull(result);
@@ -128,7 +128,7 @@ public class HumidityDaoTest : DbTestBase
         var parameters = new SearchMeasurementDto(true);
 
         // Act
-        var result = await dao.GetHumidityAsync(parameters);
+        var result = await dao.GetAsync(parameters);
 
         // Assert
         Assert.IsNotNull(result);
@@ -153,7 +153,7 @@ public class HumidityDaoTest : DbTestBase
         var dto = new SearchMeasurementDto(false);
 
         // Act
-        var result = await dao.GetHumidityAsync(dto);
+        var result = await dao.GetAsync(dto);
 
         // Assert
         Assert.IsNotNull(result);
@@ -177,7 +177,7 @@ public class HumidityDaoTest : DbTestBase
         var dto = new SearchMeasurementDto(false, new DateTime(2023, 03, 01));
 
         // Act
-        var result = await dao.GetHumidityAsync(dto);
+        var result = await dao.GetAsync(dto);
 
         // Assert
         Assert.IsNotNull(result);
@@ -199,7 +199,7 @@ public class HumidityDaoTest : DbTestBase
         var dto = new SearchMeasurementDto(false, null, new DateTime(2023, 03, 01));
 
         // Act
-        var result = await dao.GetHumidityAsync(dto);
+        var result = await dao.GetAsync(dto);
 
         // Assert
         Assert.IsNotNull(result);

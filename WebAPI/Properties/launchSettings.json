@@ -12,7 +12,7 @@
     "WebAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
+      "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://10.154.202.66:7071;http://10.154.202.66:5060",
       "environmentVariables": {

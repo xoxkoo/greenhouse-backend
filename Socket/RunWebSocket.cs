@@ -19,11 +19,13 @@ class RunWebSocket
 		builder.RegisterType<HumidityLogic>().As<IHumidityLogic>();
 		builder.RegisterType<TemperatureLogic>().As<ITemperatureLogic>();
 		builder.RegisterType<CO2Logic>().As<ICO2Logic>();
-
+		builder.RegisterType<WateringSystemLogic>().As<IWateringSystemLogic>();
+		
 		builder.RegisterType<CO2EfcDao>().As<ICO2Dao>();
 		builder.RegisterType<HumidityEfcDao>().As<IHumidityDao>();
 		builder.RegisterType<TemperatureEfcDao>().As<ITemperatureDao>();
-
+		builder.RegisterType<WateringSystemDao>().As<IWateringSystemDao>();
+		
 		builder.RegisterType<Converter>().As<IConverter>();
 
 		builder.RegisterType<WebSocketClient>().AsSelf();

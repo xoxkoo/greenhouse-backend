@@ -17,11 +17,13 @@ builder.Services.AddScoped<IConverter, Converter>();
 builder.Services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 builder.Services.AddScoped<IHumidityLogic, HumidityLogic>();
 builder.Services.AddScoped<ICO2Logic, CO2Logic>();
+builder.Services.AddScoped<IWateringSystemLogic, WateringSystemLogic>();
 builder.Services.AddScoped<IScheduleLogic, ScheduleLogic>();
 
 builder.Services.AddScoped<ITemperatureDao, TemperatureEfcDao>();
 builder.Services.AddScoped<IHumidityDao, HumidityEfcDao>();
 builder.Services.AddScoped<ICO2Dao, CO2EfcDao>();
+builder.Services.AddScoped<IWateringSystemDao, WateringSystemDao>();
 builder.Services.AddScoped<IScheduleDao, ScheduleEfcDao>();
 
 builder.Services.AddDbContext<Context>();

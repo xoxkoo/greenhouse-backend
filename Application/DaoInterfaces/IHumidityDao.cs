@@ -5,6 +5,6 @@ namespace Application.DaoInterfaces;
 
 public interface IHumidityDao
 {
-	Task<IEnumerable<HumidityDto>> GetHumidityAsync(SearchMeasurementDto searchMeasurement);
+	Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto searchMeasurement);
 	Task<HumidityDto> CreateAsync(Humidity humidity);
 }
