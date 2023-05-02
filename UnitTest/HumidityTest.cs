@@ -32,15 +32,6 @@ public class HumidityTest
 		// SeedDatabase();
 	}
 
-	[TestMethod]
-	public void Test()
-	{
-
-		// var result = dao.GetHumidityAsync(new SearchMeasurementDto(false));
-		// Console.WriteLine(result.Result);
-
-		Assert.Equals(1, 1);
-	}
 
 	[ClassCleanup]
 	public void CleanUp()
