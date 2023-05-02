@@ -1,4 +1,5 @@
-﻿using System.Net.WebSockets;
+﻿using System.Globalization;
+using System.Net.WebSockets;
 using System.Text;
 using Application.LogicInterfaces;
 using Newtonsoft.Json;
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Socket
 {
-    public class WebSocketClient 
+    public class WebSocketClient : IWebSocketClient
     {
         private readonly ClientWebSocket _webSocket;
         private readonly IConverter _converter;
@@ -48,50 +49,94 @@ namespace Socket
 
 			await Connect();
 
-            byte[] receiveBuffer = new byte[1024];
+            byte[] receiveBuffer = new byte[256];
+
+	        Console.WriteLine("Listening...");
+
             while (_webSocket.State == WebSocketState.Open)
             {
-	            Console.WriteLine("Listening...");
+
 	            WebSocketReceiveResult receiveResult = await _webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
 	            if (receiveResult.MessageType == WebSocketMessageType.Text)
 	            {
 		            string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
-		            Console.WriteLine($"Received message: {message}");
 
-		            try
+		            //todo maybe this should be handled differently
+		            // check for the object that we want to receive
+		            if (message.Substring(1,10).Equals("\"cmd\":\"rx\""))
 		            {
-			            // deserialize message into object
-						dynamic? response = JsonConvert.DeserializeObject(message);
-						if (response != null)
-						{
-							if (! response["data"].Equals(""))
-							{
+			            Console.WriteLine($"Received message: {message}");
 
-								// call convertor method to convert data from hexadecimal representation
-								var converterResponse = await _converter.ConvertFromHex(response["data"].ToString());
-								Console.WriteLine($"Convertor: {converterResponse}");
-							}
+			            try
+			            {
+				            // deserialize message into object
+				            dynamic? response = JsonConvert.DeserializeObject(message);
+				            if (response != null)
+				            {
+					            // check if response[cmd] is equal to 'rx'
+					            // checking for response we need
+					            if (response["cmd"] == "rx")
+					            {
+						            if (! response["data"].Equals(""))
+						            {
 
-						}
+							            try
+							            {
+											// call convertor method to convert data from hexadecimal representation
+								            var converterResponse = await _converter.ConvertFromHex(response["data"].ToString());
+								            Console.WriteLine($"Convertor: {converterResponse}");
+							            }
+							            catch (Exception e)
+							            {
+								            Console.WriteLine(e);
+
+							            }
+						            }
+					            }
+
+				            }
+				            Console.WriteLine("Listening...");
+			            }
+			            catch (Exception e)
+			            {
+				            Console.WriteLine("Object was not deserialized: " + e);
+			            }
+
 		            }
-		            catch (Exception e)
-		            {
-			            Console.WriteLine("Object was not deserialized: " + e);
-			            throw;
-		            }
+
 
 	            }
+
+
             }
 
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
         }
 
-        public async Task Send(string message)
+        public async Task Send(string hexData)
         {
 	        await Connect();
 
-            byte[] sendBuffer = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(message));
-            await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
+	        if (_webSocket.State == WebSocketState.Open)
+	        {
+		        var json = JsonConvert.SerializeObject(new
+		        {
+			        cmd = "tx",
+			        EUI = "0004A30B00E7E072",
+			        port = 6,
+			        confirmed = true,
+			        data = hexData
+		        });
+
+		        byte[] sendBuffer = Encoding.UTF8.GetBytes(json);
+		        await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
+
+		        Console.WriteLine("Message sent!");
+	        }
+	        else
+	        {
+		        Console.WriteLine("WebSocket connection is not open!");
+	        }
         }
 
         /**
@@ -104,5 +149,4 @@ namespace Socket
         }
 
     }
-    
 }

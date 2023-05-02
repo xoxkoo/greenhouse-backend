@@ -51,13 +51,13 @@ public class ConverterTest : DbTestBase
         )), Times.Once);
     }
 
-    // [TestMethod]
-    // public async Task THCPayload_ResponseStringIsCorrect()
-    // {
-	   //  string result = await converter.ConvertFromHex("07817b1f4ff0");
-    //
-	   //  Assert.AreEqual("25.8, 31, 1279", result);
-    // }
+    [TestMethod]
+    public async Task THCPayload_ResponseStringIsCorrect()
+    {
+	    string result = await converter.ConvertFromHex("07817b1f4ff0");
+
+	    Assert.AreEqual("25.8, 31, 1279", result);
+    }
 
     [TestMethod]
     public void THCPayload_ThrowErrorWhenNotHexValue()
@@ -70,6 +70,69 @@ public class ConverterTest : DbTestBase
     {
 	    Assert.ThrowsExceptionAsync<Exception>(() => converter.ConvertFromHex(""));
 	    Assert.ThrowsExceptionAsync<Exception>(() => converter.ConvertFromHex("    "));
+    }
+
+    [TestMethod]
+    public void IntervalPayload_DataAreSent()
+    {
+	    var intervals = GetIntervals(7);
+
+
+	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
+	    string expected = "09cf04073c101cf04073c101cf04073c101cf0400";
+
+
+	    Assert.AreEqual(result, expected);
+    }
+
+    [TestMethod]
+    public void IntervalPayload_MaximumAmountOfIntervalsReached()
+    {
+	    // 7 intervals is maximum amount
+	    var intervals = GetIntervals(12);
+
+	    Assert.ThrowsException<Exception>(() =>
+		    converter.ConvertIntervalToHex(new ScheduleToSendDto() { Intervals = intervals }));
+    }
+
+    [TestMethod]
+    public void IntervalPayload_HoursAndMinutesAreMinBoundaries()
+    {
+	    var intervals = new List<IntervalToSendDto>();
+	    var interval = new IntervalToSendDto()
+		    { StartTime = TimeSpan.FromHours(0) + TimeSpan.FromMinutes(0), EndTime = TimeSpan.FromHours(0) + TimeSpan.FromMinutes(0) };
+	    intervals.Add(interval);
+
+	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
+
+	    Assert.AreEqual(result, "0800000");
+    }
+
+    [TestMethod]
+    public void IntervalPayload_HoursAndMinutesAreMaxBoundaries()
+    {
+	    var intervals = new List<IntervalToSendDto>();
+	    var interval = new IntervalToSendDto()
+		    { StartTime = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59), EndTime = TimeSpan.FromHours(23) + TimeSpan.FromMinutes(59) };
+	    intervals.Add(interval);
+
+	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
+
+	    Assert.AreEqual(result, "0afddfb");
+    }
+
+
+    private IEnumerable<IntervalToSendDto> GetIntervals(int n)
+    {
+	    var intervals = new List<IntervalToSendDto>();
+	    for (int i = 0; i < n; i++)
+	    {
+		    var interval = new IntervalToSendDto()
+			    {StartTime = TimeSpan.FromHours(14) + TimeSpan.FromMinutes(30), EndTime = TimeSpan.FromHours(1) + TimeSpan.FromMinutes(0) };
+		    intervals.Add(interval);
+
+	    }
+	    return intervals;
     }
 
     [TestMethod]

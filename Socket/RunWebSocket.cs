@@ -9,7 +9,7 @@ namespace Socket;
 
 class RunWebSocket
 {
-	static void Main(string[] args)
+	static async Task Main(string[] args)
 	{
 		var builder = new ContainerBuilder();
 
@@ -33,9 +33,21 @@ class RunWebSocket
 
 		WebSocketClient socket = container.Resolve<WebSocketClient>();
 
-		Thread thread = new Thread( new ThreadStart(socket.Run));
+		try
+		{
 
-		thread.Start();
+			// await socket.Connect();
+			await socket.Send("07817fff7");
+		}
+		catch (Exception e)
+		{
+			Console.WriteLine(e);
+			throw;
+		}
+
+		// Thread thread = new Thread( new ThreadStart(socket.Run));
+
+		// thread.Start();
 
 	}
 
