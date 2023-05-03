@@ -36,8 +36,8 @@ class RunWebSocket
 		try
 		{
 
-			// await socket.Connect();
-			await socket.Send("07817fff7");
+			 socket.Run();
+			//await socket.Send("07817fff7");
 		}
 		catch (Exception e)
 		{

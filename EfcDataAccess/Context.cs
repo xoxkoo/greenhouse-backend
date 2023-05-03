@@ -26,7 +26,7 @@ public class Context : DbContext
 	{
 		// var dataSource = Path.Combine(Environment.CurrentDirectory, "../EfcDataAccess/Greenhouse.db");
 		// optionsBuilder.UseSqlite($"Data Source = {dataSource};");
-		var dataSource = optionsBuilder.UseSqlite($"Data Source = /Users/antondurcak/Documents/via/SemesterIV/SEP/greenhouse/greenhouse-backend/EfcDataAccess/Greenhouse.db");
+		var dataSource = optionsBuilder.UseSqlite($"Data Source = C:/Users/babic/RiderProjects/greenhouse-backend/EfcDataAccess/Greenhouse.db");
 	}
 
 }
