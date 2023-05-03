@@ -31,4 +31,5 @@ public class HumidityController:ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
 }
