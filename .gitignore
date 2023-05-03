@@ -8,3 +8,5 @@
 /EfcDataAccess/Migrations
 /greenhouse-backend.sln.DotSettings.user
 /.env
+**/.env
+.env
