@@ -6,14 +6,9 @@ on:
       -main
 
 jobs:
-  tests:
-    name: Unit tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Run Tests 
-        run: dotnet test
+  unit_test:
+    name: Unit Test
+    uses: ./.github/workflows/unit_test.yaml
   build:
     name: Building image
     runs-on: ubuntu-latest
