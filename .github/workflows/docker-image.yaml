@@ -1,6 +1,9 @@
 name: CI/CD
 
-on: push
+on: 
+  push:
+    branches:
+      -main
 
 jobs:
   tests:
@@ -28,7 +31,6 @@ jobs:
         with:
           username:  babicajakub
           password:  i8HN8xn@m5JRdDbE
-
       - name: Build and push
         uses: docker/build-push-action@v2
         with:

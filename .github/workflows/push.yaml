@@ -1,0 +1,10 @@
+﻿name: Test pushed commits
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
+jobs:
+  unit_test:
+    name: Unit Test
+    uses: ./.github/workflows/cypress_test.yml
