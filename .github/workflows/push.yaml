@@ -7,4 +7,4 @@ on:
 jobs:
   unit_test:
     name: Unit Test
-    uses: ./.github/workflows/cypress_test.yml
+    uses: ./.github/workflows/unit_test.yaml
