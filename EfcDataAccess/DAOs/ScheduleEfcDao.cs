@@ -67,7 +67,7 @@ public class ScheduleEfcDao : IScheduleDao
     public async Task<IEnumerable<IntervalToSendDto>> GetScheduleForDay(DayOfWeek dayOfWeek)
     {
         IEnumerable<IntervalDto> result = await _context.Intervals
-            .Where(i => i.DayOfWeek == dayOfWeek) // Filter by Monday
+            .Where(i => i.DayOfWeek == dayOfWeek)
             .Select(i => new IntervalDto()
             {
                 StartTime = i.StartTime,

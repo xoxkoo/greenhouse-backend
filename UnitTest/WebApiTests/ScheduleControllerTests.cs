@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Net;
-using System.Net.Http.Json;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
@@ -14,10 +12,9 @@ namespace Testing.WebApiTests;
 
 [TestClass]
 public class ScheduleControllerTests
-{
+{    
     private Mock<IScheduleLogic> logic;
     private ScheduleController _controller;
-    
     
     [TestInitialize]
     public void TestInitialize()

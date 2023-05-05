@@ -39,7 +39,7 @@ public class CO2Controller:ControllerBase
         try
         {
             CO2Dto created = await Logic.CreateAsync(dto);
-            return Created($"/co2s/{created}", created);
+            return Created($"/co2s/{created.CO2Id}", created);
         }
         catch (Exception e)
         {
