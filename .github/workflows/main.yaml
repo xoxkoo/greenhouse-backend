@@ -3,7 +3,7 @@ name: CI/CD
 on: 
   push:
     branches:
-      -main
+      -dev-dockerUpdate
 
 jobs:
   unit_test:
@@ -31,3 +31,6 @@ jobs:
         with:
           push: true
           tags: babicajakub/greenhouse:latest  # Please change the username here
+  publish:
+      name: Publishing to the cloud
+      uses: ./.github/workflows/publish.yaml
