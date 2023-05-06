@@ -3,7 +3,7 @@ name: CI/CD
 on: 
   push:
     branches:
-      -dev-dockerUpdate
+      dev-dockerUpdate
 
 jobs:
   unit_test:
