@@ -6,9 +6,6 @@ on:
 jobs:
   Deploy:
     runs-on: ubuntu-latest #run this workflow on ubuntu instance
-    permissions: #make sure we add permission to read and write package
-      contents: read
-      packages: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1 #checkouts your repo, so this workflow can access it
