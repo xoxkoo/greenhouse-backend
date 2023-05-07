@@ -9,7 +9,12 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
-
+   
+      - id: auth
+        uses: google-github-actions/auth@v1
+        with:
+            credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}   
+            
       - name: Login to GCR
         env:
           PROJECT_ID: noted-palisade-385613
