@@ -18,6 +18,7 @@ public class TemperatureController:ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetAsync([FromQuery] bool current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
     {
+	    Console.WriteLine(endTime);
         try
         {
             SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime,endTime);
