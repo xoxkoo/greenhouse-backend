@@ -7,6 +7,9 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest #run this workflow on ubuntu instance
     steps:
+      - permissions:
+          contents: 'read'
+          id-token: 'write'
       - name: Checkout Code
         uses: actions/checkout@v1 #checkouts your repo, so this workflow can access it
       - name: Login to GCR
