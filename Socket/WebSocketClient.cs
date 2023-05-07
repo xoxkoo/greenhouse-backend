@@ -66,7 +66,6 @@ namespace Socket
 		            if (message.Substring(1,10).Equals("\"cmd\":\"rx\""))
 		            {
 			            Console.WriteLine($"Received message: {message}");
-
 			            try
 			            {
 				            // deserialize message into object
