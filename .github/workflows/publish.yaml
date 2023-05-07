@@ -9,10 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3 #checkouts your repo, so this workflow can access it
     - id: 'auth'
+      env:
+        KEY: '${{ secrets.SERVICE_ACCOUNT_KEY }}'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        credentials_json: '${{ secrets.SERVICE_ACCOUNT_KEY }}'    
+        credentials_json: ${{ env.KEY }}
     - name: Login to GCR
       env:
            PROJECT_ID: noted-palisade-385613 #create env called PROJECT_ID consisted of our actual GCP Project ID
