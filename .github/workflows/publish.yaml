@@ -7,17 +7,22 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest #run this workflow on ubuntu instance
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v1 #checkouts your repo, so this workflow can access it
-      - name: Login to GCR
-        env:
-            PROJECT_ID: noted-palisade-385613 #create env called PROJECT_ID consisted of our actual GCP Project ID
-        uses: google-github-actions/setup-gcloud@v0.3.0 #checkouts GCR repo, so this workflow can access it
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-            service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }} #parse the value of repository secret called SERVICE_ACCOUNT_KEY that we have created earlier
-            project_id: ${{ env.PROJECT_ID }} #parse the value of env called PROJECT_ID
-            export_default_credentials: true
-    
+          version: '270.0.0'
+          service_account_key: ${{ secrets.GCR_KEY }}
+      
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: |
+          # Set up docker to authenticate
+          # via gcloud command-line tool.
+          gcloud auth configure-docker
+      
+      
       - name: Build Docker Image
         env:
               IMAGE_NAME: greenhouse_backend_v1 #create env called IMAGE_NAME consisted of actual name of Docker Image after we build
