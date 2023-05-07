@@ -7,6 +7,14 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest #run this workflow on ubuntu instance
     steps:
+      - name: Log in to GHCR
+        env:
+          REGISTRY: ghcr.io #create env called REGISTRY
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+            registry: ${{ env.REGISTRY }} #parse REGISTRY env value to here. Make sure it is correctly stating ghcr.io
+            username: ${{ github.actor }} #this will be our github account
+            password: ${{ secrets.CR_PAT }} #parse the value of repository secret called CR_PAT that we have created earlier
       - name: Checkout Code
         uses: actions/checkout@v1 #checkouts your repo, so this workflow can access it
       - name: Login to GCR
