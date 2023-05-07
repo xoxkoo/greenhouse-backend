@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v2
       
       # Setup gcloud CLI
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@dev-dockerUpdate
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@v0.3.0
         with:
           version: '270.0.0'
           service_account_key: ${{ secrets.GCR_KEY }}
