@@ -1,8 +1,8 @@
 ﻿name: Publish to GCR and GHCR
 
-on: [push]
+on:
+  workflow_call:
   
-    
 jobs:
   Deploy:
     runs-on: ubuntu-latest
