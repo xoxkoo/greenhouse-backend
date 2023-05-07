@@ -7,48 +7,52 @@ jobs:
   Deploy:
     runs-on: ubuntu-latest #run this workflow on ubuntu instance
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v1 #checkouts your repo, so this workflow can access it
-      - name: Login to GCR
-        env:
-            PROJECT_ID: noted-palisade-385613 #create env called PROJECT_ID consisted of our actual GCP Project ID
-        uses: google-github-actions/setup-gcloud@v0.3.0 #checkouts GCR repo, so this workflow can access it
-        with:
+    - uses: actions/checkout@v3 #checkouts your repo, so this workflow can access it
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'    
+    - name: Login to GCR
+      env:
+           PROJECT_ID: noted-palisade-385613 #create env called PROJECT_ID consisted of our actual GCP Project ID
+      uses: google-github-actions/setup-gcloud@v0.3.0 #checkouts GCR repo, so this workflow can access it
+      with:
             service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }} #parse the value of repository secret called SERVICE_ACCOUNT_KEY that we have created earlier
             project_id: ${{ env.PROJECT_ID }} #parse the value of env called PROJECT_ID
             export_default_credentials: true
     
-      - name: Build Docker Image
-        env:
+    - name: Build Docker Image
+      env:
               IMAGE_NAME: greenhouse_backend_v1 #create env called IMAGE_NAME consisted of actual name of Docker Image after we build
               PROJECT_ID: noted-palisade-385613
-        run: docker build -t $IMAGE_NAME:latest . #build the docker image
+      run: docker build -t $IMAGE_NAME:latest . #build the docker image
     
-      - name: Configure Docker Client
-        run:  |-
-              gcloud auth configure-docker --quiet #authenticate to gcr
+    - name: Configure Docker Client
+      run:  |-
+            gcloud auth configure-docker --quiet #authenticate to gcr
     
-      - name: Push Docker Image to Container Registry GCR
-        env:
+    - name: Push Docker Image to Container Registry GCR
+      env:
               IMAGE_NAME: greenhouse_backend_v1
               PROJECT_ID: noted-palisade-385613
             #tag docker image to gcr image format then push to gcr
-        run: |-
+      run: |-
               docker tag $IMAGE_NAME:latest eu.gcr.io/$PROJECT_ID/$IMAGE_NAME:latest 
               docker push eu.gcr.io/$PROJECT_ID/$IMAGE_NAME:latest 
     
-      - name: Extract metadata (tags, labels) for Docker GHCR
-        env:
-              REGISTRY: ghcr.io
-              IMAGE_NAME: ${{ github.repository }}
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-              images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} #create ghcr image format within as id called meta
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc #push docker image to ghcr
-        with:
-            context: .
-            push: true
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
+    - name: Extract metadata (tags, labels) for Docker GHCR
+      env:
+            REGISTRY: ghcr.io
+            IMAGE_NAME: ${{ github.repository }}
+      id: meta
+      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      with:
+            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} #create ghcr image format within as id called meta
+    - name: Build and push Docker image
+      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc #push docker image to ghcr
+      with:
+           context: .
+           push: true
+           tags: ${{ steps.meta.outputs.tags }}
+           labels: ${{ steps.meta.outputs.labels }}
