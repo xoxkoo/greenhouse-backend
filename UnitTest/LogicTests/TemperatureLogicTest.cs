@@ -145,5 +145,40 @@ public class TemperatureLogicTest : DbTestBase
         Assert.AreEqual(1, temps.Count());
         Assert.AreEqual(tempDto, temps.FirstOrDefault());
     }
+//B + E - Boundary + Exceptional behavior
+    [TestMethod]
+    public async Task CreateTemperature_AboveRange_Test()
+    {
+        var temperature = new TemperatureCreateDto()
+        {
+            Date = new DateTime(2023, 04, 23),
+            Value = 61
+        };
+        
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(temperature));
+    }
+    
+    [TestMethod]
+    public async Task CreateTemperature_BelowRange_Test()
+    {
+        var temperature = new TemperatureCreateDto()
+        {
+            Date = new DateTime(2023, 04, 23),
+            Value = -51
+        };
 
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(temperature));
+    }
+    
+    [TestMethod]
+    public async Task CreateTemperature_FutureDate_Test()
+    {
+        var temperature = new TemperatureCreateDto()
+        {
+            Date = DateTime.Now.AddDays(1),
+            Value = 25
+        };
+
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(temperature));
+    }
 }

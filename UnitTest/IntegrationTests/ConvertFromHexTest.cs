@@ -18,6 +18,7 @@ public class ConvertFromHexTest : DbTestBase
     private ITemperatureLogic _temperatureLogic;
     private ICO2Logic _co2Logic;
     private IHumidityLogic _humidityLogic;
+    private IWateringSystemLogic _waterLogic;
     private IConverter _converter;
     
     [TestInitialize]
@@ -26,10 +27,12 @@ public class ConvertFromHexTest : DbTestBase
         ITemperatureDao temperatureDao = new TemperatureEfcDao(DbContext);
         ICO2Dao co2Dao = new CO2EfcDao(DbContext);
         IHumidityDao humidityDao = new HumidityEfcDao(DbContext);
+        IWateringSystemDao wateringSystemDao = new WateringSystemDao(DbContext);
         _temperatureLogic = new TemperatureLogic(temperatureDao);
         _co2Logic = new CO2Logic(co2Dao);
         _humidityLogic = new HumidityLogic(humidityDao);
-        _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic);
+        _waterLogic = new WateringSystemLogic(wateringSystemDao);
+        _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _waterLogic);
     }
     
 
