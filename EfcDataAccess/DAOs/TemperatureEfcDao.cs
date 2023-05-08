@@ -32,6 +32,7 @@ public class TemperatureEfcDao : ITemperatureDao
 	
 	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
 	{
+		long secondsPrecision = TimeSpan.TicksPerSecond;
 		IQueryable<Temperature> tempQuery= _context.Temperatures.AsQueryable();
 		if (dto.Current)
 		{
@@ -39,15 +40,15 @@ public class TemperatureEfcDao : ITemperatureDao
 		}
 		if (dto.EndTime !=null && dto.StartTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime && t.Date <= dto.EndTime).AsQueryable() ;
+			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision && t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision).AsQueryable() ;
 		}
 		else if (dto.StartTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime).AsQueryable();
+			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision).AsQueryable();
 		}
 		else if (dto.EndTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date <= dto.EndTime).AsQueryable();
+			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision).AsQueryable();
 		}
 		
 		IEnumerable<TemperatureDto> result = await tempQuery
