@@ -43,7 +43,7 @@ public class HumidityLogic : IHumidityLogic
 
         return await _humidityDao.CreateAsync(entity);
     }
-
+    
     public async Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto dto)
     {
         if (dto.StartTime>dto.EndTime)

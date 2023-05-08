@@ -48,16 +48,16 @@ public class CO2EfcDao : ICO2Dao
 		// One tick is 0.0001 millisecond, we divide it by number of ticks in one second so that the precision is in seconds.
 		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
 		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision );
+			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1);
 		}
 		else if (searchMeasurement.StartTime != null)
 		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision  >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision ).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
 			
 		}
 		else if (searchMeasurement.EndTime != null)
 		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision ).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
 		}
 
 		IEnumerable<CO2Dto> result = await list.Select(c =>

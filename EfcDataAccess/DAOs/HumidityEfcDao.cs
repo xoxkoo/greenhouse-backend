@@ -45,16 +45,16 @@ public class HumidityEfcDao : IHumidityDao
 		// return humidities in interval
 		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
 		{
-			list = list.Where(h => h.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision && h.Date.Ticks/secondsPrecision <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision);
+			list = list.Where(h => h.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && h.Date.Ticks/secondsPrecision <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1);
 		}
 		else if (searchMeasurement.StartTime != null)
 		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1).AsQueryable();
 			
 		}
 		else if (searchMeasurement.EndTime != null)
 		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1).AsQueryable();
 		}
 
 		IEnumerable<HumidityDto> result = await list.Select(h =>

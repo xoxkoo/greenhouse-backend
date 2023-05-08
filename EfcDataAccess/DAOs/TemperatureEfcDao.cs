@@ -40,15 +40,15 @@ public class TemperatureEfcDao : ITemperatureDao
 		}
 		if (dto.EndTime !=null && dto.StartTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision && t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision).AsQueryable() ;
+			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision-1 && t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision-1).AsQueryable() ;
 		}
 		else if (dto.StartTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision).AsQueryable();
+			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision-1).AsQueryable();
 		}
 		else if (dto.EndTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision).AsQueryable();
+			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision-1).AsQueryable();
 		}
 		
 		IEnumerable<TemperatureDto> result = await tempQuery
