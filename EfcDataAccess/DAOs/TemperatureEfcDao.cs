@@ -30,30 +30,43 @@ public class TemperatureEfcDao : ITemperatureDao
 		return dto;
 	}
 	
-	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
+	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
+		var list = _context.Temperatures.AsQueryable();
 		long secondsPrecision = TimeSpan.TicksPerSecond;
-		IQueryable<Temperature> tempQuery= _context.Temperatures.AsQueryable();
-		if (dto.Current)
+
+		// if current is requested, return just last
+		if (searchMeasurement.Current)
 		{
-			tempQuery = tempQuery.OrderByDescending(t => t.Date).Take(1).AsQueryable();
+			list = list
+				.OrderByDescending(h => h.Date)
+				.Take(1);
 		}
-		if (dto.EndTime !=null && dto.StartTime != null)
+		// return temperatures in interval
+		// DateTime of temperatures saved in database is converted to Ticks (the number of ticks that have elapsed since January 1, 0001, at 00:00:00.000 in the Gregorian calendar.)
+		// One tick is 0.0001 millisecond, we divide it by number of ticks in one second so that the precision is in seconds.
+		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision-1 && t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision-1).AsQueryable() ;
+			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision);
 		}
-		else if (dto.StartTime != null)
+		else if (searchMeasurement.StartTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision >= dto.StartTime.Value.Ticks/secondsPrecision-1).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
+			
 		}
-		else if (dto.EndTime != null)
+		else if (searchMeasurement.EndTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date.Ticks/secondsPrecision <= dto.EndTime.Value.Ticks/secondsPrecision-1).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
 		}
-		
-		IEnumerable<TemperatureDto> result = await tempQuery
-			.Select(t => new TemperatureDto(){Date = t.Date,TemperatureId = t.TemperatureId,value = t.Value})
-			.ToListAsync();
+
+		IEnumerable<TemperatureDto> result = await list.Select(c =>
+			new TemperatureDto()
+			{
+				Date = c.Date,
+				TemperatureId = c.TemperatureId,
+				value = c.Value
+			}).ToListAsync();
+
 		return result;
 	}
 
