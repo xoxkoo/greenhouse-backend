@@ -125,7 +125,7 @@ public class HumidityIntegrationTest : DbTestBase
     [TestMethod]
     public async Task GetAsync_Boundaries_Test() 
     {
-        await CreateTemperatures(10);
+        await CreateHumidities(10);
         // minutes are 0 and 2, so it should return 3 temperatures (0, 1, 2)
         var result = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 16, 2, 0));
         var createdResult = (ObjectResult?)result.Result; 
@@ -135,14 +135,14 @@ public class HumidityIntegrationTest : DbTestBase
         Assert.AreEqual(list.Count(), 3);
         }
     
-        private async Task CreateTemperatures(int num)
+        private async Task CreateHumidities(int num)
         {
             for (int i = 0; i < num; i++)
             {
                 HumidityCreationDto dto = new HumidityCreationDto()
                 {
                     Date = new DateTime(2023, 5, 7, 16, i, 0),
-                    Value = 1000 + i
+                    Value = 1 + i*3
                 };
                 
                 await _logic.CreateAsync(dto);

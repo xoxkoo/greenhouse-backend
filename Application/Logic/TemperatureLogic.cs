@@ -60,6 +60,8 @@ public class TemperatureLogic : ITemperatureLogic
         {
             dto.StartTime=DateTime.MinValue;
         }
+        Console.WriteLine($"Number of temperatures retrieved from database: {_temperatureDao.GetAsync(dto).Result.Count()}");
+        Console.WriteLine($"Start Time: {dto.StartTime}, End Time: {dto.EndTime}");
 
         return await _temperatureDao.GetAsync(dto);
     }
