@@ -19,7 +19,7 @@ public class CO2Controller:ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync([FromQuery] DateTime? startTime,[FromQuery] DateTime? endTime, [FromQuery] Boolean current)
+    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync([FromQuery] Boolean current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
     {
         try
         {

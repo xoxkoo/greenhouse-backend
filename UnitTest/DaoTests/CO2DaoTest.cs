@@ -30,7 +30,7 @@ public class CO2DaoTest : DbTestBase
     
     //O - One
     [TestMethod]
-    public async Task SaveCO2Test()
+    public async Task SaveCO2_Test()
     {
         var co2 = new CO2
         {
