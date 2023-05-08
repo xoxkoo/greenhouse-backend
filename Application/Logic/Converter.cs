@@ -106,7 +106,6 @@ public class Converter : IConverter
      */
     public string ConvertIntervalToHex(ScheduleToSendDto intervals)
     {
-
 	    // max allowed count is 7
 	    if (intervals.Intervals.Count() > 7)
 	    {
@@ -170,11 +169,9 @@ public class Converter : IConverter
             Date = DateTime.Now,
             Value = Convert.ToInt32(humidity, 2)
         };
-
         await co2Logic.CreateAsync(co2Dto);
         await humidityLogic.CreateAsync(humidityDto);
         await temperatureLogic.CreateAsync(tempDto);
-
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 

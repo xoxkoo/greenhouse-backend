@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Net;
-using System.Net.Http.Json;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
@@ -15,7 +13,7 @@ namespace Testing.WebApiTests;
 
 [TestClass]
 public class ScheduleControllerTests
-{
+{    
     private Mock<IScheduleLogic> logic;
     private ScheduleController _controller;
 
@@ -62,15 +60,15 @@ public class ScheduleControllerTests
         // Act
         ActionResult<ScheduleDto> response = await _controller.CreateAsync(dto);
         Debug.WriteLine(response);
-
-
+        
+        
         // Assert
         Assert.IsInstanceOfType(response.Result, typeof(CreatedResult));
         CreatedResult createdResult = (CreatedResult)response.Result;
         Assert.AreEqual("/schedule/" + fromLogic.Id, createdResult.Location);
         Assert.AreEqual(fromLogic, createdResult.Value);
     }
-
+    
     [TestMethod]
     public async Task CreateAsync_ExceptionThrown_ReturnsInternalServerError()
     {

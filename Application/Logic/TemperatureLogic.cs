@@ -43,16 +43,20 @@ public class TemperatureLogic : ITemperatureLogic
     }
     public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
     {
-        if (dto.StartTime>dto.EndTime)
+        if (dto.Current)
+        {
+            dto.StartTime = null;
+            dto.EndTime = null;
+        }
+        if (dto.StartTime > dto.EndTime)
         {
             throw new Exception("Start date cannot be before the end date");
         }
-        
-        if (dto.EndTime==null)
+        if (dto.EndTime==null && dto.Current == false)
         {
             dto.EndTime=DateTime.MaxValue;
         }
-        if (dto.StartTime==null)
+        if (dto.StartTime==null && dto.Current == false)
         {
             dto.StartTime=DateTime.MinValue;
         }
