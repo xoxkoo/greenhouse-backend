@@ -45,10 +45,11 @@ public class TemperatureEfcDao : ITemperatureDao
 		};
 		return dto;
 	}
-	
+
 	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
 	{
 		IQueryable<Temperature> tempQuery= _context.Temperatures.AsQueryable();
+
 		if (dto.Current)
 		{
 			tempQuery = tempQuery.OrderByDescending(t => t.Date).Take(1).AsQueryable();
@@ -65,7 +66,7 @@ public class TemperatureEfcDao : ITemperatureDao
 		{
 			tempQuery = tempQuery.Where(t => t.Date <= dto.EndTime).AsQueryable();
 		}
-		
+
 		IEnumerable<TemperatureDto> result = await tempQuery
 			.Select(t => new TemperatureDto(){Date = t.Date,TemperatureId = t.TemperatureId,value = t.Value})
 			.ToListAsync();

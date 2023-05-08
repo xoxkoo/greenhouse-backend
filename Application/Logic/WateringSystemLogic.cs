@@ -4,14 +4,16 @@ using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
+// using Socket;
 
 namespace Application.Logic;
 
 public class WateringSystemLogic : IWateringSystemLogic
 {
     private readonly IWateringSystemDao _wateringSystemDao;
+    // private readonly IWebSocketCLient _webSocketClient;
     private readonly Converter _converter;
-    
+
 
     public WateringSystemLogic(IWateringSystemDao wateringSystemDao)
     {
@@ -36,8 +38,14 @@ public class WateringSystemLogic : IWateringSystemLogic
         {
             Toggle = dto.Toggle
         };
+
+        var toggleDto = new ValveStateDto()
+        {
+	        Toggle = dto.Toggle
+        };
+
         //in converter call socket USE STATECREATION NOT ENTITY
-        // await _converter.ConvertToHex;
+        string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
 
         return await _wateringSystemDao.CreateAsync(entity);
     }

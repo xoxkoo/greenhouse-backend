@@ -3,7 +3,9 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Domain.Entities;
 using EfcDataAccess.DAOs;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Utils;
@@ -57,11 +59,16 @@ public class TemperatureIntegrationTest : DbTestBase
 
 		await _logic.CreateAsync(dto);
 
-		var tmpDto = await _controller.GetAsync(true);
+		var result = await _controller.GetAsync(true);
 
-		Assert.IsNotNull(tmpDto.Value);
-		Assert.AreEqual(tmpDto.Value.FirstOrDefault().TemperatureId, 1);
-		Assert.AreEqual((float)25.9, tmpDto.Value.FirstOrDefault().value);
+		var createdResult = (ObjectResult?)result.Result;
+		Assert.IsNotNull(createdResult);
+
+		var list = (IEnumerable<TemperatureDto>?)createdResult.Value;
+		Assert.IsNotNull(list);
+
+		Assert.AreEqual(list.FirstOrDefault().TemperatureId, 1);
+		Assert.AreEqual((float)25.9, list.FirstOrDefault().value);
 
 	}
 
@@ -70,11 +77,14 @@ public class TemperatureIntegrationTest : DbTestBase
 	{
 		await CreateTemperatures(10);
 
-		var temperatureDtos = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 20, 0, 0));
+		var result = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 10, 0, 0), new DateTime(2023, 5, 7, 20, 0, 0));
 
-		Console.WriteLine(temperatureDtos);
-		Assert.IsNotNull(temperatureDtos.Value);
-		Assert.AreEqual(temperatureDtos.Value.Count(), 10);
+		var createdResult = (ObjectResult?)result.Result;
+		Assert.IsNotNull(createdResult);
+
+		var list = (IEnumerable<TemperatureDto>?)createdResult.Value;
+		Assert.IsNotNull(list);
+		Assert.AreEqual(list.Count(), 10);
 	}
 
 	[TestMethod]
@@ -83,10 +93,14 @@ public class TemperatureIntegrationTest : DbTestBase
 		await CreateTemperatures(10);
 
 		// minutes are 0 and 2, so it should return 3 temperatures (0, 1, 2)
-		var temperatureDtos = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 16, 2, 0));
+		var result = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 16, 2, 0));
 
-		Assert.IsNotNull(temperatureDtos.Value);
-		Assert.AreEqual(temperatureDtos.Value.Count(), 3);
+		var createdResult = (ObjectResult?)result.Result;
+		Assert.IsNotNull(createdResult);
+
+		var list = (IEnumerable<TemperatureDto>?)createdResult.Value;
+		Assert.IsNotNull(list);
+		Assert.AreEqual(list.Count(), 3);
 	}
 
 	private async Task CreateTemperatures(int num)
@@ -98,6 +112,8 @@ public class TemperatureIntegrationTest : DbTestBase
 				Date = new DateTime(2023, 5, 7, 16, i, 0),
 				Value = (float)20.5 + i
 			};
+
+			Console.WriteLine(dto.Date.Ticks);
 			await _logic.CreateAsync(dto);
 		}
 	}
