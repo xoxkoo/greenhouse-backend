@@ -4,9 +4,9 @@
 &lt;/SessionState&gt;</s:String>
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f2ff9eb0_002Dac3c_002D4f29_002Dac3b_002D854a439346c8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="THCPayload_ThrowErrorWhenNotHexValue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;TestAncestor&gt;
-    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ConverterTest&lt;/TestId&gt;
-    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.TemperatureLogicTest&lt;/TestId&gt;
-  &lt;/TestAncestor&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f2ff9eb0_002Dac3c_002D4f29_002Dac3b_002D854a439346c8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="THCPayload_ThrowErrorWhenNotHexValue" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.ConverterTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::A83C0C3D-EF6B-414C-9B0C-3BF56755C0AE::net7.0::Testing.WebApiTests.TemperatureLogicTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

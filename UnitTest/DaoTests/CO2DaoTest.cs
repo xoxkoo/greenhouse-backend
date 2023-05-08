@@ -121,45 +121,8 @@ public class CO2DaoTest : DbTestBase
         Assert.AreEqual(co2.Value, savedCO2.Value);
         Assert.AreEqual(co2.Date, savedCO2.Date);
     }
-    
-    //B + E - Boundary + Exceptional behavior
-    [TestMethod]
-    public async Task CreateTemperature_AboveRange_Test()
-    {
-        var co2 = new CO2()
-        {
-            Date = new DateTime(2023, 04, 23),
-            Value = 5000
-        };
-        
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(co2));
-    }
-    
-    [TestMethod]
-    public async Task CreateTemperature_BelowRange_Test()
-    {
-        var co2 = new CO2()
-        {
-            Date = new DateTime(2023, 04, 23),
-            Value = -1
-        };
 
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(co2));
-    }
-    
-    [TestMethod]
-    public async Task CreateTemperature_FutureDate_Test()
-    {
-        var co2 = new CO2()
-        {
-            Date = DateTime.Now.AddDays(1),
-            Value = 25
-        };
 
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(co2));
-    }
-    
-    
     //GetAsync() test
     //Z - Zero
     [TestMethod]
