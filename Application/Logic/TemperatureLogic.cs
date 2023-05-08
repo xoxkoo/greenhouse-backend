@@ -47,7 +47,7 @@ public class TemperatureLogic : ITemperatureLogic
         {
             throw new Exception("Start date cannot be before the end date");
         }
-
+        
         if (dto.EndTime==null)
         {
             dto.EndTime=DateTime.MaxValue;

@@ -1,9 +1,10 @@
-﻿using System.Text;
+﻿
+
+using System.Text;
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
-using Domain.DTOs.PayloadDTOs;
 
 namespace Application.Logic;
 
@@ -53,15 +54,13 @@ public class Converter : IConverter
             case "000001":
                 response = await ReadTHCPayload(valueInBinary.Substring(6));
                 break;
-            //TODO
-            //handle rest of payloads
         }
 
         return response;
     }
     /**
      * Convert actions payload into hexidecimal payload
-     * 
+     *
      * @param actionsPayload
      */
     public string ConvertActionsPayloadToHex(ValveStateDto dto, int duration)
@@ -70,7 +69,7 @@ public class Converter : IConverter
         //  Actions 8bits - 7th bit water toggle
         // Interval 10bits - 1023 minutes
         StringBuilder result = new StringBuilder();
-        
+
         //ID for this payload is 4
         result.Append("000100");
 
@@ -88,7 +87,7 @@ public class Converter : IConverter
         }
         // 7th bit is either 0 or 1, total size 8 bits
         result.Append(IntToBinaryRight(toggleBit, 8));
-        
+
         // Validation for duration
         if (duration < 0 || duration > 1023)
         {
@@ -96,10 +95,55 @@ public class Converter : IConverter
         }
         // Interval in minutes, total size of 10 bits
         result.Append(IntToBinaryLeft(duration, 10));
-        
+
         // Return a hex representation of provided binary payload
         return BinaryStringToHex(result.ToString()).ToLower();
     }
+    /**
+     * Convert schedule into hexadecimal payload
+     *
+     * @param intervals
+     */
+    public string ConvertIntervalToHex(ScheduleToSendDto intervals)
+    {
+
+	    // max allowed count is 7
+	    if (intervals.Intervals.Count() > 7)
+	    {
+		    throw new Exception("Too many intervals");
+	    }
+
+	    // set the ide to be 2 (2 -> 10 in binary)
+	    string payloadBinary = "10";
+
+
+	    // loop through the intervals and convert
+	    foreach (var interval in intervals.Intervals)
+	    {
+
+		    int startHours = interval.StartTime.Hours;
+		    int startMinutes = interval.StartTime.Minutes;
+		    Console.WriteLine(startHours);
+
+		    int endHours = interval.EndTime.Hours;
+		    int endMinutes = interval.EndTime.Minutes;
+
+		    // convert start and end hours and minutes to hexadecimal
+		    // hours should be 5 bits, minutes 6 bits
+		    payloadBinary += IntToBinary(startHours, 5);
+		    payloadBinary += IntToBinary(startMinutes, 6);
+		    payloadBinary += IntToBinary(endHours, 5);
+		    payloadBinary += IntToBinary(endMinutes, 6);
+
+		    Console.WriteLine(IntToBinary(startHours, 5));
+
+	    }
+
+	    // return the hex value of payload
+	    // prepend 0 in the beginning, because provided binary string length must be a Dividable of 8
+	    return '0' + BinaryStringToHex(payloadBinary).ToLower();
+    }
+
     private async Task<string> ReadTHCPayload(string data)
     {
         //TODO handle flags
@@ -157,19 +201,6 @@ public class Converter : IConverter
        return BitConverter.ToString(binaryData).Replace("-", "");
     }
 
-    /**
-     * Appends 0s to the end of a string to make its length divisible by 8.
-     */
-    private string PadToMultipleOf8(string value)
-    {
-       const int multiple = 8; // Define the multiple we want to pad to.
-
-       int currentLength = value.Length;
-       int desiredLength = (currentLength + multiple - 1) / multiple * multiple; // Round up to nearest multiple of 8.
-
-       return value.PadRight(desiredLength, '0');
-    }
-
     private string IntToBinaryLeft(int number, int totalSize)
     {
        string binary = Convert.ToString(number, 2);
@@ -186,6 +217,29 @@ public class Converter : IConverter
         return binary.PadRight((totalSize - binary.Length) + binary.Length, '0');
 
     }
+
+    /**
+     * Appends 0s to the end of a string to make its length divisible by 8.
+     */
+    private string PadToMultipleOf8(string value)
+    {
+	    const int multiple = 8; // Define the multiple we want to pad to.
+
+	    int currentLength = value.Length;
+	    int desiredLength = (currentLength + multiple - 1) / multiple * multiple; // Round up to nearest multiple of 8.
+
+	    return value.PadRight(desiredLength, '0');
+    }
+
+    private string IntToBinary(int number, int totalSize)
+    {
+	    string binary = Convert.ToString(number, 2);
+
+	    // prepend a zero to the binary string so the total length of the binary string is totalSize
+	    return binary.PadLeft((totalSize - binary.Length) + binary.Length, '0');
+
+    }
+
     private string HexStringToBinary(string hex) {
         StringBuilder result = new StringBuilder();
 
