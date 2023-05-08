@@ -34,7 +34,7 @@ public class CO2EfcDao : ICO2Dao
 	public async Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
 		var list = _context.CO2s.AsQueryable();
-
+		long secondsPrecision = TimeSpan.TicksPerSecond;
 
 		// if current is requested, return just last
 		if (searchMeasurement.Current)
@@ -44,18 +44,20 @@ public class CO2EfcDao : ICO2Dao
 				.Take(1);
 		}
 		// return co2s in interval
+		// DateTime of co2s saved in database is converted to Ticks (the number of ticks that have elapsed since January 1, 0001, at 00:00:00.000 in the Gregorian calendar.)
+		// One tick is 0.0001 millisecond, we divide it by number of ticks in one second so that the precision is in seconds.
 		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
 		{
-			list = list.Where(c => c.Date >= searchMeasurement.StartTime && c.Date <= searchMeasurement.EndTime);
+			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision );
 		}
 		else if (searchMeasurement.StartTime != null)
 		{
-			list = list.Where(c => c.Date >= searchMeasurement.StartTime).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision ).AsQueryable();
 			
 		}
 		else if (searchMeasurement.EndTime != null)
 		{
-			list = list.Where(c => c.Date <= searchMeasurement.EndTime).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision ).AsQueryable();
 		}
 
 		IEnumerable<CO2Dto> result = await list.Select(c =>
