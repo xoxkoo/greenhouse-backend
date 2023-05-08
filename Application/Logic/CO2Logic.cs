@@ -42,7 +42,7 @@ public class CO2Logic : ICO2Logic
         }
         if (dto.StartTime==null && dto.Current == false)
         {
-            dto.EndTime=DateTime.MinValue;
+            dto.StartTime=DateTime.MinValue;
         }
 
         return _co2Dao.GetAsync(dto);

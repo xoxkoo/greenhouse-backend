@@ -121,7 +121,36 @@ public class HumidityIntegrationTest : DbTestBase
         var result =(IEnumerable<HumidityDto>?) createdResult.Value;
         Assert.AreEqual(2, result.Count());
     }
+        
+    [TestMethod]
+    public async Task GetAsync_Boundaries_Test() 
+    {
+        await CreateTemperatures(10);
+        // minutes are 0 and 2, so it should return 3 temperatures (0, 1, 2)
+        var result = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 16, 2, 0));
+        var createdResult = (ObjectResult?)result.Result; 
+        Assert.IsNotNull(createdResult);
+        var list = (IEnumerable<HumidityDto>?)createdResult.Value; 
+        Assert.IsNotNull(list); 
+        Assert.AreEqual(list.Count(), 3);
+        }
     
+        private async Task CreateTemperatures(int num)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                HumidityCreationDto dto = new HumidityCreationDto()
+                {
+                    Date = new DateTime(2023, 5, 7, 16, i, 0),
+                    Value = 1000 + i
+                };
+                
+                await _logic.CreateAsync(dto);
+                Console.WriteLine(DbContext.Humidities.FirstOrDefault().HumidityId);
+            }
+        }
+        
+        
     //B - Boundary
     [TestMethod]
     public async Task GetAsync_WithValidParameters_Boundaries_Test()
@@ -187,33 +216,5 @@ public class HumidityIntegrationTest : DbTestBase
     
     
     
-    [TestMethod]
-    public async Task GetAsync_Boundaries_Test()
-    {
-        await CreateTemperatures(10);
 
-        // minutes are 0 and 2, so it should return 3 temperatures (0, 1, 2)
-        var result = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 16, 2, 0));
-
-        var createdResult = (ObjectResult?)result.Result;
-        Assert.IsNotNull(createdResult);
-
-        var list = (IEnumerable<HumidityDto>?)createdResult.Value;
-        Assert.IsNotNull(list);
-        Assert.AreEqual(list.Count(), 3);
-    }
-
-    private async Task CreateTemperatures(int num)
-    {
-        for (int i = 0; i < num; i++)
-        {
-            HumidityCreationDto dto = new HumidityCreationDto()
-            {
-                Date = new DateTime(2023, 5, 7, 16, i, 0),
-                Value = 1000 + i
-            };
-            
-            await _logic.CreateAsync(dto);
-        }
-    }
 }
