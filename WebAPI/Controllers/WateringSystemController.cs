@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]/toggle")]
+[Route("watering-system/toggle")]
 public class WateringSystemController:ControllerBase
 {
     private readonly IWateringSystemLogic Logic;
@@ -25,7 +25,7 @@ public class WateringSystemController:ControllerBase
             return Ok();
         }
         catch (Exception e)
-        {   
+        {
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }

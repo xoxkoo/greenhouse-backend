@@ -113,7 +113,6 @@ public class TemperatureIntegrationTest : DbTestBase
 				Value = (float)20.5 + i
 			};
 
-			Console.WriteLine(dto.Date.Ticks);
 			await _logic.CreateAsync(dto);
 		}
 	}

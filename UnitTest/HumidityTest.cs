@@ -1,5 +1,4 @@
 using System.Data.Common;
-using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
