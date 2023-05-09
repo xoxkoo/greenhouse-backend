@@ -12,6 +12,7 @@ public class Context : DbContext
 	public DbSet<Schedule> Schedules { get; set; }
 	public DbSet<Interval> Intervals { get; set; }
 	public DbSet<ValveState> ValveState { get; set; }
+	public DbSet<Email> Mails { get; set; }
 
 	public Context()
 	{
