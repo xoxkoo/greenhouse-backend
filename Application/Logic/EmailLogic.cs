@@ -69,23 +69,23 @@ public class EmailLogic : IEmailLogic
     private SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
     {
         Port = 587,
-        Credentials = new NetworkCredential("greenhousex4@gmail.com", "kdrwjmjydpeojmrs"),
+        Credentials = new NetworkCredential("greenhousesep4@gmail.com", "zievqkygqhfrwioe"),
         EnableSsl = true,
     };
 
 
     public void sendMail(Email mail)
     {
-        MailMessage _message = new MailMessage
+        MailMessage message = new MailMessage
         {
             From = new MailAddress("greenhousex4@gmail.com"),
-            Subject = mail.Title,
-            Body = "<h1>" + mail.Body + "<h1>",
+            Subject = "Warning",
+            Body = "<h1>" + mail.Title + "<h1>\n<h4>" + mail.Body + "</h4>",
             IsBodyHtml = true
         };
         
-        _message.To.Add(mail.EmailAddress);
-        smtpClient.Send(_message);
+        message.To.Add(mail.EmailAddress);
+        smtpClient.Send(message);
     }
 
 }

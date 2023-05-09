@@ -29,8 +29,6 @@ public class HumidityEfcDao : IHumidityDao
 	
 	public async Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
-		Console.WriteLine(searchMeasurement.StartTime);
-
 		var list = _context.Humidities.AsQueryable();
 		long secondsPrecision = TimeSpan.TicksPerSecond;
 

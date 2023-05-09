@@ -15,7 +15,7 @@ public class MailTest : DbTestBase
     public void Mail_test()
     {
         Email mail = new Email();
-        mail.EmailAddress = "mateusz.zbyslaw@gmail.com";
+        mail.EmailAddress = "nataliakoziara6@gmail.com";
         mail.Title = "Greenhouse is overheated";
         mail.Body = "You stupid";
 
