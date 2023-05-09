@@ -29,9 +29,5 @@ public class SchedulePlan : IJob
 			Console.WriteLine(e);
 
 		}
-
-
-
-
 	}
 }
