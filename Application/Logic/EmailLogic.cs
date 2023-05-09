@@ -6,9 +6,39 @@ using Domain.DTOs;
 using Domain.Entities;
 
 namespace Application.Logic;
-
 public class EmailLogic : IEmailLogic
 {
+    private static Email temperatureTooLow = new Email()
+    {
+        Title = "Temperature is too low",
+        Body = "The temperature in the greenhouse is too low."
+    };
+    
+    private static Email temperatureTooHigh = new Email()
+    {
+        Title = "Temperature is too high",
+        Body = "The temperature in the greenhouse is too high."
+    };
+    private static Email humidityTooLow = new Email()
+    {
+        Title = "Humidity is too low",
+        Body = "The humidity in the greenhouse is too low."
+    };
+    private static Email humidityTooHigh = new Email()
+    {
+        Title = "Humidity is too high",
+        Body = "The humidity in the greenhouse is too high."
+    };
+    private static Email Co2LvlTooHigh = new Email()
+    {
+        Title = "CO2 is too high",
+        Body = "The CO2 in the greenhouse is too high."
+    };    private static Email Co2LvlTooLow = new Email()
+    {
+        Title = "CO2 is too low",
+        Body = "The CO2 in the greenhouse is too low."
+    };
+    
     private readonly IEmailDao _emailDao;
 
     public EmailLogic(IEmailDao emailDao)

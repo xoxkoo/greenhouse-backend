@@ -21,9 +21,19 @@ public class EmailEfcDao : IEmailDao
         {
             throw new ArgumentNullException(nameof(email), "Mail data cannot be null.");
         }
-        
+    
+        // Check if an email with the same email address already exists
+        Email existingEmail = await _context.Mails.FirstOrDefaultAsync();
+        if (existingEmail != null)
+        {
+            // Delete the existing email
+            _context.Mails.Remove(existingEmail);
+        }
+    
+        // Add the new email to the database
         EntityEntry<Email> entity = await _context.Mails.AddAsync(email);
         await _context.SaveChangesAsync();
+    
         return new EmailDto()
         {
             EmailAdress = entity.Entity.EmailAddress

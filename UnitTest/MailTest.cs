@@ -15,9 +15,9 @@ public class MailTest : DbTestBase
     public void Mail_test()
     {
         Email mail = new Email();
-        mail.EmailAddress = "nataliakoziara6@gmail.com";
+        mail.EmailAddress = "mateusz.zbyslaw@gmail.com";
         mail.Title = "Greenhouse is overheated";
-        mail.Body = "Open window";
+        mail.Body = "You stupid";
 
         IEmailDao dao = new EmailEfcDao(DbContext);
         IEmailLogic presetLogic = new EmailLogic(dao);
