@@ -3,8 +3,7 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
-using EfcDataAccess;
-using EfcDataAccess.DAOs;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
@@ -140,7 +139,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = true
+		    State = true
 	    };
 	    string result = converter.ConvertActionsPayloadToHex(dto, 16);
 	    Assert.AreEqual("120010", result);
@@ -150,7 +149,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = true
+		    State = true
 	    };
 	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1024));
 
@@ -160,7 +159,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = true
+		    State = true
 	    };
 	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, -1));
     }
@@ -174,7 +173,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = true
+		    State = true
 	    };
         Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1025));
     }
@@ -184,7 +183,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = false
+		    State = false
 	    };
         Assert.AreEqual("100001", converter.ConvertActionsPayloadToHex(dto, 1));
     }
@@ -193,7 +192,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = true
+		    State = true
 	    };
 	    Assert.AreEqual("120001", converter.ConvertActionsPayloadToHex(dto, 1));
     }
@@ -202,7 +201,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = false
+		    State = false
 	    };
 	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1024));
     }
@@ -211,7 +210,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = true
+		    State = true
 	    };
 	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 100000));
     }
@@ -220,7 +219,7 @@ public class ConverterTest : DbTestBase
     {
 	    ValveStateDto dto = new ValveStateDto()
 	    {
-		    Toggle = true
+		    State = true
 	    };
 	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, -1));
     }

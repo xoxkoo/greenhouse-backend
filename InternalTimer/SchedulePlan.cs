@@ -1,4 +1,3 @@
-using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
@@ -27,11 +26,8 @@ public class SchedulePlan : IJob
 		catch (Exception e)
 		{
 			Console.WriteLine(e);
-
+			new Exception("Intervals were not sent to the server");
 		}
-
-
-
 
 	}
 }

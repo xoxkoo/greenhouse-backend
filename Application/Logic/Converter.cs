@@ -75,15 +75,15 @@ public class Converter : IConverter
 
         int toggleBit = 0;
         // bit is 1 if toggle is true, 0 if false
-        if (dto.Toggle)
+        if (dto.State)
         {
             toggleBit = 1;
         }
 
         // Validation for toggle bit
-        if ((dto.Toggle && toggleBit != 1) || (!dto.Toggle && toggleBit != 0))
+        if ((dto.State && toggleBit != 1) || (!dto.State && toggleBit != 0))
         {
-            throw new Exception("Toggle bit error.");
+            throw new Exception("State bit error.");
         }
         // 7th bit is either 0 or 1, total size 8 bits
         result.Append(IntToBinaryRight(toggleBit, 8));
