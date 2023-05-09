@@ -130,4 +130,40 @@ public class CO2LogicTest : DbTestBase
         Assert.AreEqual(1, co2s.Count());
         Assert.AreEqual(tempDto, co2s.FirstOrDefault());
     }
+    //B + E - Boundary + Exceptional behavior
+    [TestMethod]
+    public async Task CreateTemperature_AboveRange_Test()
+    {
+        var co2 = new CO2CreateDto()
+        {
+            Date = new DateTime(2023, 04, 23),
+            Value = 5000
+        };
+        
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(co2));
+    }
+    
+    [TestMethod]
+    public async Task CreateTemperature_BelowRange_Test()
+    {
+        var co2 = new CO2CreateDto()
+        {
+            Date = new DateTime(2023, 04, 23),
+            Value = -1
+        };
+
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(co2));
+    }
+    
+    [TestMethod]
+    public async Task CreateTemperature_FutureDate_Test()
+    {
+        var co2 = new CO2CreateDto()
+        {
+            Date = DateTime.Now.AddDays(1),
+            Value = 25
+        };
+
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(co2));
+    }
 }

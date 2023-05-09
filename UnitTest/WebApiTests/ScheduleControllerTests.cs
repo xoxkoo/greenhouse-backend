@@ -4,6 +4,7 @@ using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
 using Domain.DTOs.ScheduleDTOs;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -13,7 +14,7 @@ namespace Testing.WebApiTests;
 
 [TestClass]
 public class ScheduleControllerTests
-{
+{    
     private Mock<IScheduleLogic> logic;
     private ScheduleController _controller;
 
@@ -68,15 +69,15 @@ public class ScheduleControllerTests
 	        }
         });
         Debug.WriteLine(response);
-
-
+        
+        
         // Assert
         Assert.IsInstanceOfType(response.Result, typeof(CreatedResult));
         CreatedResult createdResult = (CreatedResult)response.Result;
         Assert.AreEqual("/schedule/" + fromLogic.Id, createdResult.Location);
         Assert.AreEqual(fromLogic, createdResult.Value);
     }
-
+    
     [TestMethod]
     public async Task CreateAsync_ExceptionThrown_ReturnsInternalServerError()
     {

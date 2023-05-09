@@ -95,7 +95,7 @@ public class HumidityDaoTest : DbTestBase
     
     
     //GetAsync() test
-    //O - One
+    //Z - Zero
     [TestMethod]
     public async Task GetHumidityAsync_ReturnsEmptyList_Test()
     {

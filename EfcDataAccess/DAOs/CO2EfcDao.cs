@@ -22,24 +22,6 @@ public class CO2EfcDao : ICO2Dao
 
 	public async Task<CO2Dto> CreateAsync(CO2 co2)
 	{
-		if (co2 == null)
-		{
-			throw new ArgumentNullException(nameof(co2), "CO2 data cannot be null.");
-		}
-
-		if (co2.Value < 0)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Value), "CO2 value cannot be negative.");
-		}
-		if (co2.Value > 4095)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Value), "CO2 value cannot be bigger than 4095 ppm.");
-		}
-		if (co2.Date > DateTime.Now)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Date), "Date of temperature cannot be in the future");
-		}
-
 		EntityEntry<CO2> entity = await _context.CO2s.AddAsync(co2);
 		await _context.SaveChangesAsync();
 		return new CO2Dto()
@@ -52,7 +34,7 @@ public class CO2EfcDao : ICO2Dao
 	public async Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
 		var list = _context.CO2s.AsQueryable();
-
+		long secondsPrecision = TimeSpan.TicksPerSecond;
 
 		// if current is requested, return just last
 		if (searchMeasurement.Current)
@@ -62,18 +44,20 @@ public class CO2EfcDao : ICO2Dao
 				.Take(1);
 		}
 		// return co2s in interval
+		// DateTime of co2s saved in database is converted to Ticks (the number of ticks that have elapsed since January 1, 0001, at 00:00:00.000 in the Gregorian calendar.)
+		// One tick is 0.0001 millisecond, we divide it by number of ticks in one second so that the precision is in seconds.
 		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
 		{
-			list = list.Where(c => c.Date >= searchMeasurement.StartTime && c.Date <= searchMeasurement.EndTime);
+			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision);
 		}
 		else if (searchMeasurement.StartTime != null)
 		{
-			list = list.Where(c => c.Date >= searchMeasurement.StartTime).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
 			
 		}
 		else if (searchMeasurement.EndTime != null)
 		{
-			list = list.Where(c => c.Date <= searchMeasurement.EndTime).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
 		}
 
 		IEnumerable<CO2Dto> result = await list.Select(c =>

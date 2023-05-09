@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Application\Application.csproj" />
+      <ProjectReference Include="..\Socket\Socket.csproj" />
       <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
     </ItemGroup>
 
