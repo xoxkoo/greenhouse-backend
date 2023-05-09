@@ -18,8 +18,12 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ScheduleDto>> CreateAsync([FromBody] ScheduleCreationDto dto)
+    public async Task<ActionResult<ScheduleDto>> CreateAsync([FromBody] IEnumerable<IntervalDto> intervals)
     {
+	    var dto = new ScheduleCreationDto()
+	    {
+		    Intervals = intervals
+	    };
         try
         {
             ScheduleDto created = await Logic.CreateAsync(dto);
@@ -33,12 +37,12 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ScheduleDto>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<IntervalDto>>> GetAsync()
     {
         try
         {
             var schedules = await Logic.GetAsync();
-            return Ok(schedules);
+            return Ok(schedules.FirstOrDefault().Intervals);
         }
         catch (Exception e)
         {

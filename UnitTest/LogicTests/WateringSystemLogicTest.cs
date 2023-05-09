@@ -25,11 +25,11 @@ public class WateringSystemLogicTest : DbTestBase
     public async Task WateringSystemDurationTest()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<ValveState>()))
-            .ReturnsAsync(new ValveStateDto() {Toggle = true});
+            .ReturnsAsync(new ValveStateDto() {State = true});
         ValveStateCreationDto dto = new ValveStateCreationDto()
         {
             duration = 0,
-            Toggle = true
+            State = true
         };
         var expectedValues = "Duration cannot be 0 or less";
         try
@@ -64,14 +64,14 @@ public class WateringSystemLogicTest : DbTestBase
     public async Task GetReturnsExpectedValue()
     {
         dao.Setup(dao => dao.GetAsync())
-            .ReturnsAsync(new ValveStateDto() {Toggle = false});
+            .ReturnsAsync(new ValveStateDto() {State = false});
         ValveStateCreationDto dto = new ValveStateCreationDto()
         {
             duration = 2,
-            Toggle = false
+            State = false
         };
         ValveStateDto created = await logic.GetAsync();
-        Assert.AreEqual(created.Toggle, dto.Toggle);
+        Assert.AreEqual(created.State, dto.State);
     }
     
     [TestMethod]

@@ -14,7 +14,7 @@ public class WateringSystemControllerTest
     public async Task CheckDurationValue()
     {
         var expectedErrorMessage = "Duration cannot be 0 or less";
-        ValveStateCreationDto dto = new ValveStateCreationDto(){duration = 0,Toggle = true};
+        ValveStateCreationDto dto = new ValveStateCreationDto(){duration = 0,State = true};
         // Arrange
         var logicMock = new Mock<IWateringSystemLogic>();
         logicMock
@@ -37,7 +37,7 @@ public class WateringSystemControllerTest
     public async Task CheckDurationMinusValue()
     {
         var expectedErrorMessage = "Duration cannot be 0 or less";
-        ValveStateCreationDto dto = new ValveStateCreationDto(){duration = -1,Toggle = true};
+        ValveStateCreationDto dto = new ValveStateCreationDto(){duration = -1,State = true};
         // Arrange
         var logicMock = new Mock<IWateringSystemLogic>();
         logicMock
@@ -60,13 +60,13 @@ public class WateringSystemControllerTest
     [TestMethod]
     public async Task CheckToggle()
     {
-        var expectedErrorMessage = "Toggle has to be set";
+        var expectedErrorMessage = "State has to be set";
         ValveStateCreationDto dto = new ValveStateCreationDto(){duration = 5};
         // Arrange
         var logicMock = new Mock<IWateringSystemLogic>();
         logicMock
             .Setup(x => x.CreateAsync(dto))
-            .ThrowsAsync(new Exception("Toggle has to be set"));
+            .ThrowsAsync(new Exception("State has to be set"));
 
         var controller = new WateringSystemController(logicMock.Object);
 
@@ -85,7 +85,7 @@ public class WateringSystemControllerTest
     public async Task CheckDuration()
     {
         var expectedErrorMessage = "Duration has to be set";
-        ValveStateCreationDto dto = new ValveStateCreationDto(){Toggle = false};
+        ValveStateCreationDto dto = new ValveStateCreationDto(){State = false};
         // Arrange
         var logicMock = new Mock<IWateringSystemLogic>();
         logicMock
@@ -107,27 +107,27 @@ public class WateringSystemControllerTest
     [TestMethod]
     public async Task GetAsync_checkValueTrue()
     {
-        ValveStateDto dto = new ValveStateDto(){Toggle = true};
+        ValveStateDto dto = new ValveStateDto(){State = true};
         // Arrange
         var logicMock = new Mock<IWateringSystemLogic>();
         logicMock
             .Setup(x => x.GetAsync()).ReturnsAsync(dto);
         var controller = new WateringSystemController(logicMock.Object);
         await controller.GetAsync();
-        Assert.AreEqual(true,dto.Toggle);
+        Assert.AreEqual(true,dto.State);
  
     }
     [TestMethod]
     public async Task GetAsync_checkValueFalse()
     {
-        ValveStateDto dto = new ValveStateDto(){Toggle = false};
+        ValveStateDto dto = new ValveStateDto(){State = false};
         // Arrange
         var logicMock = new Mock<IWateringSystemLogic>();
         logicMock
             .Setup(x => x.GetAsync()).ReturnsAsync(dto);
         var controller = new WateringSystemController(logicMock.Object);
         await controller.GetAsync();
-        Assert.AreEqual(false,dto.Toggle);
+        Assert.AreEqual(false,dto.State);
  
     }
 }

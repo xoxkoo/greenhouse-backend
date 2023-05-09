@@ -1,12 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using Application.DaoInterfaces;
+﻿using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
-using Autofac;
-using Domain.DTOs.CreationDTOs;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
-using InternalTimer;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
@@ -14,7 +10,7 @@ using Socket;
 
 namespace InternalTimer;
 
-class Program
+class RunInternalTimer
 {
 	static async Task Main(string[] args)
 	{

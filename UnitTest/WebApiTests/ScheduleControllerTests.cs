@@ -59,7 +59,15 @@ public class ScheduleControllerTests
         logic.Setup(x => x.CreateAsync(dto))
             .ReturnsAsync(fromLogic);
         // Act
-        ActionResult<ScheduleDto> response = await _controller.CreateAsync(dto);
+        ActionResult<ScheduleDto> response = await _controller.CreateAsync(new List<IntervalDto>
+        {
+	        new IntervalDto
+	        {
+		        DayOfWeek = DayOfWeek.Monday,
+		        StartTime = new TimeSpan(8, 0, 0),
+		        EndTime = new TimeSpan(9, 0, 0)
+	        }
+        });
         Debug.WriteLine(response);
         
         
@@ -78,7 +86,7 @@ public class ScheduleControllerTests
         logic.Setup(x => x.CreateAsync(dto)).ThrowsAsync(new Exception("An error occurred."));
 
         // Act
-        ActionResult<ScheduleDto> result = await _controller.CreateAsync(dto);
+        ActionResult<ScheduleDto> result = await _controller.CreateAsync(new List<IntervalDto>());
 
         // Assert
         Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
