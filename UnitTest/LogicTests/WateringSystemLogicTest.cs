@@ -88,7 +88,7 @@ public class WateringSystemLogicTest : DbTestBase
     public async Task CreateAsync_WhenToggleIsTrueAndDurationIsLessThanOrEqualToZero_ThrowsException()
     {
         // Arrange
-        var dto = new ValveStateCreationDto { duration = 0, Toggle = true };
+        var dto = new ValveStateCreationDto { duration = 0, State = true };
 
         // Act & Assert
         Assert.ThrowsExceptionAsync<Exception>(() => logic.CreateAsync(dto));
@@ -98,13 +98,13 @@ public class WateringSystemLogicTest : DbTestBase
     public async Task CreateAsync_WhenValidDtoIsPassed_CreatesNewValveState()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<ValveState>()))
-            .ReturnsAsync(new ValveStateDto() {Toggle = false});
+            .ReturnsAsync(new ValveStateDto() {State = false});
         // Arrange
-        var dto = new ValveStateCreationDto() { duration = 10, Toggle = false };
+        var dto = new ValveStateCreationDto() { duration = 10, State = false };
 
         // Act
         var result = await logic.CreateAsync(dto);
-        Console.WriteLine(result.Toggle);
+        Console.WriteLine(result.State);
         // Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType<ValveStateDto>(result);
