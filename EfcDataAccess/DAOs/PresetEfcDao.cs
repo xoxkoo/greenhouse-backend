@@ -2,6 +2,7 @@
 using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EfcDataAccess.DAOs;
 
@@ -46,5 +47,36 @@ public class PresetEfcDao : IPresetDao
             }).ToListAsync();
 
         return result;
+    }
+
+    public async Task<PresetEfcDto> CreateAsync(Preset preset)
+    {
+        if (preset == null)
+        {
+            throw new ArgumentNullException(nameof(preset), "Preset data cannot be null");
+        }
+        EntityEntry<Preset> entity = await _context.Presets.AddAsync(preset);
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Failed to save changes to database", ex);
+        }
+
+        IEnumerable<ThresholdDto> thresholdDtos = entity.Entity.Thresholds?.Select(t => new ThresholdDto
+        {
+            Type = t.Type,
+            MinValue = t.MinValue,
+            MaxValue = t.MaxValue
+        }) ?? Enumerable.Empty<ThresholdDto>();
+
+        return new PresetEfcDto
+        {
+            Id = entity.Entity.Id,
+            Name = entity.Entity.Name,
+            Thresholds = thresholdDtos
+        };
     }
 }
