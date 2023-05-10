@@ -17,15 +17,16 @@ public class Context : DbContext
 	{
 
 	}
+
 	public Context(DbContextOptions<Context> options) : base(options)
 	{
 	}
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		var dataSource = Path.Combine(Environment.CurrentDirectory, "../EfcDataAccess/Greenhouse.db");
-		optionsBuilder.UseSqlite($"Data Source = {dataSource};");
-		//var dataSource = optionsBuilder.UseSqlite($"Data Source = C:/Users/babic/RiderProjects/greenhouse-backend/EfcDataAccess/Greenhouse.db");
+		// var dataSource = Path.Combine(Environment.CurrentDirectory, "../EfcDataAccess/Greenhouse.db");
+		// optionsBuilder.UseSqlite($"Data Source = {dataSource};");
+		var dataSource = optionsBuilder.UseSqlite($"Data Source = C:/Users/babic/RiderProjects/greenhouse-backend/EfcDataAccess/Greenhouse.db");
 	}
 
 }
