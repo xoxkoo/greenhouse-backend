@@ -18,6 +18,10 @@ public class EmailController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<EmailDto>> CreateAsync([FromBody] EmailDto dto)
     {
+        if (dto == null)
+        {
+            return BadRequest("Email data cannot be null");
+        }
         try
         {
             EmailDto created = await _logic.CreateAsync(dto);

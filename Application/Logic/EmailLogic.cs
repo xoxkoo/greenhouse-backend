@@ -8,37 +8,6 @@ using Domain.Entities;
 namespace Application.Logic;
 public class EmailLogic : IEmailLogic
 {
-    private static Email temperatureTooLow = new Email()
-    { 
-        Title = "Temperature is too low",
-        Body = "The temperature in the greenhouse is too low."
-    };
-    
-    private static Email temperatureTooHigh = new Email()
-    {
-        Title = "Temperature is too high",
-        Body = "The temperature in the greenhouse is too high."
-    };
-    private static Email humidityTooLow = new Email()
-    {
-        Title = "Humidity is too low",
-        Body = "The humidity in the greenhouse is too low."
-    };
-    private static Email humidityTooHigh = new Email()
-    {
-        Title = "Humidity is too high",
-        Body = "The humidity in the greenhouse is too high."
-    };
-    private static Email Co2LvlTooHigh = new Email()
-    {
-        Title = "CO2 is too high",
-        Body = "The CO2 in the greenhouse is too high."
-    };    private static Email Co2LvlTooLow = new Email()
-    {
-        Title = "CO2 is too low",
-        Body = "The CO2 in the greenhouse is too low."
-    };
-    
     private readonly IEmailDao _emailDao;
     private readonly IPresetDao _presetDao;
 
@@ -50,6 +19,14 @@ public class EmailLogic : IEmailLogic
 
     public async Task<EmailDto> CreateAsync(EmailDto dto)
     {
+        if (dto == null)
+        {
+            throw new ArgumentNullException(nameof(dto), "Email data cannot be null");
+        }
+        if (string.IsNullOrWhiteSpace(dto.EmailAdress))
+        {
+            throw new ArgumentException("Email address cannot be empty or whitespace.", nameof(dto));
+        }
         if (!dto.EmailAdress.EndsWith("@gmail.com"))
         {
             throw new ArgumentException("Email address must end with @gmail.com");
@@ -76,17 +53,38 @@ public class EmailLogic : IEmailLogic
     };
 
 
-    private void sendMail(Email mail)
+    private void sendMail(string warning)
     {
         MailMessage message = new MailMessage
         {
             From = new MailAddress("greenhousex4@gmail.com"),
             Subject = "Warning",
-            Body = "<h1>" + mail.Title + "<h1>\n<h4>" + mail.Body + "</h4>",
+            Body = @"
+                <html>
+                <head>
+                    <style>
+                        /* Define some global styles for the email */
+                        body {
+                            font-size: 13px;
+                        }
+                        h1 {
+                            color: #ff0000;
+                            font-size: 24px;
+                            margin-bottom: 21px;
+                        }
+                        p {
+                            margin-bottom: 10px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>" + warning + @"</h1>
+                </body>
+                </html>",
             IsBodyHtml = true
         };
-        mail.EmailAddress = _emailDao.GetAsync().Result.EmailAdress;
-        message.To.Add(mail.EmailAddress);
+        
+        message.To.Add(_emailDao.GetAsync().Result.EmailAdress);
         smtpClient.Send(message);
     }
     
@@ -95,36 +93,33 @@ public class EmailLogic : IEmailLogic
         SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(null, true);
         var list = await _presetDao.GetAsync(parametersDto);
         PresetDto? currentPreset = list.FirstOrDefault();
+        
+        if (currentPreset == null)
+        {
+            return;
+        }
+
         var thresholds = currentPreset.Thresholds;
-        Threshold? temperatureThreshold = thresholds.FirstOrDefault(t => t.Type == "temperature");
-        Threshold? humidityThreshold = thresholds.FirstOrDefault(t => t.Type == "humidity");
-        Threshold? co2Threshold = thresholds.FirstOrDefault(t => t.Type == "co2");
 
-        if (temperatureThreshold.MinValue > temperature)
-        {
-            sendMail(temperatureTooLow);
-        }
-        else if (temperatureThreshold.MaxValue < temperature)
-        {
-            sendMail(temperatureTooHigh);
-        }
+        CheckThresholdValue("temperature", temperature, thresholds.FirstOrDefault(t => t.Type == "temperature"));
+        CheckThresholdValue("humidity", humidity, thresholds.FirstOrDefault(t => t.Type == "humidity"));
+        CheckThresholdValue("co2", co2, thresholds.FirstOrDefault(t => t.Type == "co2"));
+    }
 
-        if (humidityThreshold.MinValue > humidity)
+    private void CheckThresholdValue(string valueType, float value, Threshold? threshold)
+    {
+        if (threshold == null)
         {
-            sendMail(humidityTooLow);
-        }
-        else if (humidityThreshold.MaxValue < humidity)
-        {
-            sendMail(humidityTooHigh);
+            throw new Exception($"No threshold found for {valueType}");
         }
 
-        if (co2Threshold.MinValue > co2)
+        if (threshold.MinValue > value)
         {
-            sendMail(Co2LvlTooLow);
+            sendMail($"{threshold.Type} is too low");
         }
-        else if (co2Threshold.MaxValue < co2)
+        else if (threshold.MaxValue < value)
         {
-            sendMail(humidityTooHigh);
+            sendMail($"{valueType} is too high");
         }
     }
 }

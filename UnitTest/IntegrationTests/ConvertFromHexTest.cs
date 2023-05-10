@@ -51,10 +51,10 @@ public class ConvertFromHexTest : DbTestBase
 	    {
 		    Id = 1,
 		    MinValue = 20,
-		    MaxValue = 26,
+		    MaxValue = 21,
 		    Type = "temperature"
 	    };
-	    Threshold humidiy = new Threshold
+	    Threshold humidity = new Threshold
 	    {
 		    Id = 2,
 		    MinValue = 30,
@@ -68,7 +68,7 @@ public class ConvertFromHexTest : DbTestBase
 		    Type = "co2"
 	    };
 	    thresholds.Add(temp);
-	    thresholds.Add(humidiy);
+	    thresholds.Add(humidity);
 	    thresholds.Add(co2);
 	    Preset preset = new Preset
 	    {
