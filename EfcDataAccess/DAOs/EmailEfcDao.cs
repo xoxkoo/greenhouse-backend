@@ -42,7 +42,11 @@ public class EmailEfcDao : IEmailDao
 
     public async Task<EmailDto> GetAsync()
     {
-        var email = await _context.Mails.FirstAsync();
+        var email = await _context.Mails.FirstOrDefaultAsync();
+        if (email == null)
+        {
+            throw new Exception("No email found.");
+        }
         return new EmailDto()
         {
             EmailAdress = email.EmailAddress

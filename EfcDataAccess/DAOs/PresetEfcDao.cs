@@ -19,9 +19,16 @@ public class PresetEfcDao : IPresetDao
         var listPreset = _context.Presets.AsQueryable();
         listPreset = listPreset.Include(p => p.Thresholds);
         
-        if (parametersDto.IsCurrent == true)
+        if (parametersDto.IsCurrent != null)
         {
-            listPreset = listPreset.Where(s => s.IsCurrent == parametersDto.IsCurrent);
+            if (parametersDto.IsCurrent == true)
+            {
+                listPreset = listPreset.Where(s => s.IsCurrent == parametersDto.IsCurrent);
+            }
+            else if (parametersDto.IsCurrent == false)
+            {
+                listPreset = listPreset.Where(s => s.IsCurrent == parametersDto.IsCurrent);
+            }
         }
 
         if (parametersDto.Id != null)
