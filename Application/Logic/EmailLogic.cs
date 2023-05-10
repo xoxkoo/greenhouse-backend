@@ -9,7 +9,7 @@ namespace Application.Logic;
 public class EmailLogic : IEmailLogic
 {
     private static Email temperatureTooLow = new Email()
-    {
+    { 
         Title = "Temperature is too low",
         Body = "The temperature in the greenhouse is too low."
     };
@@ -40,10 +40,12 @@ public class EmailLogic : IEmailLogic
     };
     
     private readonly IEmailDao _emailDao;
+    private readonly IPresetDao _presetDao;
 
-    public EmailLogic(IEmailDao emailDao)
+    public EmailLogic(IEmailDao emailDao, IPresetDao presetDao)
     {
         _emailDao = emailDao;
+        _presetDao = presetDao;
     }
 
     public async Task<EmailDto> CreateAsync(EmailDto dto)
@@ -74,7 +76,7 @@ public class EmailLogic : IEmailLogic
     };
 
 
-    public void sendMail(Email mail)
+    private void sendMail(Email mail)
     {
         MailMessage message = new MailMessage
         {
@@ -83,9 +85,46 @@ public class EmailLogic : IEmailLogic
             Body = "<h1>" + mail.Title + "<h1>\n<h4>" + mail.Body + "</h4>",
             IsBodyHtml = true
         };
-        
+        mail.EmailAddress = _emailDao.GetAsync().Result.EmailAdress;
         message.To.Add(mail.EmailAddress);
         smtpClient.Send(message);
     }
+    
+    public async Task CheckIfInRange(float temperature, int humidity, int co2)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(null, true);
+        var list = await _presetDao.GetAsync(parametersDto);
+        PresetDto? currentPreset = list.FirstOrDefault();
+        var thresholds = currentPreset.Thresholds;
+        Threshold? temperatureThreshold = thresholds.FirstOrDefault(t => t.Type == "temperature");
+        Threshold? humidityThreshold = thresholds.FirstOrDefault(t => t.Type == "humidity");
+        Threshold? co2Threshold = thresholds.FirstOrDefault(t => t.Type == "co2");
 
+        if (temperatureThreshold.MinValue > temperature)
+        {
+            sendMail(temperatureTooLow);
+        }
+        else if (temperatureThreshold.MaxValue < temperature)
+        {
+            sendMail(temperatureTooHigh);
+        }
+
+        if (humidityThreshold.MinValue > humidity)
+        {
+            sendMail(humidityTooLow);
+        }
+        else if (humidityThreshold.MaxValue < humidity)
+        {
+            sendMail(humidityTooHigh);
+        }
+
+        if (co2Threshold.MinValue > co2)
+        {
+            sendMail(Co2LvlTooLow);
+        }
+        else if (co2Threshold.MaxValue < co2)
+        {
+            sendMail(humidityTooHigh);
+        }
+    }
 }

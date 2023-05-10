@@ -18,6 +18,7 @@ public class ConverterTest : DbTestBase
 	private readonly Mock<IHumidityLogic> humidityLogic;
 	private readonly Mock<ICO2Logic> co2logic;
 	private readonly Mock<IWateringSystemLogic> waterLogic;
+	private readonly Mock<IEmailLogic> emailLogic;
 	private readonly IConverter converter;
 
 
@@ -27,7 +28,8 @@ public class ConverterTest : DbTestBase
 	    co2logic = new Mock<ICO2Logic>();
 	    humidityLogic = new Mock<IHumidityLogic>();
 	    waterLogic = new Mock<IWateringSystemLogic>();
-        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, waterLogic.Object);
+	    emailLogic = new Mock<IEmailLogic>();
+        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, waterLogic.Object, emailLogic.Object);
     }
 
     [TestMethod]
