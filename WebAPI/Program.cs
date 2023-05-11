@@ -20,6 +20,7 @@ builder.Services.AddScoped<ICO2Logic, CO2Logic>();
 builder.Services.AddScoped<IWateringSystemLogic, WateringSystemLogic>();
 builder.Services.AddScoped<IScheduleLogic, ScheduleLogic>();
 builder.Services.AddScoped<IEmailLogic, EmailLogic>();
+builder.Services.AddScoped<IPresetLogic, PresetLogic>();
 
 builder.Services.AddScoped<ITemperatureDao, TemperatureEfcDao>();
 builder.Services.AddScoped<IHumidityDao, HumidityEfcDao>();
@@ -27,6 +28,7 @@ builder.Services.AddScoped<ICO2Dao, CO2EfcDao>();
 builder.Services.AddScoped<IWateringSystemDao, WateringSystemDao>();
 builder.Services.AddScoped<IScheduleDao, ScheduleEfcDao>();
 builder.Services.AddScoped<IEmailDao, EmailEfcDao>();
+builder.Services.AddScoped<IPresetDao, PresetEfcDao>();
 
 builder.Services.AddDbContext<Context>();
 

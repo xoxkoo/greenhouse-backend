@@ -13,7 +13,8 @@ public class Context : DbContext
 	public DbSet<Interval> Intervals { get; set; }
 	public DbSet<ValveState> ValveState { get; set; }
 	public DbSet<Email> Mails { get; set; }
-
+	public DbSet<Preset> Presets { get; set; }
+	public DbSet<Threshold> Thresholds { get; set; }
 	public Context()
 	{
 

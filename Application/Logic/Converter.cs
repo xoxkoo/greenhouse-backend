@@ -34,12 +34,14 @@ public class Converter : IConverter
     private ICO2Logic co2Logic;
     private IHumidityLogic humidityLogic;
     private IWateringSystemLogic wateringSystemLogic;
-    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IWateringSystemLogic wateringSystemLogic)
+    private IEmailLogic emailLogic;
+    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IWateringSystemLogic wateringSystemLogic, IEmailLogic emailLogic)
     {
         this.temperatureLogic = temperatureLogic;
         this.co2Logic = co2Logic;
         this.humidityLogic = humidityLogic;
         this.wateringSystemLogic = wateringSystemLogic;
+        this.emailLogic = emailLogic;
     }
 
     public async Task<string> ConvertFromHex(string payload)
@@ -172,6 +174,7 @@ public class Converter : IConverter
         await co2Logic.CreateAsync(co2Dto);
         await humidityLogic.CreateAsync(humidityDto);
         await temperatureLogic.CreateAsync(tempDto);
+        await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 

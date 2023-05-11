@@ -8,46 +8,25 @@ using Domain.Entities;
 namespace Application.Logic;
 public class EmailLogic : IEmailLogic
 {
-    private static Email temperatureTooLow = new Email()
-    {
-        Title = "Temperature is too low",
-        Body = "The temperature in the greenhouse is too low."
-    };
-    
-    private static Email temperatureTooHigh = new Email()
-    {
-        Title = "Temperature is too high",
-        Body = "The temperature in the greenhouse is too high."
-    };
-    private static Email humidityTooLow = new Email()
-    {
-        Title = "Humidity is too low",
-        Body = "The humidity in the greenhouse is too low."
-    };
-    private static Email humidityTooHigh = new Email()
-    {
-        Title = "Humidity is too high",
-        Body = "The humidity in the greenhouse is too high."
-    };
-    private static Email Co2LvlTooHigh = new Email()
-    {
-        Title = "CO2 is too high",
-        Body = "The CO2 in the greenhouse is too high."
-    };    private static Email Co2LvlTooLow = new Email()
-    {
-        Title = "CO2 is too low",
-        Body = "The CO2 in the greenhouse is too low."
-    };
-    
     private readonly IEmailDao _emailDao;
+    private readonly IPresetDao _presetDao;
 
-    public EmailLogic(IEmailDao emailDao)
+    public EmailLogic(IEmailDao emailDao, IPresetDao presetDao)
     {
         _emailDao = emailDao;
+        _presetDao = presetDao;
     }
 
     public async Task<EmailDto> CreateAsync(EmailDto dto)
     {
+        if (dto == null)
+        {
+            throw new ArgumentNullException(nameof(dto), "Email data cannot be null");
+        }
+        if (string.IsNullOrWhiteSpace(dto.EmailAdress))
+        {
+            throw new ArgumentException("Email address cannot be empty or whitespace.", nameof(dto));
+        }
         if (!dto.EmailAdress.EndsWith("@gmail.com"))
         {
             throw new ArgumentException("Email address must end with @gmail.com");
@@ -69,23 +48,78 @@ public class EmailLogic : IEmailLogic
     private SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
     {
         Port = 587,
-        Credentials = new NetworkCredential("greenhousex4@gmail.com", "kdrwjmjydpeojmrs"),
+        Credentials = new NetworkCredential("greenhousesep4@gmail.com", "zievqkygqhfrwioe"),
         EnableSsl = true,
     };
 
 
-    public void sendMail(Email mail)
+    private void sendMail(string warning)
     {
-        MailMessage _message = new MailMessage
+        MailMessage message = new MailMessage
         {
             From = new MailAddress("greenhousex4@gmail.com"),
-            Subject = mail.Title,
-            Body = "<h1>" + mail.Body + "<h1>",
+            Subject = "Warning",
+            Body = @"
+                <html>
+                <head>
+                    <style>
+                        /* Define some global styles for the email */
+                        body {
+                            font-size: 13px;
+                        }
+                        h1 {
+                            color: #ff0000;
+                            font-size: 24px;
+                            margin-bottom: 21px;
+                        }
+                        p {
+                            margin-bottom: 10px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>" + warning + @"</h1>
+                </body>
+                </html>",
             IsBodyHtml = true
         };
         
-        _message.To.Add(mail.EmailAddress);
-        smtpClient.Send(_message);
+        message.To.Add(_emailDao.GetAsync().Result.EmailAdress);
+        smtpClient.Send(message);
+    }
+    
+    public async Task CheckIfInRange(float temperature, int humidity, int co2)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(null, true);
+        var list = await _presetDao.GetAsync(parametersDto);
+        PresetDto? currentPreset = list.FirstOrDefault();
+        
+        if (currentPreset == null)
+        {
+            return;
+        }
+
+        var thresholds = currentPreset.Thresholds;
+
+        CheckThresholdValue("temperature", temperature, thresholds.FirstOrDefault(t => t.Type == "temperature"));
+        CheckThresholdValue("humidity", humidity, thresholds.FirstOrDefault(t => t.Type == "humidity"));
+        CheckThresholdValue("co2", co2, thresholds.FirstOrDefault(t => t.Type == "co2"));
     }
 
+    private void CheckThresholdValue(string valueType, float value, Threshold? threshold)
+    {
+        if (threshold == null)
+        {
+            throw new Exception($"No threshold found for {valueType}");
+        }
+
+        if (threshold.MinValue > value)
+        {
+            sendMail($"{threshold.Type} is too low");
+        }
+        else if (threshold.MaxValue < value)
+        {
+            sendMail($"{valueType} is too high");
+        }
+    }
 }

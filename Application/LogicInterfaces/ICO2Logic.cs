@@ -8,5 +8,5 @@ public interface ICO2Logic
 {
     //Testing
     public Task<CO2Dto> CreateAsync(CO2CreateDto dto);
-    public Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto);
+    Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto dto);
 }
