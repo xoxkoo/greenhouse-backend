@@ -7,3 +7,10 @@
 /EfcDataAccess/Greenhouse.db
 /EfcDataAccess/Migrations
 /greenhouse-backend.sln.DotSettings.user
+/.env
+**/.env
+.env
+/.env
+**/.env
+.env
+WebAPI/Properties/launchSettings.json
