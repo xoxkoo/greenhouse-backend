@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.IntegrationTests.CO2IntegrationTests;
+namespace Testing.IntegrationTests;
 
 [TestClass]
 public class ConvertFromHexTest : DbTestBase
@@ -20,7 +20,7 @@ public class ConvertFromHexTest : DbTestBase
     private IHumidityLogic _humidityLogic;
     private IWateringSystemLogic _waterLogic;
     private IConverter _converter;
-    
+
     [TestInitialize]
     public void TestInitialize()
     {
@@ -34,7 +34,7 @@ public class ConvertFromHexTest : DbTestBase
         _waterLogic = new WateringSystemLogic(wateringSystemDao);
         _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _waterLogic);
     }
-    
+
 
     [TestMethod]
     public async Task ConvertFromHex_WhenCalledWithValidPayload_Test()

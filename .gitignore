@@ -10,3 +10,4 @@
 /.env
 **/.env
 .env
+WebAPI/Properties/launchSettings.json
