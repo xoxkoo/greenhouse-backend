@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 [TestClass]
 public class HumidityLogicTest : DbTestBase
 {
@@ -131,9 +131,9 @@ public class HumidityLogicTest : DbTestBase
         Assert.AreEqual(humDto.Date, humidities.First().Date);
         Assert.AreEqual(humDto.Value, humidities.First().Value);
     }
-    
-    
-    
+
+
+
     [TestMethod]
     public async Task HumidityGetAsyncCurrentTrueCorrectTest()
     {

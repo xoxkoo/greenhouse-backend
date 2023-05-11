@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.IntegrationTests.CO2IntegrationTests;
+namespace Testing.IntegrationTests;
 
 [TestClass]
 public class ConvertFromHexTest : DbTestBase
@@ -23,7 +23,7 @@ public class ConvertFromHexTest : DbTestBase
     private IWateringSystemLogic _waterLogic;
     private IEmailLogic _emailLogic;
     private IConverter _converter;
-    
+
     [TestInitialize]
     public void TestInitialize()
     {
@@ -40,7 +40,7 @@ public class ConvertFromHexTest : DbTestBase
         _emailLogic = new EmailLogic(emailDao, presetDao);
         _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _waterLogic, _emailLogic);
     }
-    
+
 
     [TestMethod]
     public async Task ConvertFromHex_WhenCalledWithValidPayload_Test()

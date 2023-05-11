@@ -1,4 +1,4 @@
-﻿namespace Testing.IntegrationTests.CO2IntegrationTests;
+﻿namespace Testing.IntegrationTests;
 
 using Application.DaoInterfaces;
 using Application.Logic;
@@ -88,19 +88,19 @@ public class TemperatureIntegrationTest : DbTestBase
 			Date = new DateTime(2023, 1, 2, 10, 35, 0),
 			Value = 1020
 		};
-		
+
 		var temp3 = new Temperature()
 		{
 			TemperatureId = 3,
 			Date = new DateTime(2023, 1, 2, 10, 38, 0),
 			Value = 1020
 		};
-        
+
 		await DbContext.Temperatures.AddAsync(temp1);
 		await DbContext.Temperatures.AddAsync(temp2);
 		await DbContext.Temperatures.AddAsync(temp3);
 		await DbContext.SaveChangesAsync();
-        
+
 		var startTime = new DateTime(2023, 1, 2, 10, 29, 0);
 		var endTime = new DateTime(2023, 1, 2, 10, 36, 10);
 		var current = false;
@@ -110,15 +110,15 @@ public class TemperatureIntegrationTest : DbTestBase
 		// Assert
 		Assert.IsNotNull(response);
 		var createdResult = (ObjectResult?)response.Result;
-		Assert.IsNotNull(createdResult); 
+		Assert.IsNotNull(createdResult);
 		Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
 		Assert.AreEqual(200, ((OkObjectResult)response.Result).StatusCode);
 		var result =(IEnumerable<TemperatureDto>?) createdResult.Value;
 		Assert.AreEqual(2, result.Count());
 	}
-	
+
 	[TestMethod]
-	public async Task GetAsync_Boundaries_Test() 
+	public async Task GetAsync_Boundaries_Test()
 	{
 		// Arrange
 		var temp1 = new Temperature()
@@ -133,19 +133,19 @@ public class TemperatureIntegrationTest : DbTestBase
 			Date = new DateTime(2023, 1, 2, 10, 35, 0),
 			Value = 1020
 		};
-		
+
 		var temp3 = new Temperature()
 		{
 			TemperatureId = 3,
 			Date = new DateTime(2023, 1, 2, 10, 36, 0),
 			Value = 1020
 		};
-        
+
 		await DbContext.Temperatures.AddAsync(temp1);
 		await DbContext.Temperatures.AddAsync(temp2);
 		await DbContext.Temperatures.AddAsync(temp3);
 		await DbContext.SaveChangesAsync();
-        
+
 		var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
 		var endTime = new DateTime(2023, 1, 2, 10, 36, 10);
 		var current = false;
@@ -155,13 +155,13 @@ public class TemperatureIntegrationTest : DbTestBase
 		// Assert
 		Assert.IsNotNull(response);
 		var createdResult = (ObjectResult?)response.Result;
-		Assert.IsNotNull(createdResult); 
+		Assert.IsNotNull(createdResult);
 		Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
 		Assert.AreEqual(200, ((OkObjectResult)response.Result).StatusCode);
 		var result =(IEnumerable<TemperatureDto>?) createdResult.Value;
 		Assert.AreEqual(3, result.Count());
 	}
-	
+
 	private async Task CreateTemperatures(int num)
 	{
 		for (int i = 0; i < num; i++)
@@ -175,12 +175,12 @@ public class TemperatureIntegrationTest : DbTestBase
 
 			await _logic.CreateAsync(dto);
 			// Debug statement
-			Console.WriteLine($"Number of temperatures in database: {DbContext.Temperatures.Count()}"); 
+			Console.WriteLine($"Number of temperatures in database: {DbContext.Temperatures.Count()}");
 
 			Console.WriteLine(DbContext.Temperatures.FirstOrDefault().TemperatureId);
 		}
 	}
-	
+
 	//M - Many
 	[TestMethod]
 	public async Task GetAsync_WithValidParameters_Many_Test()
@@ -198,33 +198,33 @@ public class TemperatureIntegrationTest : DbTestBase
 			Date = new DateTime(2023, 1, 2, 10, 35, 0),
 			Value = 1020
 		};
-		
+
 		var humidity3 = new Temperature()
 		{
 			TemperatureId = 3,
 			Date = new DateTime(2023, 1, 2, 10, 36, 0),
 			Value = 1020
 		};
-        
+
 		await DbContext.Temperatures.AddAsync(humidity1);
 		await DbContext.Temperatures.AddAsync(humidity2);
 		await DbContext.Temperatures.AddAsync(humidity3);
 		await DbContext.SaveChangesAsync();
-        
+
 		var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
 		var endTime = new DateTime(2023, 1, 2, 10, 35, 10);
 		var current = false;
 
 		// Act
 		ActionResult<IEnumerable<TemperatureDto>> response = await _controller.GetAsync(current, startTime, endTime);
-        
+
 		// Assert
 		Assert.IsNotNull(response);
 		var createdResult = (ObjectResult?)response.Result;
 		Assert.IsNotNull(createdResult);
 		Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
 		Assert.AreEqual(200, ((OkObjectResult)response.Result).StatusCode);
-        
+
 		var result =(IEnumerable<TemperatureDto>?) createdResult.Value;
 		Assert.AreEqual(2, result.Count());
 	}
