@@ -7,13 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 [TestClass]
 public class WateringSystemLogicTest : DbTestBase
 {
     private Mock<IWateringSystemDao> dao;
     private IWateringSystemLogic logic;
-    
+
     [TestInitialize]
     public void WateringSystemLogicTestInit()
     {
@@ -73,7 +73,7 @@ public class WateringSystemLogicTest : DbTestBase
         ValveStateDto created = await logic.GetAsync();
         Assert.AreEqual(created.State, dto.State);
     }
-    
+
     [TestMethod]
     public async Task CreateAsync_WhenDurationIsNull_ThrowsException()
     {

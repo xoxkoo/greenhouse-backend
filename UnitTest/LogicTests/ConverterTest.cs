@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 
 [TestClass]
 public class ConverterTest : DbTestBase

@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Utils;
 using WebAPI.Controllers;
 
-namespace Testing.IntegrationTests.CO2IntegrationTests;
+namespace Testing.IntegrationTests;
 
 [TestClass]
 public class CO2IntegrationTest : DbTestBase
@@ -20,7 +20,7 @@ public class CO2IntegrationTest : DbTestBase
     private CO2Controller _controller;
     private ICO2Dao _dao;
     private ICO2Logic _logic;
-    
+
     [TestInitialize]
     public void Setup()
     {
@@ -38,14 +38,14 @@ public class CO2IntegrationTest : DbTestBase
 
         // Act
         ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(current);
-        
+
         // Assert
         Assert.IsNotNull(response);
         var createdResult = (ObjectResult?)response.Result;
         Assert.IsNotNull(createdResult);
         Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
         Assert.AreEqual(200, ((OkObjectResult)response.Result).StatusCode);
-        
+
         var result =(IEnumerable<CO2Dto>?) createdResult.Value;
         Assert.AreEqual(0, result.Count());
     }
@@ -68,13 +68,13 @@ public class CO2IntegrationTest : DbTestBase
         var createdResult = (CreatedResult)result.Result;
         Assert.AreEqual($"/co2s/1", createdResult.Location);
         Assert.AreEqual(201, createdResult.StatusCode);
-        
+
         var checkResult = (CO2Dto?)createdResult.Value;
         Assert.AreEqual(1, checkResult.CO2Id);
         Assert.AreEqual(co2CreateDto.Date, checkResult.Date);
         Assert.AreEqual(co2CreateDto.Value, checkResult.Value);
     }
-    
+
     [TestMethod]
     public async Task CreateAsync_InvalidData_Test()
     {
@@ -106,27 +106,27 @@ public class CO2IntegrationTest : DbTestBase
         };
         await DbContext.CO2s.AddAsync(co2);
         await DbContext.SaveChangesAsync();
-        
+
         var startTime = new DateTime(2023, 1, 1);
         var endTime = new DateTime(2023, 1, 3);
         var current = false;
 
         // Act
         ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(current, startTime, endTime);
-        
+
         // Assert
         Assert.IsNotNull(response);
         var createdResult = (ObjectResult?)response.Result;
         Assert.IsNotNull(createdResult);
         Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
         Assert.AreEqual(200, ((OkObjectResult)response.Result).StatusCode);
-        
+
         var result =(IEnumerable<CO2Dto>?) createdResult.Value;
         Assert.AreEqual(1, result.FirstOrDefault().CO2Id);
         Assert.AreEqual(co2.Value, result.FirstOrDefault().Value);
         Assert.AreEqual(co2.Date, result.FirstOrDefault().Date);
     }
-    
+
     //M - Many
     [TestMethod]
     public async Task GetAsync_WithValidParameters_Many_Test()
@@ -144,25 +144,25 @@ public class CO2IntegrationTest : DbTestBase
             Date = new DateTime(2023, 1, 2, 10, 35, 0),
             Value = 1020
         };
-        
+
         await DbContext.CO2s.AddAsync(co2_1);
         await DbContext.CO2s.AddAsync(co2_2);
         await DbContext.SaveChangesAsync();
-        
+
         var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
         var endTime = new DateTime(2023, 1, 2, 10, 35, 10);
         var current = false;
 
         // Act
         ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(current, startTime, endTime);
-        
+
         // Assert
         Assert.IsNotNull(response);
         var createdResult = (ObjectResult?)response.Result;
         Assert.IsNotNull(createdResult);
         Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
         Assert.AreEqual(200, ((OkObjectResult)response.Result).StatusCode);
-        
+
         var result =(IEnumerable<CO2Dto>?) createdResult.Value;
         Assert.AreEqual(2, result.Count());
     }
@@ -179,19 +179,19 @@ public class CO2IntegrationTest : DbTestBase
         };
         await DbContext.CO2s.AddAsync(co2);
         await DbContext.SaveChangesAsync();
-        
+
         var startTime = new DateTime(2023, 1, 3);
         var endTime = new DateTime(2023, 1, 1);
         var current = false;
 
         // Act
         ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(current, startTime, endTime);
-        
+
         // Assert
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response.Result, typeof(ObjectResult));
         var statusCodeResult = (ObjectResult)response.Result;
         Assert.AreEqual(500, statusCodeResult.StatusCode);
     }
-    
+
 }
