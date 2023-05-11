@@ -5,6 +5,7 @@ using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
+using SocketServer;
 
 
 namespace Application.Logic;
@@ -13,7 +14,7 @@ public class WateringSystemLogic : IWateringSystemLogic
 {
     private readonly IWateringSystemDao _wateringSystemDao;
     private readonly IConverter _converter;
-
+    private readonly IWebSocketServer _socketServer;
 
     public WateringSystemLogic(IWateringSystemDao wateringSystemDao)
     {
@@ -44,11 +45,8 @@ public class WateringSystemLogic : IWateringSystemLogic
 	        State = dto.State
         };
 
-        //in converter call socket USE STATECREATION NOT ENTITY
-        // await _converter.ConvertToHex;
-       
-        // string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
-
+        string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
+        _socketServer.Send(payload);
         return await _wateringSystemDao.CreateAsync(entity);
     }
 
