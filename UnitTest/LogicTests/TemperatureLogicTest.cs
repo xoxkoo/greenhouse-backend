@@ -14,8 +14,7 @@ using Moq;
 using Testing.Utils;
 
 
-namespace Testing.WebApiTests;
-
+namespace Testing.LogicTests;
 [TestClass]
 public class TemperatureLogicTest : DbTestBase
 {
@@ -71,9 +70,9 @@ public class TemperatureLogicTest : DbTestBase
         Assert.AreEqual(tempDto.Date, temperatures.First().Date);
         Assert.AreEqual(tempDto.value, temperatures.First().value);
     }
-    
-    
-    
+
+
+
     [TestMethod]
     public async Task CO2GetAsyncCurrentTrueCorrectTest()
     {
@@ -154,10 +153,10 @@ public class TemperatureLogicTest : DbTestBase
             Date = new DateTime(2023, 04, 23),
             Value = 61
         };
-        
+
         await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(temperature));
     }
-    
+
     [TestMethod]
     public async Task CreateTemperature_BelowRange_Test()
     {
@@ -169,7 +168,7 @@ public class TemperatureLogicTest : DbTestBase
 
         await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(temperature));
     }
-    
+
     [TestMethod]
     public async Task CreateTemperature_FutureDate_Test()
     {

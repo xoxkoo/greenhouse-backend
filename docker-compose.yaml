@@ -1,21 +1,15 @@
-﻿version: '3.4'
-
-services:
-  socket:
-    image: 'socket:latest'
-    build: 
-      context: ./
-    ports:
-      - 5001:5001
+﻿services:
   webapi:
     image: 'webapi:latest'
     build:
       context: ./
     ports:
-      - 5060:5060
-  database:
-    image: 'database:latest'
-    build:
-      context: ./
-    ports:
-      - 5002:5002
+      - 7071:7071
+    environment:
+      DB_DRIVER: sqlite
+      DB_CONNECTION_STRING: "Data Source=Greenhouse.db;Version=3.4;"
+  
+  sqlite:
+    image: 'keinos/sqlite3:latest'
+    volumes:
+      - ./EfcDataAccess/Greenhouse.db:/Greenhouse.db

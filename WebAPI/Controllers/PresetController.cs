@@ -7,7 +7,6 @@ namespace WebAPI.Controllers;
 
 
 [ApiController]
-[Route("[controller]")]
 public class PresetController : ControllerBase
 {
     private readonly IPresetLogic _logic;
@@ -51,6 +50,7 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    [Route("preset")]
     [HttpPost]
     public async Task<ActionResult<PresetEfcDto>> CreateAsync([FromBody] PresetCreationDto dto)
     {

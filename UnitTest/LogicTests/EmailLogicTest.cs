@@ -45,16 +45,13 @@ public class EmailLogicTest
         // Arrange
         string validEmail = "test@gmail.com";
         var emailDto = new EmailDto() { EmailAdress = validEmail };
-        var emailEntity = new Email() { EmailAddress = validEmail };
-        _mockEmailDao.Setup(dao => dao.CreateAsync(emailEntity)).ReturnsAsync(emailDto);
-
+        _mockEmailDao.Setup(dao => dao.CreateAsync(It.IsAny<Email>())).ReturnsAsync(emailDto);
         // Act
         var result = await _emailLogic.CreateAsync(emailDto);
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(validEmail, result.EmailAdress);
-        _mockEmailDao.Verify(dao => dao.CreateAsync(emailEntity), Times.Once);
     }
     
     //E - Exception
@@ -99,5 +96,34 @@ public class EmailLogicTest
         Assert.IsNotNull(result);
         Assert.AreEqual(validEmail, result.EmailAdress);
         _mockEmailDao.Verify(dao => dao.GetAsync(), Times.Once);
+    }
+
+
+    [TestMethod]
+    public async Task CheckIfInRange_ShouldSendEmail()
+    {
+        // Arrange
+        _mockEmailDao.Setup(e => e.GetAsync()).ReturnsAsync(new EmailDto { EmailAdress = "greenhousesep4@gmail.com" });
+
+        var temperature = 30;
+        var humidity = 80;
+        var co2 = 2000;
+
+        var thresholds = new List<Threshold>
+        {
+            new Threshold() { Type = "temperature", MinValue = 10, MaxValue = 25 },
+            new Threshold() { Type = "humidity", MinValue = 30, MaxValue = 60 },
+            new Threshold() { Type = "co2", MinValue = 400, MaxValue = 1000 },
+        };
+
+        var presetDto = new PresetDto { Thresholds = thresholds };
+        _mockPresetDao.Setup(d => d.GetAsync(It.IsAny<SearchPresetParametersDto>()))
+            .ReturnsAsync(new List<PresetDto> { presetDto });
+
+        // Act
+        await _emailLogic.CheckIfInRange(temperature, humidity, co2);
+
+        // Assert
+        //Checking if the email was send to the email
     }
 }

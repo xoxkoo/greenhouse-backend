@@ -8,7 +8,7 @@ using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 
 [TestClass]
 public class ScheduleLogicTest
@@ -320,6 +320,8 @@ public class ScheduleLogicTest
         Assert.AreEqual(interval.StartTime, intervalDto.StartTime);
         Assert.AreEqual(interval.EndTime, intervalDto.EndTime);
     }
+
+
     // Test that a schedule with the latest possible end time is saved correctly
     [TestMethod]
     public async Task CreateSchedule_LatestEndTime_Test()

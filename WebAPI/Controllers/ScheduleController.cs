@@ -20,10 +20,12 @@ public class ScheduleController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ScheduleDto>> CreateAsync([FromBody] IEnumerable<IntervalDto> intervals)
     {
+	    Console.WriteLine(intervals.Count());
 	    var dto = new ScheduleCreationDto()
 	    {
 		    Intervals = intervals
 	    };
+
         try
         {
             ScheduleDto created = await Logic.CreateAsync(dto);
@@ -42,6 +44,7 @@ public class ScheduleController : ControllerBase
         try
         {
             var schedules = await Logic.GetAsync();
+            Console.WriteLine(schedules.FirstOrDefault().Intervals.Count());
             return Ok(schedules.FirstOrDefault().Intervals);
         }
         catch (Exception e)
@@ -50,5 +53,5 @@ public class ScheduleController : ControllerBase
             throw;
         }
     }
-    
+
 }
