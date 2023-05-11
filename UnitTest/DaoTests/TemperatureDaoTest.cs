@@ -125,42 +125,7 @@ public class TemperatureDaoTest : DbTestBase
         Assert.AreEqual(temperature.Date, createdTemperature.Date);
     }
     
-    //B + E - Boundary + Exceptional behavior
-    [TestMethod]
-    public async Task CreateTemperature_AboveRange_Test()
-    {
-        var temperature = new Temperature
-        {
-            Date = new DateTime(2023, 04, 23),
-            Value = 61
-        };
-        
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(temperature));
-    }
     
-    [TestMethod]
-    public async Task CreateTemperature_BelowRange_Test()
-    {
-        var temperature = new Temperature
-        {
-            Date = new DateTime(2023, 04, 23),
-            Value = -51
-        };
-
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(temperature));
-    }
-    
-    [TestMethod]
-    public async Task CreateTemperature_FutureDate_Test()
-    {
-        var temperature = new Temperature
-        {
-            Date = DateTime.Now.AddDays(1),
-            Value = 25
-        };
-
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(temperature));
-    }
 
     //GetAsync() test
     //Z - Zero

@@ -1,9 +1,9 @@
 name: main
 
-on: 
+on:
   push:
     branches:
-      dev-dockerUpdate
+    - main
 
 jobs:
   unit_test:
@@ -34,3 +34,4 @@ jobs:
   publish:
     name: Publishing to the cloud
     uses: ./.github/workflows/publish.yaml
+

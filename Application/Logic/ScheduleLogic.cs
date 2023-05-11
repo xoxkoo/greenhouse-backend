@@ -29,6 +29,8 @@ public class ScheduleLogic : IScheduleLogic
         {
             throw new ArgumentException("At least one interval must be provided", nameof(dto.Intervals));
         }
+
+
         List<Interval> intervals = dto.Intervals.Select(i => new Interval
         {
             DayOfWeek = i.DayOfWeek,
@@ -36,8 +38,20 @@ public class ScheduleLogic : IScheduleLogic
             StartTime = i.StartTime
         }).ToList();
 
+        List<Interval> intervalsToRemove = await CheckForIntervalsInDatabase(intervals);
+
+        Console.WriteLine(intervalsToRemove.Count);
+
+        // Remove the intervals that need to be removed
+        foreach (var intervalToRemove in intervalsToRemove)
+        {
+	        intervals.Remove(intervalToRemove);
+        }
+
+
         foreach (var interval in intervals)
         {
+
             if (interval.StartTime >= interval.EndTime)
             {
                 throw new ArgumentException("The start time has to be smaller than end time for all intervals");
@@ -75,6 +89,35 @@ public class ScheduleLogic : IScheduleLogic
         };
 
         return await _scheduleDao.CreateAsync(schedule);
+    }
+
+    private async Task<List<Interval>> CheckForIntervalsInDatabase(List<Interval> intervals)
+    {
+
+	    // old intervals in database
+	    IEnumerable<ScheduleDto> intervalsInDatabase = await GetAsync();
+
+	    List<Interval> intervalsToRemove = new List<Interval>();
+
+	    foreach (var interval in intervals)
+	    {
+		    // Check for old intervals
+		    foreach (var schedule in intervalsInDatabase)
+		    {
+			    foreach (var oldInterval in schedule.Intervals)
+			    {
+				    // If it is already in the database
+				    if (interval.StartTime.Equals(oldInterval.StartTime) &&
+				        interval.EndTime.Equals(oldInterval.EndTime) &&
+				        interval.DayOfWeek.Equals(oldInterval.DayOfWeek))
+				    {
+					    intervalsToRemove.Add(interval);
+				    }
+			    }
+		    }
+	    }
+
+	    return intervalsToRemove;
     }
 
     public async Task<IEnumerable<ScheduleDto>> GetAsync()

@@ -12,6 +12,7 @@ public class Context : DbContext
 	public DbSet<Schedule> Schedules { get; set; }
 	public DbSet<Interval> Intervals { get; set; }
 	public DbSet<ValveState> ValveState { get; set; }
+	public DbSet<Email> Mails { get; set; }
 
 	public Context()
 	{
@@ -24,9 +25,10 @@ public class Context : DbContext
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		var dataSource = Path.Combine(Environment.CurrentDirectory, "../EfcDataAccess/Greenhouse.db");
-		optionsBuilder.UseSqlite($"Data Source = {dataSource};");
-		//var dataSource = optionsBuilder.UseSqlite($"Data Source = C:/Users/babic/RiderProjects/greenhouse-backend/EfcDataAccess/Greenhouse.db");
+		// loads environment variables and sets the path
+		DotNetEnv.Env.TraversePath().Load();
+		Console.WriteLine(DotNetEnv.Env.GetString("DB_CONNECTION"));
+		optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
 	}
 
 }

@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Net.WebSockets;
+﻿using System.Net.WebSockets;
 using System.Text;
 using Application.LogicInterfaces;
 using Newtonsoft.Json;
@@ -14,11 +13,9 @@ namespace Socket
 
         public WebSocketClient(IConverter converter)
         {
-
+	        _converter = converter;
 	        _webSocket = new ClientWebSocket();
-            _converter = converter;
         }
-
         /**
          * Connect to the websocket server with  uri
          */
@@ -44,7 +41,7 @@ namespace Socket
         /**
          * Listen and receive message from the websocket server
          */
-        private async Task ConnectAndListen()
+        public async Task ConnectAndListen()
         {
 
 			await Connect();

@@ -7,13 +7,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 [TestClass]
 public class WateringSystemLogicTest : DbTestBase
 {
     private Mock<IWateringSystemDao> dao;
     private IWateringSystemLogic logic;
-    
+
     [TestInitialize]
     public void WateringSystemLogicTestInit()
     {
@@ -25,11 +25,11 @@ public class WateringSystemLogicTest : DbTestBase
     public async Task WateringSystemDurationTest()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<ValveState>()))
-            .ReturnsAsync(new ValveStateDto() {Toggle = true});
+            .ReturnsAsync(new ValveStateDto() {State = true});
         ValveStateCreationDto dto = new ValveStateCreationDto()
         {
             duration = 0,
-            Toggle = true
+            State = true
         };
         var expectedValues = "Duration cannot be 0 or less";
         try
@@ -64,13 +64,49 @@ public class WateringSystemLogicTest : DbTestBase
     public async Task GetReturnsExpectedValue()
     {
         dao.Setup(dao => dao.GetAsync())
-            .ReturnsAsync(new ValveStateDto() {Toggle = false});
+            .ReturnsAsync(new ValveStateDto() {State = false});
         ValveStateCreationDto dto = new ValveStateCreationDto()
         {
             duration = 2,
-            Toggle = false
+            State = false
         };
         ValveStateDto created = await logic.GetAsync();
-        Assert.AreEqual(created.Toggle, dto.Toggle);
+        Assert.AreEqual(created.State, dto.State);
+    }
+
+    [TestMethod]
+    public async Task CreateAsync_WhenDurationIsNull_ThrowsException()
+    {
+        // Arrange
+        ValveStateCreationDto dto = null;
+
+        // Act & Assert
+        Assert.ThrowsExceptionAsync<Exception>(() => logic.CreateAsync(dto));
+    }
+
+    [TestMethod]
+    public async Task CreateAsync_WhenToggleIsTrueAndDurationIsLessThanOrEqualToZero_ThrowsException()
+    {
+        // Arrange
+        var dto = new ValveStateCreationDto { duration = 0, State = true };
+
+        // Act & Assert
+        Assert.ThrowsExceptionAsync<Exception>(() => logic.CreateAsync(dto));
+    }
+
+    [TestMethod]
+    public async Task CreateAsync_WhenValidDtoIsPassed_CreatesNewValveState()
+    {
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<ValveState>()))
+            .ReturnsAsync(new ValveStateDto() {State = false});
+        // Arrange
+        var dto = new ValveStateCreationDto() { duration = 10, State = false };
+
+        // Act
+        var result = await logic.CreateAsync(dto);
+        Console.WriteLine(result.State);
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.IsInstanceOfType<ValveStateDto>(result);
     }
 }

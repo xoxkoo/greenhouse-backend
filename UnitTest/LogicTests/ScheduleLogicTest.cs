@@ -8,7 +8,7 @@ using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 
 [TestClass]
 public class ScheduleLogicTest
@@ -275,5 +275,125 @@ public class ScheduleLogicTest
         Assert.AreEqual(expectedSchedules.Count(), result.Count());
         Assert.AreEqual(expectedSchedules.First().Id, result.First().Id);
         Assert.AreEqual(expectedSchedules.First().Intervals.Count(), result.First().Intervals.Count());
+    }
+    //B - Boundaries
+
+    // Test that a schedule with the earliest possible start time is saved correctly
+    [TestMethod]
+    public async Task CreateSchedule_EarliestStartTime_Test()
+    {
+        //Arrange
+        var dto = new ScheduleCreationDto
+        {
+            Intervals = new List<IntervalDto>
+            {
+                new IntervalDto
+                {
+                    DayOfWeek = DayOfWeek.Monday,
+                    StartTime = TimeSpan.Zero,
+                    EndTime = new TimeSpan(1, 0, 0)
+                }
+            }
+        };
+        dao
+            .Setup(x => x.CreateAsync(It.IsAny<Schedule>()))
+            .ReturnsAsync((Schedule s) => new ScheduleDto
+            {
+                Id = s.Id,
+                Intervals = s.Intervals.Select(i => new IntervalDto
+                {
+                    DayOfWeek = i.DayOfWeek,
+                    StartTime = i.StartTime,
+                    EndTime = i.EndTime
+                }).ToList()
+            });
+
+        //Act
+        var result = await logic.CreateAsync(dto);
+
+        //Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(1, result.Intervals.Count());
+        var intervalDto = result.Intervals.First();
+        var interval = dto.Intervals.First();
+        Assert.AreEqual(interval.DayOfWeek, intervalDto.DayOfWeek);
+        Assert.AreEqual(interval.StartTime, intervalDto.StartTime);
+        Assert.AreEqual(interval.EndTime, intervalDto.EndTime);
+    }
+
+
+    // Test that a schedule with the latest possible end time is saved correctly
+    [TestMethod]
+    public async Task CreateSchedule_LatestEndTime_Test()
+    {
+        //Arrange
+        var dto = new ScheduleCreationDto
+        {
+            Intervals = new List<IntervalDto>
+            {
+                new IntervalDto
+                {
+                    DayOfWeek = DayOfWeek.Monday,
+                    StartTime = new TimeSpan(23, 0, 0),
+                    EndTime = new TimeSpan(23, 59, 59)
+                }
+            }
+        };
+        dao
+            .Setup(x => x.CreateAsync(It.IsAny<Schedule>()))
+            .ReturnsAsync((Schedule s) => new ScheduleDto
+            {
+                Id = s.Id,
+                Intervals = s.Intervals.Select(i => new IntervalDto
+                {
+                    DayOfWeek = i.DayOfWeek,
+                    StartTime = i.StartTime,
+                    EndTime = i.EndTime
+                }).ToList()
+            });
+
+        //Act
+        var result = await logic.CreateAsync(dto);
+
+        //Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(1, result.Intervals.Count());
+        var intervalDto = result.Intervals.First();
+        var interval = dto.Intervals.First();
+        Assert.AreEqual(interval.DayOfWeek, intervalDto.DayOfWeek);
+        Assert.AreEqual(interval.StartTime, intervalDto.StartTime);
+        Assert.AreEqual(interval.EndTime, intervalDto.EndTime);
+    }
+    [TestMethod]
+    public async Task GetScheduleForDay_ReturnsCorrectData()
+    {
+        // Arrange
+        var dayOfWeek = DayOfWeek.Monday;
+        var expectedData = new List<IntervalToSendDto>
+        {
+            new IntervalToSendDto { StartTime =new TimeSpan(9, 0, 0), EndTime = new TimeSpan(10, 0, 0) },
+            new IntervalToSendDto { StartTime = new TimeSpan(13, 0, 0), EndTime = new TimeSpan(14, 0, 0) }
+        };
+
+        dao.Setup(x => x.GetScheduleForDay(dayOfWeek)).ReturnsAsync(expectedData);
+
+        // Act
+        var actualData = await logic.GetScheduleForDay(dayOfWeek);
+
+        // Assert
+        CollectionAssert.AreEqual(expectedData, actualData.ToList());
+    }
+
+    [TestMethod]
+    public async Task GetScheduleForDay_CallsCorrectDaoMethod()
+    {
+        // Arrange
+        var dayOfWeek = DayOfWeek.Tuesday;
+
+        // Act
+        var actualData = await logic.GetScheduleForDay(dayOfWeek);
+
+        // Assert
+        dao.Verify(x => x.GetScheduleForDay(dayOfWeek), Times.Once);
     }
 }

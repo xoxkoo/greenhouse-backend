@@ -17,22 +17,6 @@ public class TemperatureEfcDao : ITemperatureDao
 
 	public async Task<TemperatureDto> CreateAsync(Temperature temperature)
 	{
-		if (temperature == null)
-		{
-			throw new ArgumentNullException(nameof(temperature), "Temperature object cannot be null");
-		}
-		if (temperature.Value < -50)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Value), "Value of temperature cannot be below -50°C");
-		}
-		if (temperature.Value > 60)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Value), "Value of temperature cannot be above 60°C");
-		}
-		if (temperature.Date > DateTime.Now)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Date), "Date of temperature cannot be in the future");
-		}
 
 		EntityEntry<Temperature> entity = await _context.Temperatures.AddAsync(temperature);
 		await _context.SaveChangesAsync();
@@ -46,29 +30,43 @@ public class TemperatureEfcDao : ITemperatureDao
 		return dto;
 	}
 	
-	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
+	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
-		IQueryable<Temperature> tempQuery= _context.Temperatures.AsQueryable();
-		if (dto.Current)
+		var list = _context.Temperatures.AsQueryable();
+		long secondsPrecision = TimeSpan.TicksPerSecond;
+
+		// if current is requested, return just last
+		if (searchMeasurement.Current)
 		{
-			tempQuery = tempQuery.OrderByDescending(t => t.Date).Take(1).AsQueryable();
+			list = list
+				.OrderByDescending(h => h.Date)
+				.Take(1);
 		}
-		if (dto.EndTime !=null && dto.StartTime != null)
+		// return temperatures in interval
+		// DateTime of temperatures saved in database is converted to Ticks (the number of ticks that have elapsed since January 1, 0001, at 00:00:00.000 in the Gregorian calendar.)
+		// One tick is 0.0001 millisecond, we divide it by number of ticks in one second so that the precision is in seconds.
+		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime && t.Date <= dto.EndTime).AsQueryable() ;
+			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision);
 		}
-		else if (dto.StartTime != null)
+		else if (searchMeasurement.StartTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
+			
 		}
-		else if (dto.EndTime != null)
+		else if (searchMeasurement.EndTime != null)
 		{
-			tempQuery = tempQuery.Where(t => t.Date <= dto.EndTime).AsQueryable();
+			list = list.Where(c => c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
 		}
-		
-		IEnumerable<TemperatureDto> result = await tempQuery
-			.Select(t => new TemperatureDto(){Date = t.Date,TemperatureId = t.TemperatureId,value = t.Value})
-			.ToListAsync();
+
+		IEnumerable<TemperatureDto> result = await list.Select(c =>
+			new TemperatureDto()
+			{
+				Date = c.Date,
+				TemperatureId = c.TemperatureId,
+				value = c.Value
+			}).ToListAsync();
+
 		return result;
 	}
 
