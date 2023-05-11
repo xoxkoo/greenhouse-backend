@@ -17,7 +17,7 @@ COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
 COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
 COPY ["Socket/Socket.csproj", "Socket/"]
-#RUN dotnet restore
+RUN dotnet restore "WebAPI/WebAPI.csproj"
 COPY . .
 
 WORKDIR "/src/WebAPI"
