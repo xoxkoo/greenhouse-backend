@@ -1,4 +1,4 @@
-name: CI/CD
+name: main
 
 on:
   push:
@@ -30,4 +30,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: babicajakub/greenhouse:latest  # Please change the username here
+          tags: babicajakub/greenhouse:latest  
+  publish:
+    name: Publishing to the cloud
+    uses: ./.github/workflows/publish.yaml
+

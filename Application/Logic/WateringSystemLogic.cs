@@ -45,6 +45,8 @@ public class WateringSystemLogic : IWateringSystemLogic
         };
 
         //in converter call socket USE STATECREATION NOT ENTITY
+        // await _converter.ConvertToHex;
+       
         // string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
 
         return await _wateringSystemDao.CreateAsync(entity);
