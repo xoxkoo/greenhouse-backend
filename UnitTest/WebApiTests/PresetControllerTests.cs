@@ -1,4 +1,5 @@
-﻿using Application.LogicInterfaces;
+﻿using System.Runtime.CompilerServices;
+using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -21,49 +22,110 @@ public class PresetControllerTests
         _presetController = new PresetController(_mockPresetLogic.Object);
     }
 
-    // [TestMethod]
-    // public async Task GetAsync_ReturnsOkResult()
-    // {
-    //     // Arrange
-    //     SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(null, null);
-    //     var presetDtos = new List<PresetDto>
-    //     {
-    //         new PresetDto
-    //         {
-    //             Id = 1,
-    //             Name = "Tomato",
-    //             IsCurrent = false,
-    //             Thresholds = new List<Threshold>
-    //             {
-    //                 new Threshold { Id = 1, Type = "temperature", MaxValue = 100, MinValue = 0 },
-    //                 new Threshold { Id = 2, Type = "humidity", MaxValue = 50, MinValue = 0 },
-    //             }
-    //         },
-    //         new PresetDto
-    //         {
-    //             Id = 2,
-    //             Name = "Sunny Day",
-    //             IsCurrent = true,
-    //             Thresholds = new List<Threshold>
-    //             {
-    //                 new Threshold { Id = 3, Type = "temperature", MaxValue = 200, MinValue = 0 },
-    //                 new Threshold { Id = 4, Type = "humidity", MaxValue = 100, MinValue = 0 },
-    //             }
-    //         },
-    //     };
-    //     _mockPresetLogic.Setup(p => p.GetAsync(parametersDto)).ReturnsAsync(presetDtos);
-    //
-    //     // Act
-    //     var result = await _presetController.GetAsync();
-    //
-    //     // Assert
-    //     Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
-    //     var okObjectResult = result.Result as OkObjectResult;
-    //     Assert.IsNotNull(okObjectResult);
-    //     var presets = okObjectResult.Value as IEnumerable<PresetDto>;
-    //     Assert.IsNotNull(presets);
-    //     Assert.AreEqual(presetDtos.Count, presets.Count()); 
-    // }
+    [TestMethod]
+    public async Task GetAsync_ReturnsOkResult()
+    {
+        // Arrange
+        var presetDtos = new List<PresetDto>
+        {
+            new PresetDto
+            {
+                Id = 1,
+                Name = "Tomato",
+                IsCurrent = false,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 1, Type = "temperature", MaxValue = 100, MinValue = 0 },
+                    new Threshold { Id = 2, Type = "humidity", MaxValue = 50, MinValue = 0 },
+                }
+            },
+            new PresetDto
+            {
+                Id = 2,
+                Name = "Sunny Day",
+                IsCurrent = true,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 3, Type = "temperature", MaxValue = 200, MinValue = 0 },
+                    new Threshold { Id = 4, Type = "humidity", MaxValue = 100, MinValue = 0 },
+                }
+            },
+        };
+        _mockPresetLogic.Setup(p => p.GetAsync(It.IsAny<SearchPresetParametersDto>())).ReturnsAsync(presetDtos);
     
+        // Act
+        var result = await _presetController.GetAsync();
     
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+        var okObjectResult = result.Result as OkObjectResult;
+        Assert.IsNotNull(okObjectResult);
+        var presets = okObjectResult.Value as IEnumerable<PresetDto>;
+        Assert.IsNotNull(presets);
+        Assert.AreEqual(presetDtos.Count, presets.Count()); 
+    }
+    
+    [TestMethod]
+    public async Task GetAsync_ReturnsInternalServerError_OnException()
+    {
+        // Arrange
+        _mockPresetLogic.Setup(p => p.GetAsync(It.IsAny<SearchPresetParametersDto>())).ThrowsAsync(new Exception("Something went wrong"));
+
+        // Act
+        var result = await _presetController.GetAsync();
+
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
+        ObjectResult statusCodeResult = (ObjectResult)result.Result;  
+        Assert.IsNotNull(statusCodeResult);
+        Assert.AreEqual(500, statusCodeResult.StatusCode);
+    }
+    
+    [TestMethod]
+    public async Task GetCurrentAsync_ReturnsOkResult()
+    {
+        // Arrange
+        var presetDtos = new List<PresetDto>
+        {
+            new PresetDto
+            {
+                Id = 2,
+                Name = "Tomato",
+                IsCurrent = true,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 3, Type = "temperature", MaxValue = 200, MinValue = 0 },
+                    new Threshold { Id = 4, Type = "humidity", MaxValue = 100, MinValue = 0 },
+                }
+            },
+        };
+        _mockPresetLogic.Setup(p => p.GetAsync(It.IsAny<SearchPresetParametersDto>())).ReturnsAsync(presetDtos);
+
+        // Act
+        var result = await _presetController.GetCurrentAsync();
+
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+        var okResult = result.Result as OkObjectResult;
+        Assert.AreEqual(presetDtos.FirstOrDefault(), okResult.Value);
+        Assert.IsNotNull(okResult);
+        var preset = okResult.Value as PresetDto;
+        Assert.IsNotNull(preset);
+    }
+    
+    [TestMethod]
+    public async Task GetCurrentAsync_ReturnsInternalServerError_OnException()
+    {
+        // Arrange
+        _mockPresetLogic.Setup(p => p.GetAsync(It.IsAny<SearchPresetParametersDto>())).ThrowsAsync(new Exception("Something went wrong"));
+
+        // Act
+        var result = await _presetController.GetCurrentAsync();
+
+        // Assert
+        Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
+        ObjectResult statusCodeResult = (ObjectResult)result.Result;  
+        Assert.IsNotNull(statusCodeResult);
+        Assert.AreEqual(500, statusCodeResult.StatusCode);
+    }
 }
