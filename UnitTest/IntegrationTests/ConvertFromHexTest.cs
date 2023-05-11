@@ -1,14 +1,12 @@
-﻿using System.Collections;
+﻿
 using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
-using Domain.DTOs;
-using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 using EfcDataAccess.DAOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+
 using Testing.Utils;
 
 namespace Testing.IntegrationTests;
@@ -38,7 +36,7 @@ public class ConvertFromHexTest : DbTestBase
         _humidityLogic = new HumidityLogic(humidityDao);
         _waterLogic = new WateringSystemLogic(wateringSystemDao);
         _emailLogic = new EmailLogic(emailDao, presetDao);
-        _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _waterLogic, _emailLogic);
+        _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _emailLogic);
     }
 
 

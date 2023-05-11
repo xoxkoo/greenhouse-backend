@@ -6,11 +6,11 @@ using EfcDataAccess.DAOs;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
-using Socket;
+using SocketServer;
 
 namespace InternalTimer;
 
-class RunInternalTimer
+static class RunInternalTimer
 {
 	static async Task Main(string[] args)
 	{
@@ -22,21 +22,27 @@ class RunInternalTimer
 		services.AddSingleton<IScheduleDao, ScheduleEfcDao>();
 		services.AddSingleton<ITemperatureDao, TemperatureEfcDao>();
 		services.AddSingleton<IHumidityDao, HumidityEfcDao>();
-		services.AddSingleton<IWateringSystemDao, WateringSystemDao>();
 		services.AddSingleton<ICO2Dao, CO2EfcDao>();
-		services.AddSingleton<IConverter, Converter>();
-		services.AddSingleton<IScheduleLogic, ScheduleLogic>();
-		services.AddSingleton<ITemperatureLogic, TemperatureLogic>();
-		services.AddSingleton<ICO2Logic, CO2Logic>();
-		services.AddSingleton<IHumidityLogic, HumidityLogic>();
-		services.AddSingleton<IWateringSystemLogic, WateringSystemLogic>();
-		services.AddSingleton<IWebSocketClient, WebSocketClient>();
+		services.AddSingleton<IEmailDao, EmailEfcDao>();
+		services.AddSingleton<IPresetDao, PresetEfcDao>();
+
+		services.AddScoped<IConverter, Converter>();
+		services.AddScoped<ITemperatureLogic, TemperatureLogic>();
+		services.AddScoped<IEmailLogic, EmailLogic>();
+		services.AddScoped<IPresetLogic, PresetLogic>();
+		services.AddScoped<ICO2Logic, CO2Logic>();
+		services.AddScoped<IHumidityLogic, HumidityLogic>();
+		services.AddScoped<IScheduleLogic, ScheduleLogic>();
+
+		services.AddSingleton<IWebSocketServer, WebSocketServer>();
 
 		var serviceProvider = services.BuildServiceProvider();
-		var jobData = new JobDataMap();
-		jobData.Add("scheduleLogic", serviceProvider.GetService<IScheduleLogic>());
-		jobData.Add("converter", serviceProvider.GetService<IConverter>());
-		jobData.Add("webSocketClient", serviceProvider.GetService<IWebSocketClient>());
+		var jobData = new JobDataMap
+		{
+			{ "scheduleLogic", serviceProvider.GetService<IScheduleLogic>() },
+			{ "converter", serviceProvider.GetService<IConverter>() },
+			{ "webSocketServer", serviceProvider.GetService<IWebSocketServer>() }
+		};
 
 		// create a Quartz scheduler
 		var scheduler = await StdSchedulerFactory.GetDefaultScheduler();

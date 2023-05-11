@@ -6,21 +6,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using WebAPI.Controllers;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 
 [TestClass]
 public class PresetLogicTest
 {
     private Mock<IPresetDao> _mockPresetDao;
     private IPresetLogic _presetLogic;
-    
+
     [TestInitialize]
     public void TestInitialize()
     {
         _mockPresetDao = new Mock<IPresetDao>();
         _presetLogic = new PresetLogic(_mockPresetDao.Object);
     }
-    
+
     //Z - Zero
     [TestMethod]
     public async Task GetAsync_ZeroPresets_ReturnsEmptyPresetDtoList()
@@ -39,7 +39,7 @@ public class PresetLogicTest
         // Assert
         Assert.AreEqual(0, result.Count());
     }
-    
+
     //O - One
     [TestMethod]
     public async Task GetAsync_OnePreset()
@@ -75,17 +75,17 @@ public class PresetLogicTest
             new PresetDto { Id = 2, Name = "Sunny Day", IsCurrent = false }
         };
         _mockPresetDao.Setup(dao => dao.GetAsync(parametersDto)).ReturnsAsync(presets);
-        
+
         // Act
         var result = await _presetLogic.GetAsync(parametersDto);
-        
+
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
         Assert.IsTrue(result.Any(p => p.Id == 1));
         Assert.IsTrue(result.Any(p => p.Id == 2));
     }
-    
+
     [TestMethod]
     public async Task GetAsync_ReturnsPresetsByIsCurrent()
     {
@@ -98,16 +98,16 @@ public class PresetLogicTest
             new PresetDto { Id = 3, Name = "Rainy Day", IsCurrent = false }
         };
         _mockPresetDao.Setup(dao => dao.GetAsync(parametersDto)).ReturnsAsync(presets.Where(p => p.IsCurrent));
-        
+
         // Act
         var result = await _presetLogic.GetAsync(parametersDto);
-        
+
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.IsTrue(result.Any(p => p.Id == 1)); 
+        Assert.IsTrue(result.Any(p => p.Id == 1));
     }
-    
+
     [TestMethod]
     public async Task GetAsync_ReturnsPresetById()
     {
@@ -119,10 +119,10 @@ public class PresetLogicTest
             new PresetDto { Id = 2, Name = "Sunny Day", IsCurrent = false }
         };
         _mockPresetDao.Setup(dao => dao.GetAsync(parametersDto)).ReturnsAsync(presets.Where(p => p.Id == parametersDto.Id));
-        
+
         // Act
         var result = await _presetLogic.GetAsync(parametersDto);
-        
+
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());

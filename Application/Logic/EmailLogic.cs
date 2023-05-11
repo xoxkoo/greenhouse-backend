@@ -44,7 +44,7 @@ public class EmailLogic : IEmailLogic
     {
         return await _emailDao.GetAsync();
     }
-    
+
     private SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
     {
         Port = 587,
@@ -83,17 +83,17 @@ public class EmailLogic : IEmailLogic
                 </html>",
             IsBodyHtml = true
         };
-        
+
         message.To.Add(_emailDao.GetAsync().Result.EmailAdress);
         smtpClient.Send(message);
     }
-    
+
     public async Task CheckIfInRange(float temperature, int humidity, int co2)
     {
         SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(null, true);
         var list = await _presetDao.GetAsync(parametersDto);
         PresetDto? currentPreset = list.FirstOrDefault();
-        
+
         if (currentPreset == null)
         {
             return;

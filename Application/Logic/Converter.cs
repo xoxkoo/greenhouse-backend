@@ -1,6 +1,4 @@
-﻿
-
-using System.Text;
+﻿using System.Text;
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
@@ -33,14 +31,12 @@ public class Converter : IConverter
     private ITemperatureLogic temperatureLogic;
     private ICO2Logic co2Logic;
     private IHumidityLogic humidityLogic;
-    private IWateringSystemLogic wateringSystemLogic;
     private IEmailLogic emailLogic;
-    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IWateringSystemLogic wateringSystemLogic, IEmailLogic emailLogic)
+    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IEmailLogic emailLogic)
     {
         this.temperatureLogic = temperatureLogic;
         this.co2Logic = co2Logic;
         this.humidityLogic = humidityLogic;
-        this.wateringSystemLogic = wateringSystemLogic;
         this.emailLogic = emailLogic;
     }
 
@@ -124,7 +120,6 @@ public class Converter : IConverter
 
 		    int startHours = interval.StartTime.Hours;
 		    int startMinutes = interval.StartTime.Minutes;
-		    Console.WriteLine(startHours);
 
 		    int endHours = interval.EndTime.Hours;
 		    int endMinutes = interval.EndTime.Minutes;
@@ -136,7 +131,6 @@ public class Converter : IConverter
 		    payloadBinary += IntToBinary(endHours, 5);
 		    payloadBinary += IntToBinary(endMinutes, 6);
 
-		    Console.WriteLine(IntToBinary(startHours, 5));
 
 	    }
 
