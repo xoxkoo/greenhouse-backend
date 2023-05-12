@@ -16,9 +16,7 @@ COPY ["Application/Application.csproj", "Application/"]
 COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
 COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
-COPY ["SocketServer/SocketServer.csproj", "SocketServer/"]
-COPY ["SocketClient/SocketClient.csproj", "SocketClient/"]
-COPY ["InternalTimer/InternalTimer.csproj", "InternalTimer/"]
+
 COPY . .
 
 WORKDIR "/src/WebAPI"
