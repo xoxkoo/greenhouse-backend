@@ -3,7 +3,7 @@ name: main
 on:
   push:
     branches:
-    - main
+    - socketInternalTimer-waterSystem_communication
 
 jobs:
   unit_test:
