@@ -22,7 +22,6 @@ public class PresetLogicTest
         _mockPresetDao = new Mock<IPresetDao>();
         _presetLogic = new PresetLogic(_mockPresetDao.Object);
     }
-
     //Z - Zero
     [TestMethod]
     public async Task GetAsync_ZeroPresets_ReturnsEmptyPresetDtoList()
