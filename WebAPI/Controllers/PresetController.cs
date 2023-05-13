@@ -1,5 +1,6 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -49,6 +50,19 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
-    
+    [Route("preset")]
+    [HttpPost]
+    public async Task<ActionResult<PresetEfcDto>> CreateAsync([FromBody] PresetCreationDto dto)
+    {
+        try
+        {
+            PresetEfcDto created = await _logic.CreateAsync(dto);
+            return Ok(created);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

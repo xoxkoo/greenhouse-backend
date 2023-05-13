@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -128,4 +129,67 @@ public class PresetControllerTests
         Assert.IsNotNull(statusCodeResult);
         Assert.AreEqual(500, statusCodeResult.StatusCode);
     }
+    [TestMethod]
+public async Task CreateAsync_ReturnsOkResult()
+{
+    // Arrange
+    var presetCreationDto = new PresetCreationDto
+    {
+        Name = "Test Preset",
+        Thresholds = new List<ThresholdDto>
+        {
+            new ThresholdDto {  Type = "temperature", MaxValue = 100, MinValue = 0 },
+            new ThresholdDto {Type = "humidity", MaxValue = 50, MinValue = 0 }
+        }
+    };
+    var presetEfcDto = new PresetEfcDto
+    {
+        Id = 1,
+        Name = "Test Preset",
+        Thresholds = new List<ThresholdDto>
+        {
+            new ThresholdDto { Type = "temperature", MaxValue = 100, MinValue = 0 },
+            new ThresholdDto { Type = "humidity", MaxValue = 50, MinValue = 0 }
+        }
+    };
+    _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ReturnsAsync(presetEfcDto);
+
+    // Act
+    var result = await _presetController.CreateAsync(presetCreationDto);
+
+    // Assert
+    Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+    var okObjectResult = result.Result as OkObjectResult;
+    Assert.IsNotNull(okObjectResult);
+    var createdPreset = okObjectResult.Value as PresetEfcDto;
+    Assert.IsNotNull(createdPreset);
+    Assert.AreEqual(presetEfcDto.Id, createdPreset.Id);
+    Assert.AreEqual(presetEfcDto.Name, createdPreset.Name);
+    // Assert other properties and thresholds as needed
+}
+
+[TestMethod]
+public async Task CreateAsync_ReturnsInternalServerError_OnException()
+{
+    // Arrange
+    var presetCreationDto = new PresetCreationDto
+    {
+        Name = "Test Preset",
+        Thresholds = new List<ThresholdDto>
+        {
+            new ThresholdDto { Type = "temperature", MaxValue = 100, MinValue = 0 },
+            new ThresholdDto {Type = "humidity", MaxValue = 50, MinValue = 0 }
+        }
+    };
+    _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ThrowsAsync(new Exception("Something went wrong"));
+
+    // Act
+    var result = await _presetController.CreateAsync(presetCreationDto);
+
+    // Assert
+    Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
+    var statusCodeResult = result.Result as ObjectResult;
+    Assert.IsNotNull(statusCodeResult);
+    Assert.AreEqual(500, statusCodeResult.StatusCode);
+}
 }
