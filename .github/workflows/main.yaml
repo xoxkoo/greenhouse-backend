@@ -22,7 +22,7 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal
       - name: EF Core Migrations
-        run: dotnet ef database update --project EfcDataAccess/Migrations  
+        run: dotnet ef database update --startup-project EfcDataAccess/      
       - name: DockerHub login
         uses: docker/login-action@v1
         with:
