@@ -24,7 +24,7 @@ jobs:
       - name: Install EF Core tools
         run: dotnet tool install --global dotnet-ef 
       - name: EF Core Migrations
-        run: dotnet ef database update --project EfcDataAccess --startup-project EfcDataAccess -- --sqliteDbPath={"DotNetEnv.Env.GetString("DB_CONNECTION")"};
+        run: dotnet ef database update --project EfcDataAccess --startup-project EfcDataAccess -- --sqliteDbPath={DotNetEnv.Env.GetString("DB_CONNECTION")};
       
       - name: DockerHub login
         uses: docker/login-action@v1
