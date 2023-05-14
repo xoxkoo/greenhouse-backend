@@ -22,7 +22,7 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal
       - name: Install EF Core tools
-        run: dotnet tool install --global dotnet-ef && echo "::add-path::$(dotnet --info | grep 'Tools directory:' | awk '{print $NF}')"
+        run: dotnet tool install --global dotnet-ef 
       - name: EF Core Migrations
         run: dotnet ef database update --project EfcDataAccess --startup-project EfcDataAccess
       - name: DockerHub login
