@@ -101,9 +101,20 @@ public class PresetEfcDao : IPresetDao
 
     public async Task ApplyAsync(int id)
     {
-        Preset? preset = _context.Presets.FirstOrDefault(p => p.Id == id);
-        preset.IsCurrent = true;
-        _context.Presets.Update(preset);
+        //Changing previously applied preset value for isCurrent to be false
+        var oldPresets = await _context.Presets.Where(p => p.IsCurrent == true).ToListAsync();
+        foreach (var preset in oldPresets)
+        {
+            preset.IsCurrent = false;
+            _context.Presets.Update(preset);
+        }
+        Preset? presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
+        if (presetToBeCurrent == null)
+        {
+            throw new Exception($"Preset with id {id} not found");
+        }
+        presetToBeCurrent.IsCurrent = true;
+        _context.Presets.Update(presetToBeCurrent);
         await _context.SaveChangesAsync();
     }
 }

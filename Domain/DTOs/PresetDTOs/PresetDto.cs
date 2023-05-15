@@ -8,5 +8,5 @@ public class PresetDto
     public string Name { get; set; }
     public bool IsCurrent { get; set; }
     public IEnumerable<Threshold> Thresholds { get; set; }
-
+    
 }

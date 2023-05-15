@@ -3,6 +3,7 @@ using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Domain.Entities;
 
 namespace Application.Logic;
 
@@ -146,6 +147,79 @@ public class Converter : IConverter
 
 	    return payloadHex + '0';
     }
+    public string ConvertPresetToHex(PresetDto dto)
+    {
+	    StringBuilder result = new StringBuilder();
+	 
+	    //ID - 6 bits
+	    //ID for this payload is 3
+	    result.Append("000011");
+	    List<Threshold> thresholds = dto.Thresholds.ToList();
+	    if (thresholds == null)
+	    {
+		    throw new Exception("Thresholds cannot be null");
+	    }
+	    
+	    //Temperature range - 22 bits
+	    Threshold temperatureThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("temperature"));
+	    if (temperatureThreshold == null)
+	    {
+		    result.Append("00000000000");
+		    result.Append("00000000000");
+	    }
+	    else
+	    {
+		    if (temperatureThreshold.MinValue < -50 || temperatureThreshold.MaxValue > 60)
+		    {
+			    throw new Exception("The value of the temperature is out of range -50 to 60");
+		    }
+		    //TODO ask boys because i do not know 
+		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MinValue*10, 11));
+		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MaxValue*10, 11));
+	    }
+
+	    
+	    //Humidity range - 14 bits
+	    Threshold humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
+	    if (humidityThreshold == null)
+	    {
+		    result.Append("0000000");
+		    result.Append("0000000");
+	    }
+	    else
+	    {
+		    if (humidityThreshold.MinValue < 0 || humidityThreshold.MaxValue > 100)
+		    {
+			    throw new Exception("The value of the humidity is out of range 0 to 100");
+
+		    }
+		    result.Append(IntToBinaryLeft((int)humidityThreshold.MinValue, 7));
+		    result.Append(IntToBinaryLeft((int)humidityThreshold.MaxValue, 7));
+	    }
+
+	    
+	    //CO2 range - 24 bits
+	    Threshold co2Threshold = thresholds.FirstOrDefault(t => t.Type.Equals("co2"));
+	    if (co2Threshold == null)
+	    {
+		    result.Append("000000000000");
+		    result.Append("000000000000");
+	    }
+	    else
+	    {
+		    if (co2Threshold.MinValue < 0 || co2Threshold.MaxValue > 4095)
+		    {
+			    throw new Exception("The value of the co2 is out of range 0 to 4095");
+		    }
+		    result.Append(IntToBinaryLeft((int)co2Threshold.MinValue, 12));
+		    result.Append(IntToBinaryLeft((int)co2Threshold.MaxValue, 12));
+	    }
+	    
+	    Console.WriteLine(result.ToString());
+	    Console.WriteLine(BinaryStringToHex(result.ToString()).ToLower());
+	    return BinaryStringToHex(result.ToString()).ToLower();
+    }
+
 
     private async Task<string> ReadTHCPayload(string data)
     {
@@ -262,8 +336,7 @@ public class Converter : IConverter
             {
                throw new Exception($"Invalid character in hex value: {c}");
             }
-
-           result.Append(hexCharacterToBinary[char.ToLower(c)]);
+            result.Append(hexCharacterToBinary[char.ToLower(c)]);
         }
         return result.ToString();
     }
