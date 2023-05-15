@@ -1,4 +1,5 @@
-﻿using Application.DaoInterfaces;
+﻿using System.Collections;
+using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -85,5 +86,24 @@ public class PresetEfcDao : IPresetDao
             Name = entity.Entity.Name,
             Thresholds = thresholdDtos
         };
+    }
+
+    public async Task UpdateAsync(Preset preset)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(preset.Id, null);
+        IEnumerable<Threshold> existingThresholdsForPreset = GetAsync(parametersDto).Result.FirstOrDefault()?.Thresholds;
+        _context.Thresholds.RemoveRange(existingThresholdsForPreset);
+        await _context.Thresholds.AddRangeAsync(preset.Thresholds);
+        _context.Presets.Update(preset);
+        
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ApplyAsync(int id)
+    {
+        Preset? preset = _context.Presets.FirstOrDefault(p => p.Id == id);
+        preset.IsCurrent = true;
+        _context.Presets.Update(preset);
+        await _context.SaveChangesAsync();
     }
 }
