@@ -6,7 +6,8 @@ using Domain.Entities;
 using EfcDataAccess.DAOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using Moq;
+using SocketServer;
 using Testing.Utils;
 
 namespace Testing.IntegrationTests;
@@ -21,6 +22,7 @@ public class ConvertFromHexTest : DbTestBase
     private IWateringSystemLogic _waterLogic;
     private IEmailLogic _emailLogic;
     private IConverter _converter;
+    private Mock<IWebSocketServer> socket;
 
     [TestInitialize]
     public void TestInitialize()
@@ -31,12 +33,15 @@ public class ConvertFromHexTest : DbTestBase
         IWateringSystemDao wateringSystemDao = new WateringSystemDao(DbContext);
         IEmailDao emailDao = new EmailEfcDao(DbContext);
         IPresetDao presetDao = new PresetEfcDao(DbContext);
+        _emailLogic = new EmailLogic(emailDao, presetDao);
+
         _temperatureLogic = new TemperatureLogic(temperatureDao);
         _co2Logic = new CO2Logic(co2Dao);
         _humidityLogic = new HumidityLogic(humidityDao);
-        _waterLogic = new WateringSystemLogic(wateringSystemDao);
-        _emailLogic = new EmailLogic(emailDao, presetDao);
         _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _emailLogic);
+        socket = new Mock<IWebSocketServer>();
+        _waterLogic = new WateringSystemLogic(wateringSystemDao,_converter,socket.Object);
+        
     }
 
 
@@ -77,7 +82,7 @@ public class ConvertFromHexTest : DbTestBase
 	    };
 	    Email email = new Email
 	    {
-		    EmailAddress = "natakoziara@gmail.com"
+		    EmailAddress = "greenhousesep4@gmail.com"
 	    };
 	    await DbContext.Mails.AddAsync(email);
 	    await DbContext.Presets.AddAsync(preset);

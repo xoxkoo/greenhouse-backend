@@ -1,10 +1,12 @@
 ﻿using Application.DaoInterfaces;
 using Application.Logic;
+using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using SocketServer;
 using Testing.Utils;
 
 namespace Testing.LogicTests;
@@ -13,13 +15,17 @@ public class WateringSystemLogicTest : DbTestBase
 {
     private Mock<IWateringSystemDao> dao;
     private IWateringSystemLogic logic;
+    private Mock<IConverter> converter;
+    private Mock<IWebSocketServer> socket;
 
     [TestInitialize]
     public void WateringSystemLogicTestInit()
     {
         base.TestInit();
         dao = new Mock<IWateringSystemDao>();
-        logic = new WateringSystemLogic(dao.Object);
+        converter = new Mock<IConverter>();
+        socket = new Mock<IWebSocketServer>();
+        logic = new WateringSystemLogic(dao.Object,converter.Object,socket.Object);
     }
     [TestMethod]
     public async Task WateringSystemDurationTest()
