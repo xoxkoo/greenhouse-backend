@@ -330,4 +330,41 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsInstanceOfType(result, typeof(List<PresetDto>));
         Assert.AreEqual(0, result.Count());
     }
+    [TestMethod]
+    public async Task CreateAsync_CreatesPresetAndReturnsPresetDto()
+    {
+        // Arrange
+        var preset = new Preset
+        {
+            Id = 1,
+            Name = "Test Preset",
+            Thresholds = new List<Threshold>
+            {
+                new Threshold { Type = "Type1", MinValue = 0, MaxValue = 10 },
+                new Threshold { Type = "Type2", MinValue = 20, MaxValue = 30 }
+            }
+        };
+
+        // Act
+        var result = await _presetDao.CreateAsync(preset);
+
+        // Assert
+        Assert.IsNotNull(result);
+        Assert.AreEqual(preset.Id, result.Id);
+        Assert.AreEqual(preset.Name, result.Name);
+        Assert.AreEqual(preset.Thresholds.Count(), result.Thresholds.Count());
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public async Task CreateAsync_ThrowsExceptionWhenPresetIsNull()
+    {
+        // Arrange
+        Preset preset = null;
+
+        // Act
+        await _presetDao.CreateAsync(preset);
+
+        // The test should throw ArgumentNullException
+    }
 }
