@@ -76,17 +76,17 @@ public class PresetLogicTest
             new PresetDto { Id = 2, Name = "Sunny Day", IsCurrent = false }
         };
         _mockPresetDao.Setup(dao => dao.GetAsync(parametersDto)).ReturnsAsync(presets);
-        
+
         // Act
         var result = await _presetLogic.GetAsync(parametersDto);
-        
+
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
         Assert.IsTrue(result.Any(p => p.Id == 1));
         Assert.IsTrue(result.Any(p => p.Id == 2));
     }
-    
+
     [TestMethod]
     public async Task GetAsync_ReturnsPresetsByIsCurrent()
     {
@@ -99,16 +99,16 @@ public class PresetLogicTest
             new PresetDto { Id = 3, Name = "Rainy Day", IsCurrent = false }
         };
         _mockPresetDao.Setup(dao => dao.GetAsync(parametersDto)).ReturnsAsync(presets.Where(p => p.IsCurrent));
-        
+
         // Act
         var result = await _presetLogic.GetAsync(parametersDto);
-        
+
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
         Assert.IsTrue(result.Any(p => p.Id == 1));
     }
-    
+
     [TestMethod]
     public async Task GetAsync_ReturnsPresetById()
     {
@@ -124,7 +124,7 @@ public class PresetLogicTest
 
         // Act
         var result = await _presetLogic.GetAsync(parametersDto);
-        
+
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());

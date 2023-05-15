@@ -21,6 +21,7 @@ public class SchedulePlan : IJob
 
 			string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
 			//TODO discuss if we want to use socket here or call the logic
+			Console.WriteLine(hexPayload);
 			socket?.Send(hexPayload);
 		}
 		catch (Exception e)
