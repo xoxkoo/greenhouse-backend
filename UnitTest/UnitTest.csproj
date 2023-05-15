@@ -21,9 +21,4 @@
       <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="IntegrationTests\ConvertFromHexTest.cs" />
-      <Compile Remove="LogicTests\WateringSystemLogicTest.cs" />
-    </ItemGroup>
-
 </Project>

@@ -176,6 +176,7 @@ public class Converter : IConverter
         await co2Logic.CreateAsync(co2Dto);
         await humidityLogic.CreateAsync(humidityDto);
         await temperatureLogic.CreateAsync(tempDto);
+        
         await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
