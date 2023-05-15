@@ -52,8 +52,8 @@ public class PresetLogic : IPresetLogic
         List<Threshold> thresholds = thresholdDtos.Select(t => new Threshold
         {
             Type = t.Type,
-            MaxValue = t.MaxValue,
-            MinValue = t.MinValue
+            MaxValue = t.Max,
+            MinValue = t.Min
         }).ToList();
 
         if (HasDuplicateThresholdTypes(thresholds))

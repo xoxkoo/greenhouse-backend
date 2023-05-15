@@ -22,7 +22,6 @@ public class PresetLogicTest
         _mockPresetDao = new Mock<IPresetDao>();
         _presetLogic = new PresetLogic(_mockPresetDao.Object);
     }
-
     //Z - Zero
     [TestMethod]
     public async Task GetAsync_ZeroPresets_ReturnsEmptyPresetDtoList()
@@ -139,7 +138,7 @@ public class PresetLogicTest
         {
             Thresholds = new List<ThresholdDto>
             {
-                new ThresholdDto { Type = "Humidity", MinValue = -10, MaxValue = 120 }
+                new ThresholdDto { Type = "Humidity", Min = -10, Max = 120 }
             }
         };
         // Act and Assert
@@ -212,9 +211,9 @@ public class PresetLogicTest
         {
             Thresholds = new List<ThresholdDto>
             {
-                new ThresholdDto { Type = "InvalidType", MinValue = 0, MaxValue = 10 },
-                new ThresholdDto { Type = "InvalidType", MinValue = 0, MaxValue = 10 },
-                new ThresholdDto { Type = "InvalidType", MinValue = 0, MaxValue = 10 }
+                new ThresholdDto { Type = "InvalidType", Min = 0, Max = 10 },
+                new ThresholdDto { Type = "InvalidType", Min = 0, Max = 10 },
+                new ThresholdDto { Type = "InvalidType", Min = 0, Max = 10 }
             }
         };
 
@@ -231,9 +230,9 @@ public class PresetLogicTest
         {
             Thresholds = new List<ThresholdDto>
             {
-                new ThresholdDto { Type = "CO2", MinValue = 20, MaxValue = 10 },
-                new ThresholdDto { Type = "Temperature", MinValue = -10, MaxValue = 20 },
-                new ThresholdDto { Type = "Humidity", MinValue = 10, MaxValue = 90 }
+                new ThresholdDto { Type = "CO2", Min = 20, Max = 10 },
+                new ThresholdDto { Type = "Temperature", Min = -10, Max = 20 },
+                new ThresholdDto { Type = "Humidity", Min = 10, Max = 90 }
             }
         };
 
@@ -250,9 +249,9 @@ public class PresetLogicTest
         {
             Thresholds = new List<ThresholdDto>
             {
-                new ThresholdDto { Type = "CO2", MinValue = -10, MaxValue = 5000 },
-                new ThresholdDto { Type = "Temperature", MinValue = -10, MaxValue = 20 },
-                new ThresholdDto { Type = "Humidity", MinValue = 10, MaxValue = 90 }
+                new ThresholdDto { Type = "CO2", Min = -10, Max = 5000 },
+                new ThresholdDto { Type = "Temperature", Min = -10, Max = 20 },
+                new ThresholdDto { Type = "Humidity", Min = 10, Max = 90 }
             }
         };
 
@@ -269,9 +268,9 @@ public class PresetLogicTest
             Name = "Test Preset",
             Thresholds = new List<ThresholdDto>
             {
-                new ThresholdDto { Type = "CO2", MinValue = 0, MaxValue = 100 },
-                new ThresholdDto { Type = "Temperature", MinValue = -10, MaxValue = 30 },
-                new ThresholdDto { Type = "Humidity", MinValue = 20, MaxValue = 80 }
+                new ThresholdDto { Type = "CO2", Min = 0, Max = 100 },
+                new ThresholdDto { Type = "Temperature", Min = -10, Max = 30 },
+                new ThresholdDto { Type = "Humidity", Min = 20, Max = 80 }
             }
         };
 

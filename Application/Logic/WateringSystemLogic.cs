@@ -16,9 +16,11 @@ public class WateringSystemLogic : IWateringSystemLogic
     private readonly IConverter _converter;
     private readonly IWebSocketServer _socketServer;
 
-    public WateringSystemLogic(IWateringSystemDao wateringSystemDao)
+    public WateringSystemLogic(IWateringSystemDao wateringSystemDao,IConverter converter,IWebSocketServer webSocketServer)
     {
         _wateringSystemDao = wateringSystemDao;
+        _converter = converter;
+        _socketServer = webSocketServer;
     }
 
     public async Task<ValveStateDto> CreateAsync(ValveStateCreationDto dto)
@@ -44,7 +46,6 @@ public class WateringSystemLogic : IWateringSystemLogic
         {
 	        State = dto.State
         };
-
         string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
         _socketServer.Send(payload);
         return await _wateringSystemDao.CreateAsync(entity);

@@ -56,7 +56,9 @@ public class PresetController : ControllerBase
     {
         try
         {
+            Console.WriteLine(dto);
             PresetEfcDto created = await _logic.CreateAsync(dto);
+            
             return Ok(created);
         }
         catch (Exception e)

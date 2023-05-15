@@ -23,13 +23,11 @@ public class Context : DbContext
 	public Context(DbContextOptions<Context> options) : base(options)
 	{
 	}
-
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		// loads environment variables and sets the path
 		DotNetEnv.Env.TraversePath().Load();
-
-		optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
+	    optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
 	}
 
 }
