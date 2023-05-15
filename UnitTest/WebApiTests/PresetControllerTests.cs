@@ -139,8 +139,8 @@ public async Task CreateAsync_ReturnsOkResult()
         Name = "Test Preset",
         Thresholds = new List<ThresholdDto>
         {
-            new ThresholdDto {  Type = "temperature", MaxValue = 100, MinValue = 0 },
-            new ThresholdDto {Type = "humidity", MaxValue = 50, MinValue = 0 }
+            new ThresholdDto {  Type = "temperature", Max = 100, Min = 0 },
+            new ThresholdDto {Type = "humidity", Max = 50, Min = 0 }
         }
     };
     var presetEfcDto = new PresetEfcDto
@@ -149,8 +149,8 @@ public async Task CreateAsync_ReturnsOkResult()
         Name = "Test Preset",
         Thresholds = new List<ThresholdDto>
         {
-            new ThresholdDto { Type = "temperature", MaxValue = 100, MinValue = 0 },
-            new ThresholdDto { Type = "humidity", MaxValue = 50, MinValue = 0 }
+            new ThresholdDto { Type = "temperature", Max = 100, Min = 0 },
+            new ThresholdDto { Type = "humidity", Max = 50, Min = 0 }
         }
     };
     _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ReturnsAsync(presetEfcDto);
@@ -178,8 +178,8 @@ public async Task CreateAsync_ReturnsInternalServerError_OnException()
         Name = "Test Preset",
         Thresholds = new List<ThresholdDto>
         {
-            new ThresholdDto { Type = "temperature", MaxValue = 100, MinValue = 0 },
-            new ThresholdDto {Type = "humidity", MaxValue = 50, MinValue = 0 }
+            new ThresholdDto { Type = "temperature", Max = 100, Min = 0 },
+            new ThresholdDto {Type = "humidity", Max = 50, Min = 0 }
         }
     };
     _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ThrowsAsync(new Exception("Something went wrong"));

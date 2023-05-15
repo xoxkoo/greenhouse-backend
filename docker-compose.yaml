@@ -6,16 +6,18 @@ services:
       context: ./
     ports:
       - 7070:7071
-    env_file:
-      - .env
+    depends_on:
+      - db
     environment:
-      DB_DRIVER: sqlite
+      - SQLITE_DB=Greenhouse
   
   db:
     container_name: "doc-sqlite-container"
-    image: 'keinos/sqlite3:latest'
+    image: 'esolang/sqlite3'
     volumes:
-      - ./EfcDataAccess/Greenhouse.db:/Greenhouse.db
+      - db:/EfcDataAccess
+    environment:
+      - SQLITE_DB=Greenhouse
 volumes:
   db:
-    driver: local
+    

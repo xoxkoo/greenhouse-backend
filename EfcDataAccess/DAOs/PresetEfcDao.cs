@@ -75,8 +75,8 @@ public class PresetEfcDao : IPresetDao
         IEnumerable<ThresholdDto> thresholdDtos = entity.Entity.Thresholds?.Select(t => new ThresholdDto
         {
             Type = t.Type,
-            MinValue = t.MinValue,
-            MaxValue = t.MaxValue
+            Min = t.MinValue,
+            Max = t.MaxValue
         }) ?? Enumerable.Empty<ThresholdDto>();
 
         return new PresetEfcDto
