@@ -82,7 +82,6 @@ public class ConverterTest : DbTestBase
 	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
 	    string expected = "09cf04073c101cf04073c101cf04073c101cf0400";
 
-
 	    Assert.AreEqual(result, expected);
     }
 
