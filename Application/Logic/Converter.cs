@@ -136,7 +136,15 @@ public class Converter : IConverter
 
 	    // return the hex value of payload
 	    // prepend 0 in the beginning, because provided binary string length must be a Dividable of 8
-	    return '0' + BinaryStringToHex(payloadBinary).ToLower();
+	    string payloadHex = '0' + BinaryStringToHex(payloadBinary).ToLower();
+
+	    // hex value must be even
+	    if (payloadHex.Length % 2 == 0)
+		    return payloadHex;
+	    if (payloadHex[^1] == '0')
+		    return payloadHex.Remove(payloadHex.Length - 1);
+
+	    return payloadHex + '0';
     }
 
     private async Task<string> ReadTHCPayload(string data)
