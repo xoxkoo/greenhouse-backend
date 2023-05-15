@@ -13,7 +13,8 @@ public class Context : DbContext
 	public DbSet<Interval> Intervals { get; set; }
 	public DbSet<ValveState> ValveState { get; set; }
 	public DbSet<Email> Mails { get; set; }
-
+	public DbSet<Preset> Presets { get; set; }
+	public DbSet<Threshold> Thresholds { get; set; }
 	public Context()
 	{
 
@@ -22,13 +23,11 @@ public class Context : DbContext
 	public Context(DbContextOptions<Context> options) : base(options)
 	{
 	}
-
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		// loads environment variables and sets the path
 		DotNetEnv.Env.TraversePath().Load();
-		Console.WriteLine(DotNetEnv.Env.GetString("DB_CONNECTION"));
-		optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
+	    optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
 	}
 
 }

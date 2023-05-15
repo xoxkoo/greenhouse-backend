@@ -7,5 +7,5 @@ public interface IEmailLogic
 {
     Task<EmailDto> CreateAsync(EmailDto dto);
     Task<EmailDto> GetAsync();
-    void sendMail(Email mail);
+    Task CheckIfInRange(float temperature, int humidity, int co2);
 }

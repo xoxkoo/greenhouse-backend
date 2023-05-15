@@ -18,6 +18,7 @@ public class ConverterTest : DbTestBase
 	private readonly Mock<IHumidityLogic> humidityLogic;
 	private readonly Mock<ICO2Logic> co2logic;
 	private readonly Mock<IWateringSystemLogic> waterLogic;
+	private readonly Mock<IEmailLogic> emailLogic;
 	private readonly IConverter converter;
 
 
@@ -27,7 +28,8 @@ public class ConverterTest : DbTestBase
 	    co2logic = new Mock<ICO2Logic>();
 	    humidityLogic = new Mock<IHumidityLogic>();
 	    waterLogic = new Mock<IWateringSystemLogic>();
-        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, waterLogic.Object);
+	    emailLogic = new Mock<IEmailLogic>();
+        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, emailLogic.Object);
     }
 
     [TestMethod]
@@ -78,8 +80,7 @@ public class ConverterTest : DbTestBase
 
 
 	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
-	    string expected = "09cf04073c101cf04073c101cf04073c101cf0400";
-
+	    string expected = "09cf04073c101cf04073c101cf04073c101cf040";
 
 	    Assert.AreEqual(result, expected);
     }
@@ -104,7 +105,7 @@ public class ConverterTest : DbTestBase
 
 	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
 
-	    Assert.AreEqual(result, "0800000");
+	    Assert.AreEqual(result, "080000");
     }
 
     [TestMethod]
@@ -117,7 +118,7 @@ public class ConverterTest : DbTestBase
 
 	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
 
-	    Assert.AreEqual(result, "0afddfb");
+	    Assert.AreEqual(result, "0afddfb0");
     }
 
 

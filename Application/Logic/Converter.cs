@@ -1,6 +1,4 @@
-﻿
-
-using System.Text;
+﻿using System.Text;
 using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
@@ -33,13 +31,13 @@ public class Converter : IConverter
     private ITemperatureLogic temperatureLogic;
     private ICO2Logic co2Logic;
     private IHumidityLogic humidityLogic;
-    private IWateringSystemLogic wateringSystemLogic;
-    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IWateringSystemLogic wateringSystemLogic)
+    private IEmailLogic emailLogic;
+    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IEmailLogic emailLogic)
     {
         this.temperatureLogic = temperatureLogic;
         this.co2Logic = co2Logic;
         this.humidityLogic = humidityLogic;
-        this.wateringSystemLogic = wateringSystemLogic;
+        this.emailLogic = emailLogic;
     }
 
     public async Task<string> ConvertFromHex(string payload)
@@ -122,7 +120,6 @@ public class Converter : IConverter
 
 		    int startHours = interval.StartTime.Hours;
 		    int startMinutes = interval.StartTime.Minutes;
-		    Console.WriteLine(startHours);
 
 		    int endHours = interval.EndTime.Hours;
 		    int endMinutes = interval.EndTime.Minutes;
@@ -134,13 +131,20 @@ public class Converter : IConverter
 		    payloadBinary += IntToBinary(endHours, 5);
 		    payloadBinary += IntToBinary(endMinutes, 6);
 
-		    Console.WriteLine(IntToBinary(startHours, 5));
 
 	    }
 
 	    // return the hex value of payload
 	    // prepend 0 in the beginning, because provided binary string length must be a Dividable of 8
-	    return '0' + BinaryStringToHex(payloadBinary).ToLower();
+	    string payloadHex = '0' + BinaryStringToHex(payloadBinary).ToLower();
+
+	    // hex value must be even
+	    if (payloadHex.Length % 2 == 0)
+		    return payloadHex;
+	    if (payloadHex[^1] == '0')
+		    return payloadHex.Remove(payloadHex.Length - 1);
+
+	    return payloadHex + '0';
     }
 
     private async Task<string> ReadTHCPayload(string data)
@@ -172,6 +176,8 @@ public class Converter : IConverter
         await co2Logic.CreateAsync(co2Dto);
         await humidityLogic.CreateAsync(humidityDto);
         await temperatureLogic.CreateAsync(tempDto);
+        
+        await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 

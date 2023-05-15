@@ -4,9 +4,9 @@ using Application.LogicInterfaces;
 using Newtonsoft.Json;
 
 
-namespace Socket
+namespace SocketClient
 {
-    public class WebSocketClient : IWebSocketClient
+    public class WebSocketClient
     {
         private readonly ClientWebSocket _webSocket;
         private readonly IConverter _converter;
@@ -107,31 +107,6 @@ namespace Socket
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "", CancellationToken.None);
         }
 
-        public async Task Send(string hexData)
-        {
-	        await Connect();
-
-	        if (_webSocket.State == WebSocketState.Open)
-	        {
-		        var json = JsonConvert.SerializeObject(new
-		        {
-			        cmd = "tx",
-			        EUI = "0004A30B00E7E072",
-			        port = 6,
-			        confirmed = true,
-			        data = hexData
-		        });
-
-		        byte[] sendBuffer = Encoding.UTF8.GetBytes(json);
-		        await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
-
-		        Console.WriteLine("Message sent!");
-	        }
-	        else
-	        {
-		        Console.WriteLine("WebSocket connection is not open!");
-	        }
-        }
 
         /**
          * Start websocket client
