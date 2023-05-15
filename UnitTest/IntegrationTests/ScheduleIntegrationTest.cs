@@ -9,10 +9,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing;
+namespace Testing.IntegrationTests;
 
 [TestClass]
-public class ScheduleIntegarationTest : DbTestBase
+public class ScheduleIntegrationTest : DbTestBase
 {
     private IScheduleDao dao;
     private IScheduleLogic logic;
@@ -48,11 +48,11 @@ public class ScheduleIntegarationTest : DbTestBase
             }
             }
         };
-        
-        
+
+
         // Act
         var result = await logic.CreateAsync(dto);
-        
+
         //Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Id);

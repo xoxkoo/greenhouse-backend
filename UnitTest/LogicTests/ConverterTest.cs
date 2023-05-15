@@ -29,7 +29,7 @@ public class ConverterTest : DbTestBase
 	    humidityLogic = new Mock<IHumidityLogic>();
 	    waterLogic = new Mock<IWateringSystemLogic>();
 	    emailLogic = new Mock<IEmailLogic>();
-        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, waterLogic.Object, emailLogic.Object);
+        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, emailLogic.Object);
     }
 
     [TestMethod]
@@ -81,7 +81,6 @@ public class ConverterTest : DbTestBase
 
 	    string result = converter.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
 	    string expected = "09cf04073c101cf04073c101cf04073c101cf0400";
-
 
 	    Assert.AreEqual(result, expected);
     }
