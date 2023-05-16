@@ -26,6 +26,7 @@ jobs:
       - name: EF Core Migrations
         run: |
           cd EfcDataAccess
+          dotnet ef database list
           dotnet ef migrations add Migrationv6
           dotnet ef database update 
       - name: DockerHub login
