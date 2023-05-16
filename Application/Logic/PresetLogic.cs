@@ -20,9 +20,37 @@ public class PresetLogic : IPresetLogic
         _converter = converter;
     }
 
-    public async Task<IEnumerable<PresetDto>> GetAsync(SearchPresetParametersDto dto)
+    public async Task<IEnumerable<PresetEfcDto>> GetAsync(SearchPresetParametersDto dto)
     {
-        return await _presetDao.GetAsync(dto);
+        var presets = await _presetDao.GetAsync(dto);
+        var result = new List<PresetEfcDto>();
+        foreach (var p in presets)
+        {
+            var thresholds = new List<ThresholdDto>();
+            if (p.Thresholds != null)
+            {
+                foreach (var t in p.Thresholds)
+                {
+                    var threshold = new ThresholdDto()
+                    {
+                        Max = t.MaxValue,
+                        Min = t.MinValue,
+                        Type = t.Type
+                    };
+                    thresholds.Add(threshold);
+                }
+            }
+
+            var presetToSend = new PresetEfcDto()
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Thresholds = thresholds
+            };
+            result.Add(presetToSend);
+        }
+
+        return result;
     }
     public async Task<PresetEfcDto> CreateAsync(PresetCreationDto dto)
     {
@@ -76,7 +104,7 @@ public class PresetLogic : IPresetLogic
         //Change the value isCurrent to be true in database
         await _presetDao.ApplyAsync(id);
         //Find the preset which should be applied as a current and send to the IoT device
-        PresetDto? presetToSend = GetAsync(new SearchPresetParametersDto(id, null)).Result.FirstOrDefault();
+        PresetDto? presetToSend = _presetDao.GetAsync(new SearchPresetParametersDto(id, null)).Result.FirstOrDefault();
         if (presetToSend == null)
         {
             throw new Exception($"Preset with id {id} not found");

@@ -67,7 +67,6 @@ public class PresetLogicTest
         Assert.AreEqual(1, result.Count());
         Assert.AreEqual(presetDto.Id, result.First().Id);
         Assert.AreEqual(presetDto.Name, result.First().Name);
-        Assert.AreEqual(presetDto.IsCurrent, result.First().IsCurrent);
     }
 
     //M - Many

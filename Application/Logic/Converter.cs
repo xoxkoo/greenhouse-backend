@@ -160,65 +160,47 @@ public class Converter : IConverter
 		    throw new NullReferenceException("Thresholds cannot be null");
 	    }
 
-	    if (thresholds.Count() == 0)
+	    foreach (var t in thresholds)
 	    {
-		    throw new Exception("In the preset there have to be at least one threshold");
+		    if (t.Type != "temperature" && t.Type != "co2" && t.Type != "humidity")		    {
+			    throw new Exception("In the preset the types of the thresholds have to be: temperature, co2 or humidity");
+		    }
+	    }
+	    if (thresholds.Count() != 3)
+	    {
+		    throw new Exception("In the preset there have to be three thresholds");
 	    }
 	    
 	    //Temperature range - 22 bits
 	    Threshold temperatureThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("temperature"));
-	    if (temperatureThreshold == null)
+	    if (temperatureThreshold.MinValue < -50 || temperatureThreshold.MaxValue > 60)
 	    {
-		    result.Append("00000000000");
-		    result.Append("00000000000");
+		    throw new ArgumentOutOfRangeException("The value of the temperature is out of range -50 to 60");
 	    }
-	    else
-	    {
-		    if (temperatureThreshold.MinValue < -50 || temperatureThreshold.MaxValue > 60)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the temperature is out of range -50 to 60");
-		    }
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MinValue*10 + 500, 11));
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MaxValue*10 + 500, 11));
-	    }
+	    result.Append(IntToBinaryLeft((int)temperatureThreshold.MinValue*10 + 500, 11));
+	    result.Append(IntToBinaryLeft((int)temperatureThreshold.MaxValue*10 + 500, 11));
 
-	    
+
 	    //Humidity range - 14 bits
 	    Threshold humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
-	    if (humidityThreshold == null)
+	    if (humidityThreshold.MinValue < 0 || humidityThreshold.MaxValue > 100)
 	    {
-		    result.Append("0000000");
-		    result.Append("0000000");
-	    }
-	    else
-	    {
-		    if (humidityThreshold.MinValue < 0 || humidityThreshold.MaxValue > 100)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the humidity is out of range 0 to 100");
+		    throw new ArgumentOutOfRangeException("The value of the humidity is out of range 0 to 100");
 
-		    }
-		    result.Append(IntToBinaryLeft((int)humidityThreshold.MinValue, 7));
-		    result.Append(IntToBinaryLeft((int)humidityThreshold.MaxValue, 7));
 	    }
+	    result.Append(IntToBinaryLeft((int)humidityThreshold.MinValue, 7));
+	    result.Append(IntToBinaryLeft((int)humidityThreshold.MaxValue, 7));
 
-	    
+
 	    //CO2 range - 24 bits
 	    Threshold co2Threshold = thresholds.FirstOrDefault(t => t.Type.Equals("co2"));
-	    if (co2Threshold == null)
+	    if (co2Threshold.MinValue < 0 || co2Threshold.MaxValue > 4095)
 	    {
-		    result.Append("000000000000");
-		    result.Append("000000000000");
+		    throw new ArgumentOutOfRangeException("The value of the co2 is out of range 0 to 4095");
 	    }
-	    else
-	    {
-		    if (co2Threshold.MinValue < 0 || co2Threshold.MaxValue > 4095)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the co2 is out of range 0 to 4095");
-		    }
-		    result.Append(IntToBinaryLeft((int)co2Threshold.MinValue, 12));
-		    result.Append(IntToBinaryLeft((int)co2Threshold.MaxValue, 12));
-	    }
-	    
+	    result.Append(IntToBinaryLeft((int)co2Threshold.MinValue, 12));
+	    result.Append(IntToBinaryLeft((int)co2Threshold.MaxValue, 12));
+
 	    Console.WriteLine(result.ToString());
 	    Console.WriteLine(BinaryStringToHex(result.ToString()).ToLower());
 	    return BinaryStringToHex(result.ToString()).ToLower();

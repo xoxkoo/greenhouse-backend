@@ -18,7 +18,7 @@ public class PresetController : ControllerBase
     
     [Route("preset")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PresetDto>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<PresetEfcDto>>> GetAsync()
     {
         try
         {
@@ -35,7 +35,7 @@ public class PresetController : ControllerBase
     
     [Route("current-preset")]
     [HttpGet]
-    public async Task<ActionResult<PresetDto>> GetCurrentAsync()
+    public async Task<ActionResult<PresetEfcDto>> GetCurrentAsync()
     {
         try
         {
@@ -96,7 +96,7 @@ public class PresetController : ControllerBase
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            return StatusCode(500, e.Message);
         }
     }
 }
