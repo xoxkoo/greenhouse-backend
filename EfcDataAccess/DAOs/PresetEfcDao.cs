@@ -86,4 +86,37 @@ public class PresetEfcDao : IPresetDao
             Thresholds = thresholdDtos
         };
     }
+
+    public async Task<Preset?> GetByIdAsync(int id)
+    {
+        try
+        {
+            Preset? preset = await _context.Presets.FindAsync(id);
+            if (preset == null)
+            {
+                return null;
+            }
+            EntityEntry<Preset> entity = _context.Entry(preset);
+            return entity.Entity;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+
+    public async Task DeleteAsync(Preset preset)
+    {
+            _context.Presets.Remove(preset);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to save changes to database", ex);
+            }
+    }
 }

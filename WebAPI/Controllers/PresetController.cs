@@ -67,4 +67,19 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    [Route("preset")]
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteAsync(int id)
+    {
+        try
+        {
+            await _logic.DeleteAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

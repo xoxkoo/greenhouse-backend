@@ -367,4 +367,47 @@ public class PresetDaoTest :  DbTestBase
 
         // The test should throw ArgumentNullException
     }
+
+    [TestMethod]
+    public async Task DeleteAsync_testGetById()
+    {
+        //Arrange
+        var preset = new Preset
+        {
+            Id = 1,
+            Name = "Tomato",
+            IsCurrent = true,
+            Thresholds = new List<Threshold>
+            {
+                new Threshold { Id = 1, Type = "temperature", MaxValue = 10, MinValue = 0 },
+                new Threshold { Id = 2, Type = "humidity", MaxValue = 50, MinValue = 60 },
+                new Threshold { Id = 3, Type = "co2", MaxValue = 1200, MinValue = 1250 }
+            }
+        };
+        // Act
+        await _presetDao.CreateAsync(preset);
+        await DbContext.SaveChangesAsync();
+        Preset preset3 = await _presetDao.GetByIdAsync(1);
+        Assert.AreEqual(preset3.Name, preset.Name);
+        
+    }/*
+    [TestMethod]
+    public async Task DeleteAsync_TestDelete()
+    {
+            //Act and Assert
+            await _presetDao.DeleteAsync(preset);
+            await DbContext.SaveChangesAsync();
+            Preset preset4 = await _presetDao.GetByIdAsync(1);
+                try
+            {
+                Console.WriteLine(preset4.Name);
+            }
+            catch (Exception e) 
+            {
+                Console.WriteLine(e);
+                Assert.AreEqual($"Object reference not set to an instance of an object.", e.Message);
+                 throw; 
+            }
+
+    }*/
 }

@@ -7,5 +7,6 @@ public interface IPresetDao
 {
     Task<IEnumerable<PresetDto>> GetAsync(SearchPresetParametersDto parametersDto);
     Task<PresetEfcDto> CreateAsync(Preset preset);
-
+    Task<Preset?> GetByIdAsync(int id);
+    Task DeleteAsync(Preset preset);
 }
