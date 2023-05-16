@@ -26,6 +26,5 @@ RUN dotnet publish -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
-COPY --from=build-env /app/EfcDataAccess/Greenhouse.db .
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "WebAPI.dll"]
