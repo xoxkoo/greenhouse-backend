@@ -18,10 +18,6 @@ COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
 
 COPY . .
-#Build database
-WORKDIR "/src/EfcDataAccess"
-RUN dotnet ef database update
-
 WORKDIR "/src/WebAPI"
 RUN dotnet build "WebAPI.csproj" -c Release -o /app
 
@@ -30,5 +26,6 @@ RUN dotnet publish -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
+COPY --from=build-env /app/EfcDataAccess/Greenhouse.db .
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "WebAPI.dll"]
