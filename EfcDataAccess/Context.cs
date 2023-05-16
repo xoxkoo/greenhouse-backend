@@ -27,7 +27,7 @@ public class Context : DbContext
 	{
 		// loads environment variables and sets the path
 		DotNetEnv.Env.TraversePath().Load();
-	    optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
+	    optionsBuilder.UseSqlite($"Data Source = ../EfcDataAccess/Greenhouse.db;");
 	}
 
 }
