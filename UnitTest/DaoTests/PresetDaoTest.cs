@@ -30,7 +30,7 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(0, result.Count());
     }
-    
+
     //O - One
     [TestMethod]
     public async Task GetAsync_ReturnsOnePreset()
@@ -50,7 +50,7 @@ public class PresetDaoTest :  DbTestBase
         };
         await DbContext.AddAsync(preset);
         await DbContext.SaveChangesAsync();
-        
+
         //Act
         var result = await _presetDao.GetAsync(new SearchPresetParametersDto());
 
@@ -64,7 +64,7 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsNotNull(preset1.Thresholds);
         Assert.AreEqual(3, preset1.Thresholds.Count());
     }
-    
+
     //M - Many
     [TestMethod]
     public async Task GetAsync_ReturnsAllPresets()
@@ -169,13 +169,13 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(true, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(10, result.First().Thresholds.First().MaxValue);
-        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual(10, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
-        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
-        Assert.AreEqual(1200, result.First().Thresholds.Last().MinValue);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
     }
-    
+
     [TestMethod]
     public async Task GetAsync_GetById()
     {
@@ -224,13 +224,13 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(true, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(10, result.First().Thresholds.First().MaxValue);
-        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual(10, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
-        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
-        Assert.AreEqual(1200, result.First().Thresholds.Last().MinValue);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
     }
-    
+
     [TestMethod]
     public async Task GetAsync_AppliedParametersIdAndIsCurrent()
     {
@@ -279,13 +279,13 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(false, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(13, result.First().Thresholds.First().MaxValue);
-        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual(13, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
-        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
-        Assert.AreEqual(1230, result.First().Thresholds.Last().MinValue);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1230, result.First().Thresholds.Last().Min);
     }
-    
+
     [TestMethod]
     public async Task GetAsync_AppliedParametersIdAndIsCurrent_ExpectedEmptyList()
     {

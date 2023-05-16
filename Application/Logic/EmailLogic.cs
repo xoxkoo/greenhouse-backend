@@ -106,18 +106,18 @@ public class EmailLogic : IEmailLogic
         CheckThresholdValue("co2", co2, thresholds.FirstOrDefault(t => t.Type == "co2"));
     }
 
-    private void CheckThresholdValue(string valueType, float value, Threshold? threshold)
+    private void CheckThresholdValue(string valueType, float value, ThresholdDto? threshold)
     {
         if (threshold == null)
         {
             throw new Exception($"No threshold found for {valueType}");
         }
 
-        if (threshold.MinValue > value)
+        if (threshold.Min > value)
         {
             sendMail($"{threshold.Type} is too low");
         }
-        else if (threshold.MaxValue < value)
+        else if (threshold.Max < value)
         {
             sendMail($"{valueType} is too high");
         }

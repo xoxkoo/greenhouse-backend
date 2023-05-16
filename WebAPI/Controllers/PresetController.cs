@@ -68,10 +68,15 @@ public class PresetController : ControllerBase
     }
 
     [HttpPut("preset/{id:int}")]
-    public async Task<ActionResult<PresetEfcDto>> UpdateAsync([FromBody] PresetEfcDto dto)
+    public async Task<ActionResult<PresetEfcDto>> UpdateAsync(int id, [FromBody] PresetEfcDto dto)
     {
 	    try
 	    {
+		    if (id != dto.Id)
+		    {
+			    throw new Exception("Id does not match object!");
+		    }
+		    
 		    PresetEfcDto updated = await _logic.UpdateAsync(dto);
 
 		    return Ok(updated);
