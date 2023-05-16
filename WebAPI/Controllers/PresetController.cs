@@ -15,7 +15,7 @@ public class PresetController : ControllerBase
     {
         _logic = logic;
     }
-    
+
     [Route("preset")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PresetDto>>> GetAsync()
@@ -32,7 +32,7 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [Route("preset-current")]
     [HttpGet]
     public async Task<ActionResult<PresetDto>> GetCurrentAsync()
@@ -56,9 +56,8 @@ public class PresetController : ControllerBase
     {
         try
         {
-            Console.WriteLine(dto);
-            PresetEfcDto created = await _logic.CreateAsync(dto);
-            
+	        PresetEfcDto created = await _logic.CreateAsync(dto);
+
             return Ok(created);
         }
         catch (Exception e)
@@ -66,5 +65,21 @@ public class PresetController : ControllerBase
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
+    }
+
+    [HttpPut("preset/{id:int}")]
+    public async Task<ActionResult<PresetEfcDto>> UpdateAsync([FromBody] PresetEfcDto dto)
+    {
+	    try
+	    {
+		    PresetEfcDto updated = await _logic.UpdateAsync(dto);
+
+		    return Ok(updated);
+	    }
+	    catch (Exception e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(500, e.Message);
+	    }
     }
 }

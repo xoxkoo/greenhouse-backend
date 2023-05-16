@@ -8,4 +8,5 @@ public interface IPresetLogic
 {
     Task<IEnumerable<PresetDto>> GetAsync(SearchPresetParametersDto dto);
     Task<PresetEfcDto> CreateAsync(PresetCreationDto dto);
+    Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto);
 }

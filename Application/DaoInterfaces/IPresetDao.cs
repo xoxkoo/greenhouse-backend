@@ -8,4 +8,5 @@ public interface IPresetDao
     Task<IEnumerable<PresetDto>> GetAsync(SearchPresetParametersDto parametersDto);
     Task<PresetEfcDto> CreateAsync(Preset preset);
 
+    Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto);
 }

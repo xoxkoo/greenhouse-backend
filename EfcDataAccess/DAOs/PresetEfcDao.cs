@@ -1,4 +1,5 @@
-﻿using Application.DaoInterfaces;
+﻿using System.Collections;
+using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ public class PresetEfcDao : IPresetDao
     {
         var listPreset = _context.Presets.AsQueryable();
         listPreset = listPreset.Include(p => p.Thresholds);
-        
+
         if (parametersDto.IsCurrent != null)
         {
             if (parametersDto.IsCurrent == true)
@@ -37,7 +38,7 @@ public class PresetEfcDao : IPresetDao
             listPreset = listPreset.Where(s => s.Id == parametersDto.Id);
         }
 
-        IEnumerable<PresetDto> result = await listPreset.Select(p => 
+        IEnumerable<PresetDto> result = await listPreset.Select(p =>
             new PresetDto
             {
                 Id = p.Id,
@@ -86,4 +87,67 @@ public class PresetEfcDao : IPresetDao
             Thresholds = thresholdDtos
         };
     }
+
+    public async Task UpdateAsync(Preset preset)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(preset.Id, null);
+        IEnumerable<Threshold> existingThresholdsForPreset = GetAsync(parametersDto).Result.FirstOrDefault()?.Thresholds;
+        _context.Thresholds.RemoveRange(existingThresholdsForPreset);
+        await _context.Thresholds.AddRangeAsync(preset.Thresholds);
+        _context.Presets.Update(preset);
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ApplyAsync(int id)
+    {
+        Preset? preset = _context.Presets.FirstOrDefault(p => p.Id == id);
+        preset.IsCurrent = true;
+        _context.Presets.Update(preset);
+        await _context.SaveChangesAsync();
+    }
+
+
+    // public async Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto)
+    // {
+	   //  var preset = MapPresetEntity(dto);
+	   //  // Retrieve the existing entity from the database using its primary key
+	   //  var existingPreset = await _context.Presets.FindAsync(dto.Id);
+    //
+	   //  // Update the properties of the existing entity
+	   //  existingPreset.Name = dto.Name;
+	   //  existingPreset.Thresholds = preset.Thresholds;
+    //
+	   //  Console.WriteLine(dto.Thresholds.FirstOrDefault().Max);
+    //
+	   //  // Save the changes to the database
+	   //  await _context.SaveChangesAsync();
+    //
+	   //  return new PresetEfcDto()
+	   //  {
+		  //   Id = dto.Id,
+		  //   Name = dto.Name,
+		  //   Thresholds = dto.Thresholds
+	   //  };
+    //
+    // }
+    //
+    // private Preset MapPresetEntity(PresetEfcDto dto)
+    // {
+	   //  List<Threshold> thresholds = dto.Thresholds.Select(t => new Threshold
+	   //  {
+		  //   Type = t.Type,
+		  //   MaxValue = t.Max,
+		  //   MinValue = t.Min
+	   //  }).ToList();
+    //
+	   //  Preset preset = new Preset()
+	   //  {
+		  //   Id = dto.Id,
+		  //   Name = dto.Name,
+		  //   Thresholds = thresholds
+	   //  };
+    //
+	   //  return preset;
+    // }
 }
