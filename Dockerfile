@@ -24,9 +24,6 @@ RUN dotnet build "WebAPI.csproj" -c Release -o /app
 FROM build AS publish
 RUN dotnet publish -c Release -o /app
 
-WORKDIR "/src/EfcDataAccess"
-RUN dotnet ef database update
-
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
