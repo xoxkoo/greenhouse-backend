@@ -157,7 +157,12 @@ public class Converter : IConverter
 	    List<Threshold> thresholds = dto.Thresholds.ToList();
 	    if (thresholds == null)
 	    {
-		    throw new Exception("Thresholds cannot be null");
+		    throw new NullReferenceException("Thresholds cannot be null");
+	    }
+
+	    if (thresholds.Count() == 0)
+	    {
+		    throw new Exception("In the preset there have to be at least one threshold");
 	    }
 	    
 	    //Temperature range - 22 bits
@@ -171,11 +176,10 @@ public class Converter : IConverter
 	    {
 		    if (temperatureThreshold.MinValue < -50 || temperatureThreshold.MaxValue > 60)
 		    {
-			    throw new Exception("The value of the temperature is out of range -50 to 60");
+			    throw new ArgumentOutOfRangeException("The value of the temperature is out of range -50 to 60");
 		    }
-		    //TODO ask boys because i do not know 
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MinValue*10, 11));
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MaxValue*10, 11));
+		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MinValue*10 + 500, 11));
+		    result.Append(IntToBinaryLeft((int)temperatureThreshold.MaxValue*10 + 500, 11));
 	    }
 
 	    
@@ -190,7 +194,7 @@ public class Converter : IConverter
 	    {
 		    if (humidityThreshold.MinValue < 0 || humidityThreshold.MaxValue > 100)
 		    {
-			    throw new Exception("The value of the humidity is out of range 0 to 100");
+			    throw new ArgumentOutOfRangeException("The value of the humidity is out of range 0 to 100");
 
 		    }
 		    result.Append(IntToBinaryLeft((int)humidityThreshold.MinValue, 7));
@@ -209,7 +213,7 @@ public class Converter : IConverter
 	    {
 		    if (co2Threshold.MinValue < 0 || co2Threshold.MaxValue > 4095)
 		    {
-			    throw new Exception("The value of the co2 is out of range 0 to 4095");
+			    throw new ArgumentOutOfRangeException("The value of the co2 is out of range 0 to 4095");
 		    }
 		    result.Append(IntToBinaryLeft((int)co2Threshold.MinValue, 12));
 		    result.Append(IntToBinaryLeft((int)co2Threshold.MaxValue, 12));
