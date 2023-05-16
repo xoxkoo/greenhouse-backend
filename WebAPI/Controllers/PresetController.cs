@@ -33,7 +33,7 @@ public class PresetController : ControllerBase
         }
     }
     
-    [Route("preset-current")]
+    [Route("current-preset")]
     [HttpGet]
     public async Task<ActionResult<PresetDto>> GetCurrentAsync()
     {
@@ -65,6 +65,38 @@ public class PresetController : ControllerBase
         {
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpPatch]
+    [Route("preset/{id:int}")]
+    public async Task<ActionResult> UpdateAsync([FromBody] PresetDto dto, [FromRoute] int id)
+    {
+        try
+        {
+            await _logic.UpdateAsync(dto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    [HttpPost]
+    [Route("current-preset")]
+    public async Task<ActionResult> ApplyAsync([FromBody] int id)
+    {
+        try
+        {
+            await _logic.ApplyAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 }

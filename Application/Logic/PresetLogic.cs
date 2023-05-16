@@ -3,15 +3,21 @@ using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
+using SocketServer;
 
 namespace Application.Logic;
 
 public class PresetLogic : IPresetLogic
 {
     private readonly IPresetDao _presetDao;
-    public PresetLogic(IPresetDao presetDao)
+    private readonly IWebSocketServer _socketServer;
+    private readonly IConverter _converter;
+
+    public PresetLogic(IPresetDao presetDao, IWebSocketServer socketServer, IConverter converter)
     {
         _presetDao = presetDao;
+        _socketServer = socketServer;
+        _converter = converter;
     }
 
     public async Task<IEnumerable<PresetDto>> GetAsync(SearchPresetParametersDto dto)
@@ -33,6 +39,50 @@ public class PresetLogic : IPresetLogic
         };
 
         return await _presetDao.CreateAsync(preset);
+    }
+
+    public async Task UpdateAsync(PresetDto dto)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(dto.Id, null);
+        IEnumerable<PresetDto> presets = await _presetDao.GetAsync(parametersDto);
+        PresetDto? existing = presets.FirstOrDefault();
+
+        if (existing == null)
+        {
+            throw new Exception($"Preset with ID {dto.Id} was not found");
+        }
+
+        string nameToUse = dto.Name ?? existing.Name;
+        bool isCurrentToUse = dto.IsCurrent;
+        List<Threshold> listThresholds = dto.Thresholds.ToList();
+        if (HasDuplicateThresholdTypes(listThresholds))
+        {
+            throw new ArgumentException("There must be exactly three thresholds named: CO2, Humidity, and Temperature.");
+        }
+        ValidateThresholds(listThresholds);
+        Preset updated = new Preset
+        {
+            Id = existing.Id,
+            IsCurrent = isCurrentToUse,
+            Name = nameToUse,
+            Thresholds = listThresholds
+        };
+
+        await _presetDao.UpdateAsync(updated);
+    }
+
+    public async Task ApplyAsync(int id)
+    {
+        //Change the value isCurrent to be true in database
+        await _presetDao.ApplyAsync(id);
+        //Find the preset which should be applied as a current and send to the IoT device
+        PresetDto? presetToSend = GetAsync(new SearchPresetParametersDto(id, null)).Result.FirstOrDefault();
+        if (presetToSend == null)
+        {
+            throw new Exception($"Preset with id {id} not found");
+        }
+        string payload = _converter.ConvertPresetToHex(presetToSend);
+        await _socketServer.Send(payload);
     }
 
     private void ValidateInput(PresetCreationDto dto)

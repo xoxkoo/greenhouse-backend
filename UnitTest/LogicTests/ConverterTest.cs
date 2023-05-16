@@ -3,7 +3,7 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
-
+using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
@@ -224,4 +224,176 @@ public class ConverterTest : DbTestBase
 	    };
 	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, -1));
     }
+
+		[TestMethod]
+	    public void ConvertPresetToHex_NullPresetDto()
+	    {
+		    // Arrange
+		    PresetDto presetDto = null;
+
+		    // Act & Assert
+		    Assert.ThrowsException<NullReferenceException>(() => converter.ConvertPresetToHex(presetDto));
+	    }
+	    
+	    [TestMethod]
+	    public void ConvertPresetToHex_MissingThresholds()
+	    {
+		    // Arrange
+		    PresetDto presetDto = new PresetDto { Id = 3 };
+
+		    // Act & Assert
+		    Assert.ThrowsException<ArgumentNullException>(() => converter.ConvertPresetToHex(presetDto));
+	    }
+	    
+	    [TestMethod]
+	    public void ConvertPresetToHex_EmptyThresholds()
+	    {
+		    // Arrange
+		    PresetDto presetDto = new PresetDto { Id = 3, Thresholds = new List<Threshold>() };
+
+		    // Act & Assert
+		    Assert.ThrowsException<Exception>(() => converter.ConvertPresetToHex(presetDto));
+		    
+	    }
+	    
+	    [TestMethod]
+	    public void ConvertPresetToHex_ValidPresetDto()
+	    {
+		    // Arrange
+		    PresetDto presetDto = new PresetDto
+		    {
+			    //000011
+			    Id = 3,
+			    Thresholds = new List<Threshold>
+			    {	
+				    //22 bits
+				    //20*10+500 = 010 10111100 30*10+500 = 011 0010 0000
+				    new Threshold { Type = "temperature", MinValue = 20, MaxValue = 30 },
+				    //14 bits
+				    //40 = 0101000 60 = 0111100
+				    new Threshold { Type = "humidity", MinValue = 40, MaxValue = 60 },
+				    //24 bits
+				    //100 = 000001100100 200 = 000011001000
+				    new Threshold { Type = "co2", MinValue = 100, MaxValue = 200 }
+			    }
+		    };
+		    
+		    // Act
+		    //00001101 01011110 00110010 00000101 00001111 00000001 10010000 00110010 00
+		    // 0d        5e        32       05       0f        01     90       32     00
+		    string resultHex = converter.ConvertPresetToHex(presetDto);
+
+		    // Assert
+		    Assert.AreEqual("0d5e32050f01903200", resultHex);
+	    }
+	    
+
+	    
+	    [TestMethod]
+	    public void ConvertPresetToHex_ThresholdWithInvalidType()
+	    {
+		    // Arrange
+		    PresetDto presetDto = new PresetDto
+		    {
+			    //000011
+			    Id = 3,
+			    Thresholds = new List<Threshold>
+			    {
+				    //010 10111100011 0010 0000
+				    new Threshold { Type = "temperature", MinValue = 20, MaxValue = 30 },
+				    //0000 0000 0000 00
+				    new Threshold { Type = "unknown", MinValue = 40, MaxValue = 60 },
+				    //000001 10010000 00110010 00
+				    new Threshold { Type = "co2", MinValue = 100, MaxValue = 200 }
+			    }
+		    };
+
+		    // Act
+		    string resultHex = converter.ConvertPresetToHex(presetDto);
+
+		    // Assert
+		    Assert.AreEqual("0d5e32000001903200", resultHex);
+	    }
+	    
+	    [TestMethod]
+	    public void ConvertPresetToHex_ThresholdsWithNegativeValues()
+	    {
+		    // Arrange
+		    PresetDto presetDto = new PresetDto
+		    {
+			    Id = 3,
+			    Thresholds = new List<Threshold>
+			    {
+				    // 22bits
+				    //00110010000 011 0010 0000
+				    new Threshold { Type = "temperature", MinValue = -10, MaxValue = 20 },
+				    //14 bits
+				    //40 = 0101000 60 = 0111100
+				    new Threshold { Type = "humidity", MinValue = 40, MaxValue = 60 },
+				    //24 bits
+				    //100 = 000001100100 200 = 000011001000
+				    new Threshold { Type = "co2", MinValue = 100, MaxValue = 200 }
+			    }
+		    };
+
+		    // Act
+		    string resultHex = converter.ConvertPresetToHex(presetDto);
+
+		    // Assert
+		    Assert.AreEqual("0cc82bc50f01903200", resultHex);
+	    }
+	    
+	    [TestMethod]
+	    public void ConvertPresetToHex_ThresholdsWithBoundaryValues()
+	    {
+		    // Arrange
+		    PresetDto presetDto = new PresetDto
+		    {
+			    Id = 3,
+			    Thresholds = new List<Threshold>
+			    {
+				    // 22bits
+				    //00 11001000 00110010 0000
+				    new Threshold { Type = "temperature", MinValue = -50, MaxValue = 60 },
+				    //14 bits
+				    //40 = 0101000 60 = 0111100
+				    new Threshold { Type = "humidity", MinValue = 0, MaxValue = 100 },
+				    //24 bits
+				    //100 = 000001100100 200 = 000011001000
+				    new Threshold { Type = "co2", MinValue = 0, MaxValue = 4095 }
+			    }
+		    };
+
+		    // Act
+		    string resultHex = converter.ConvertPresetToHex(presetDto);
+
+		    // Assert
+		    Assert.AreEqual("0c0044c0190003ffc0", resultHex);
+	    }
+	    
+	    
+	    [TestMethod]
+	    public void ConvertPresetToHex_ThresholdsValueOutOfRange()
+	    {
+		    // Arrange
+		    PresetDto presetDto = new PresetDto
+		    {
+			    Id = 3,
+			    Thresholds = new List<Threshold>
+			    {
+				    // 22bits
+				    //00 11001000 00110010 0000
+				    new Threshold { Type = "temperature", MinValue = -50, MaxValue = 60 },
+				    //14 bits
+				    //40 = 0101000 60 = 0111100
+				    new Threshold { Type = "humidity", MinValue = 0, MaxValue = 101 },
+				    //24 bits
+				    //100 = 000001100100 200 = 000011001000
+				    new Threshold { Type = "co2", MinValue = 0, MaxValue = 4096 }
+			    }
+		    };
+
+		    // Act
+		    Assert.ThrowsException<ArgumentOutOfRangeException>(() => converter.ConvertPresetToHex(presetDto));
+	    }
 }

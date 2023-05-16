@@ -1,4 +1,5 @@
-﻿using Application.DaoInterfaces;
+﻿using System.Collections;
+using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -85,5 +86,35 @@ public class PresetEfcDao : IPresetDao
             Name = entity.Entity.Name,
             Thresholds = thresholdDtos
         };
+    }
+
+    public async Task UpdateAsync(Preset preset)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(preset.Id, null);
+        IEnumerable<Threshold> existingThresholdsForPreset = GetAsync(parametersDto).Result.FirstOrDefault()?.Thresholds;
+        _context.Thresholds.RemoveRange(existingThresholdsForPreset);
+        await _context.Thresholds.AddRangeAsync(preset.Thresholds);
+        _context.Presets.Update(preset);
+        
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task ApplyAsync(int id)
+    {
+        //Changing previously applied preset value for isCurrent to be false
+        var oldPresets = await _context.Presets.Where(p => p.IsCurrent == true).ToListAsync();
+        foreach (var preset in oldPresets)
+        {
+            preset.IsCurrent = false;
+            _context.Presets.Update(preset);
+        }
+        Preset? presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
+        if (presetToBeCurrent == null)
+        {
+            throw new Exception($"Preset with id {id} not found");
+        }
+        presetToBeCurrent.IsCurrent = true;
+        _context.Presets.Update(presetToBeCurrent);
+        await _context.SaveChangesAsync();
     }
 }

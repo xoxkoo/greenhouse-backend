@@ -1,4 +1,7 @@
-﻿using Domain.Entities;
+﻿using Application.Logic;
+using Application.LogicInterfaces;
+using Domain.DTOs;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace EfcDataAccess;
@@ -6,6 +9,7 @@ namespace EfcDataAccess;
 class DatabaseInsertion
 {
     private static Context _context;
+    private static IConverter _converter;
     public static async Task InsertMyEntitiesAsync(int length)
     {
         for (int i = 1; i <= length; i++)
