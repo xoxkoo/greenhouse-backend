@@ -16,6 +16,7 @@ COPY ["Application/Application.csproj", "Application/"]
 COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
 COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
+WORKDIR "/src/EfcDataAccess"
 COPY ["EfcDataAccess/Greenhouse.db", "EfcDataAccess/"]
 COPY . .
 
