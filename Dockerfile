@@ -16,10 +16,11 @@ COPY ["Application/Application.csproj", "Application/"]
 COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
 COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
-
+COPY ["EfcDataAccess/Greenhouse.db", "EfcDataAccess/"]
 COPY . .
 
 WORKDIR "/src/WebAPI"
+
 RUN dotnet build "WebAPI.csproj" -c Release -o /app
 
 FROM build AS publish
