@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Xml.Linq;
 using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
@@ -20,7 +21,7 @@ public class PresetEfcDao : IPresetDao
     {
         var listPreset = _context.Presets.AsQueryable();
         listPreset = listPreset.Include(p => p.Thresholds);
-        
+
         if (parametersDto.IsCurrent != null)
         {
             if (parametersDto.IsCurrent == true)
@@ -38,19 +39,18 @@ public class PresetEfcDao : IPresetDao
             listPreset = listPreset.Where(s => s.Id == parametersDto.Id);
         }
 
-        IEnumerable<PresetDto> result = await listPreset.Select(p => 
+        IEnumerable<PresetDto> result = await listPreset.Select(p =>
             new PresetDto
             {
                 Id = p.Id,
                 Name = p.Name,
                 IsCurrent = p.IsCurrent,
                 Thresholds = p.Thresholds.Select(t =>
-                    new Threshold
+                    new ThresholdDto
                     {
-                        Id = t.Id,
-                        Type = t.Type,
-                        MaxValue = t.MaxValue,
-                        MinValue = t.MinValue
+	                    Type = t.Type,
+                        Max = t.MaxValue,
+                        Min = t.MinValue
                     })
             }).ToListAsync();
 
@@ -88,16 +88,16 @@ public class PresetEfcDao : IPresetDao
         };
     }
 
-    public async Task UpdateAsync(Preset preset)
-    {
-        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(preset.Id, null);
-        IEnumerable<Threshold> existingThresholdsForPreset = GetAsync(parametersDto).Result.FirstOrDefault()?.Thresholds;
-        _context.Thresholds.RemoveRange(existingThresholdsForPreset);
-        await _context.Thresholds.AddRangeAsync(preset.Thresholds);
-        _context.Presets.Update(preset);
-        
-        await _context.SaveChangesAsync();
-    }
+    // public async Task UpdateAsync(Preset preset)
+    // {
+    //     SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(preset.Id, null);
+    //     IEnumerable<Threshold> existingThresholdsForPreset = GetAsync(parametersDto).Result.FirstOrDefault()?.Thresholds;
+    //     _context.Thresholds.RemoveRange(existingThresholdsForPreset);
+    //     await _context.Thresholds.AddRangeAsync(preset.Thresholds);
+    //     _context.Presets.Update(preset);
+    //
+    //     await _context.SaveChangesAsync();
+    // }
 
     public async Task ApplyAsync(int id)
     {
@@ -116,5 +116,59 @@ public class PresetEfcDao : IPresetDao
         presetToBeCurrent.IsCurrent = true;
         _context.Presets.Update(presetToBeCurrent);
         await _context.SaveChangesAsync();
+    }
+
+
+    public async Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto)
+    {
+	    var existingPreset = await _context.Presets
+		    .Include(p => p.Thresholds)
+		    .FirstOrDefaultAsync(p => p.Id == dto.Id);
+
+	    if (existingPreset == null)
+	    {
+		    throw new Exception($"Preset with id {dto.Id} not found");
+	    }
+
+
+	    // remove old thresholds
+	    _context.Thresholds.RemoveRange(existingPreset.Thresholds);
+
+	    // Update preset properties
+	    existingPreset.Name = dto.Name;
+
+	    var preset = MapPresetEntity(dto);
+	    // add new thresholds
+	    existingPreset.Thresholds = preset.Thresholds;
+
+	    await _context.SaveChangesAsync();
+
+	    return new PresetEfcDto()
+	    {
+		    Id = dto.Id,
+		    Name = dto.Name,
+		    Thresholds = dto.Thresholds
+	    };
+
+    }
+
+
+    private Preset MapPresetEntity(PresetEfcDto dto)
+    {
+	    List<Threshold> thresholds = dto.Thresholds.Select(t => new Threshold
+	    {
+		    Type = t.Type,
+		    MaxValue = t.Max,
+		    MinValue = t.Min
+	    }).ToList();
+
+	    Preset preset = new Preset()
+	    {
+		    Id = dto.Id,
+		    Name = dto.Name,
+		    Thresholds = thresholds
+	    };
+
+	    return preset;
     }
 }

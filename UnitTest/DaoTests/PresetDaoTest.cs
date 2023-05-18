@@ -32,7 +32,7 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(0, result.Count());
     }
-    
+
     //O - One
     [TestMethod]
     public async Task GetAsync_ReturnsOnePreset()
@@ -52,7 +52,7 @@ public class PresetDaoTest :  DbTestBase
         };
         await DbContext.AddAsync(preset);
         await DbContext.SaveChangesAsync();
-        
+
         //Act
         var result = await _presetDao.GetAsync(new SearchPresetParametersDto());
 
@@ -66,9 +66,10 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsNotNull(preset1.Thresholds);
         Assert.AreEqual(3, preset1.Thresholds.Count());
     }
-    
-        [TestMethod]
-    public async Task GetAsync_GetById()
+
+    //M - Many
+    [TestMethod]
+    public async Task GetAsync_ReturnsAllPresets()
     {
         // Arrange
         var presets = new List<Preset>
@@ -115,13 +116,13 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(true, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(10, result.First().Thresholds.First().MaxValue);
-        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual(10, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
-        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
-        Assert.AreEqual(1200, result.First().Thresholds.Last().MinValue);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
     }
-    
+
         [TestMethod]
     public async Task GetAsync_GetCurrentPreset()
     {
@@ -170,15 +171,15 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(true, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(10, result.First().Thresholds.First().MaxValue);
-        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual(10, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
-        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
-        Assert.AreEqual(1200, result.First().Thresholds.Last().MinValue);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
     }
-    
+
     [TestMethod]
-    public async Task GetAsync_AppliedParametersIdAndIsCurrent()
+    public async Task GetAsync_GetById()
     {
         // Arrange
         var presets = new List<Preset>
@@ -225,16 +226,15 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(false, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(13, result.First().Thresholds.First().MaxValue);
-        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual(13, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
-        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
-        Assert.AreEqual(1230, result.First().Thresholds.Last().MinValue);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1230, result.First().Thresholds.Last().Min);
     }
-    
-    //M - Many
+
     [TestMethod]
-    public async Task GetAsync_ReturnsAllPresets()
+    public async Task GetAsync_AppliedParametersIdAndIsCurrent()
     {
         // Arrange
         var presets = new List<Preset>
@@ -267,26 +267,26 @@ public class PresetDaoTest :  DbTestBase
         DbContext.Presets.AddRange(presets);
         await DbContext.SaveChangesAsync();
 
+
         // Act
         var result = await _presetDao.GetAsync(new SearchPresetParametersDto());
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(presets.Count, result.Count());
-
-        var preset1 = result.First(p => p.Id == 1);
-        Assert.AreEqual("Tomato", preset1.Name);
-        Assert.IsTrue(preset1.IsCurrent);
-        Assert.IsNotNull(preset1.Thresholds);
-        Assert.AreEqual(3, preset1.Thresholds.Count());
-
-        var preset2 = result.First(p => p.Id == 2);
-        Assert.AreEqual("Sunny Day", preset2.Name);
-        Assert.IsFalse(preset2.IsCurrent);
-        Assert.IsNotNull(preset2.Thresholds);
-        Assert.AreEqual(3, preset2.Thresholds.Count());
+        Assert.IsInstanceOfType(result, typeof(List<PresetDto>));
+        Assert.AreEqual(2, result.Count());
+        Assert.AreEqual(1, result.First().Id);
+        Assert.AreEqual("Tomato", result.First().Name);
+        Assert.AreEqual(true, result.First().IsCurrent);
+        Assert.AreEqual(3, result.First().Thresholds.Count());
+        Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
+        Assert.AreEqual(10, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
+        Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
     }
-    
+
     //B - Boundary
     [TestMethod]
     public async Task GetAsync_AppliedParametersIdAndIsCurrent_ExpectedEmptyList()
@@ -332,7 +332,7 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsInstanceOfType(result, typeof(List<PresetDto>));
         Assert.AreEqual(0, result.Count());
     }
-    
+
     //CreateAsync()
     [TestMethod]
     public async Task CreateAsync_CreatesPresetAndReturnsPresetDto()
@@ -371,17 +371,17 @@ public class PresetDaoTest :  DbTestBase
 
         // The test should throw ArgumentNullException
     }
-    
-    
+
+
     //ApplyAsync(int id)
-    //Z - Zero 
+    //Z - Zero
     [TestMethod]
     public async Task ApplyAsync_NoValueInSetUp()
     {
         // Act & Assert
         await Assert.ThrowsExceptionAsync<Exception>(() => _presetDao.ApplyAsync(1));
     }
-    
+
     //O - One
     [TestMethod]
     public async Task ApplyAsync_SetsPresetAsCurrent_OneInSetUp()
@@ -415,7 +415,7 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsNotNull(preset1);
         Assert.IsTrue(preset1.IsCurrent);
     }
-    
+
     //M - Many
     [TestMethod]
     public async Task ApplyAsync_SetsPresetAsCurrent_ManyInSetUp()
@@ -494,7 +494,7 @@ public class PresetDaoTest :  DbTestBase
         };
         DbContext.Presets.AddRange(presets);
         await DbContext.SaveChangesAsync();
-        
+
         var presetId = 2;
         var presetDao = new PresetEfcDao(DbContext);
 
@@ -505,14 +505,14 @@ public class PresetDaoTest :  DbTestBase
         var updatedPreset = await DbContext.Presets.FindAsync(presetId);
         Assert.IsNotNull(updatedPreset);
         Assert.IsTrue(updatedPreset.IsCurrent);
-        
+
         var nonCurrentPresets = DbContext.Presets.Where(p => p.Id != presetId);
         foreach (var preset in nonCurrentPresets)
         {
             Assert.IsFalse(preset.IsCurrent);
         }
     }
-    
+
     //E - Exception
     [TestMethod]
     public async Task ApplyAsync_ThrowsExceptionForInvalidPresetId()
@@ -541,5 +541,5 @@ public class PresetDaoTest :  DbTestBase
         // Act & Assert
         await Assert.ThrowsExceptionAsync<Exception>(() => _presetDao.ApplyAsync(presetId));
     }
-    
+
 }
