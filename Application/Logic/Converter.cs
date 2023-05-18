@@ -103,10 +103,10 @@ public class Converter : IConverter
      *
      * @param intervals
      */
-    public string ConvertIntervalToHex(ScheduleToSendDto intervals)
+    public string ConvertIntervalToHex(IEnumerable<IntervalToSendDto> intervals)
     {
 	    // max allowed count is 7
-	    if (intervals.Intervals.Count() > 7)
+	    if (intervals.Count() > 7)
 	    {
 		    throw new Exception("Too many intervals");
 	    }
@@ -116,7 +116,7 @@ public class Converter : IConverter
 
 
 	    // loop through the intervals and convert
-	    foreach (var interval in intervals.Intervals)
+	    foreach (var interval in intervals)
 	    {
 
 		    int startHours = interval.StartTime.Hours;

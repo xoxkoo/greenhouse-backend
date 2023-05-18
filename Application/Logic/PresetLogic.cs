@@ -84,6 +84,7 @@ public class PresetLogic : IPresetLogic
         string payload = _converter.ConvertPresetToHex(presetToSend);
         await _socketServer.Send(payload);
     }
+    
 
     private void ValidateInput(PresetCreationDto dto)
     {

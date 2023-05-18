@@ -33,9 +33,6 @@ class DatabaseInsertion
         intervals.Add(intervalFriday);
         await _context.Intervals.AddRangeAsync(intervals);
         
-        //Schedule
-        Schedule schedule = new Schedule() { Id = 1, Intervals = intervals };
-        await _context.Schedules.AddAsync(schedule);
         
         //Thresholds
         Threshold threshold1 = new Threshold() { Id = 1, Type = "temperature", MinValue = 20, MaxValue = 40 };
@@ -68,7 +65,6 @@ class DatabaseInsertion
         _context.CO2s.RemoveRange(_context.CO2s);
         _context.Temperatures.RemoveRange(_context.Temperatures);
         _context.Intervals.RemoveRange(_context.Intervals);
-        _context.Schedules.RemoveRange(_context.Schedules);
         _context.Thresholds.RemoveRange(_context.Thresholds);
         _context.Presets.RemoveRange(_context.Presets);
         _context.Mails.RemoveRange(_context.Mails);

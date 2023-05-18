@@ -1,8 +1,6 @@
 ﻿using Application.DaoInterfaces;
 using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.CreationDTOs;
-using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 
 namespace Application.Logic;
@@ -19,20 +17,21 @@ public class ScheduleLogic : IScheduleLogic
         _converter = converter;
     }
 
-    public async Task<ScheduleDto> CreateAsync(ScheduleCreationDto dto)
+    public async Task<IEnumerable<IntervalDto>> CreateAsync(IEnumerable<IntervalDto> dto)
     {
         if (dto == null)
         {
             throw new ArgumentNullException(nameof(dto), "Provided data cannot be null");
         }
-        if (dto.Intervals == null || !dto.Intervals.Any())
+        if (!dto.Any())
         {
-            throw new ArgumentException("At least one interval must be provided", nameof(dto.Intervals));
+            throw new ArgumentException("At least one interval must be provided", nameof(dto));
         }
 
 
-        List<Interval> intervals = dto.Intervals.Select(i => new Interval
+        List<Interval> intervals = dto.Select(i => new Interval
         {
+            Id = i.Id,
             DayOfWeek = i.DayOfWeek,
             EndTime = i.EndTime,
             StartTime = i.StartTime
@@ -82,45 +81,36 @@ public class ScheduleLogic : IScheduleLogic
                 }
             }
         }
-
-        Schedule schedule = new Schedule
-        {
-            Intervals = intervals
-        };
-
-        return await _scheduleDao.CreateAsync(schedule);
+        return await _scheduleDao.CreateAsync(intervals);
     }
 
     private async Task<List<Interval>> CheckForIntervalsInDatabase(List<Interval> intervals)
     {
 
 	    // old intervals in database
-	    IEnumerable<ScheduleDto> intervalsInDatabase = await GetAsync();
+	    IEnumerable<IntervalDto> intervalsInDatabase = await GetAsync();
 
 	    List<Interval> intervalsToRemove = new List<Interval>();
 
 	    foreach (var interval in intervals)
 	    {
 		    // Check for old intervals
-		    foreach (var schedule in intervalsInDatabase)
+		    foreach (var oldInterval in intervalsInDatabase)
 		    {
-			    foreach (var oldInterval in schedule.Intervals)
-			    {
-				    // If it is already in the database
+                // If it is already in the database
 				    if (interval.StartTime.Equals(oldInterval.StartTime) &&
 				        interval.EndTime.Equals(oldInterval.EndTime) &&
 				        interval.DayOfWeek.Equals(oldInterval.DayOfWeek))
 				    {
 					    intervalsToRemove.Add(interval);
 				    }
-			    }
-		    }
-	    }
+            }
+        }
 
-	    return intervalsToRemove;
+        return intervalsToRemove;
     }
 
-    public async Task<IEnumerable<ScheduleDto>> GetAsync()
+    public async Task<IEnumerable<IntervalDto>> GetAsync()
     {
         return await _scheduleDao.GetAsync();
     }
@@ -128,5 +118,39 @@ public class ScheduleLogic : IScheduleLogic
     public async Task<IEnumerable<IntervalToSendDto>> GetScheduleForDay(DayOfWeek dayOfWeek)
     {
         return await _scheduleDao.GetScheduleForDay(dayOfWeek);
+    }
+
+    public async Task PutAsync(IntervalDto dto)
+    {
+        IntervalDto intervalDto = await _scheduleDao.GetByIdAsync(dto.Id);
+        if (intervalDto == null)
+        {
+
+            IEnumerable<Interval> intervals = new List<Interval>()
+            {
+                new Interval()
+                {
+                    Id = dto.Id,
+                    DayOfWeek = dto.DayOfWeek,
+                    StartTime = dto.StartTime,
+                    EndTime = dto.EndTime
+                }
+            };
+            await _scheduleDao.CreateAsync(intervals);
+        }
+        else
+        {
+            await _scheduleDao.PutAsync(dto);
+        }
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        IntervalDto intervalDto = await _scheduleDao.GetByIdAsync(id);
+        if (intervalDto == null)
+        {
+            throw new Exception($"Interval with id {id} was not found");
+        }
+        await _scheduleDao.DeleteAsync(id);
     }
 }

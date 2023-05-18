@@ -1,6 +1,5 @@
 ﻿using Application.DaoInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 using EfcDataAccess.DAOs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -25,39 +24,35 @@ public class ScheduleDaoTest : DbTestBase
     public async Task CreateSchedule_NullException_Test()
     {
         //Arrange
-        Schedule schedule = null;
+        IEnumerable<Interval> intervals = null;
 
         //Act and Assert
-        await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => dao.CreateAsync(schedule));
+        await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => dao.CreateAsync(intervals));
     }
 
     //O - One
     [TestMethod]
     public async Task CreateSchedule_One_Test()
     {
-        var schedule = new Schedule
+        IEnumerable<Interval> intervals = new List<Interval>()
         {
-            Intervals = new List<Interval>()
+            new Interval
             {
-                new Interval
-                {
-                    DayOfWeek = DayOfWeek.Monday,
-                    StartTime = new TimeSpan(12, 10, 0),
-                    EndTime = new TimeSpan(13, 10, 0)
-                }
+                DayOfWeek = DayOfWeek.Monday,
+                StartTime = new TimeSpan(12, 10, 0),
+                EndTime = new TimeSpan(13, 10, 0)
             }
         };
 
-        var createdSchedule = await dao.CreateAsync(schedule);
-        Console.WriteLine(createdSchedule.Intervals.FirstOrDefault()?.EndTime);
+        var createdSchedule = await dao.CreateAsync(intervals);
         Assert.IsNotNull(createdSchedule);
-        Assert.AreEqual(schedule.Intervals.Count(), createdSchedule.Intervals.Count());
-        Assert.AreEqual(schedule.Intervals.FirstOrDefault()?.StartTime,
-            createdSchedule.Intervals.FirstOrDefault()?.StartTime);
-        Assert.AreEqual(schedule.Intervals.FirstOrDefault()?.EndTime,
-            createdSchedule.Intervals.FirstOrDefault()?.EndTime);
-        Assert.AreEqual(schedule.Intervals.FirstOrDefault()?.DayOfWeek,
-            createdSchedule.Intervals.FirstOrDefault()?.DayOfWeek);
+        Assert.AreEqual( intervals.Count(), createdSchedule.Count());
+        Assert.AreEqual(intervals.FirstOrDefault()?.StartTime,
+            createdSchedule.FirstOrDefault()?.StartTime);
+        Assert.AreEqual(intervals.FirstOrDefault()?.EndTime,
+            createdSchedule.FirstOrDefault()?.EndTime);
+        Assert.AreEqual(intervals.FirstOrDefault()?.DayOfWeek,
+            createdSchedule.FirstOrDefault()?.DayOfWeek);
     }
 
     //M - Many
@@ -65,67 +60,40 @@ public class ScheduleDaoTest : DbTestBase
     public async Task CreateSchedule_Many_Test()
     {
         //Arrange
-        var schedules = new List<Schedule>
+        IEnumerable<Interval> intervals = new List<Interval>
         {
-            new Schedule
+            new Interval
             {
-                Intervals = new List<Interval>
-                {
-                    new Interval
-                    {
-                        DayOfWeek = DayOfWeek.Monday,
-                        StartTime = new TimeSpan(9, 0, 0),
-                        EndTime = new TimeSpan(17, 0, 0)
-                    }
-                }
+                DayOfWeek = DayOfWeek.Monday,
+                StartTime = new TimeSpan(9, 0, 0),
+                EndTime = new TimeSpan(17, 0, 0)
             },
-            new Schedule
+            new Interval
             {
-                Intervals = new List<Interval>
-                {
-                    new Interval
-                    {
-                        DayOfWeek = DayOfWeek.Tuesday,
-                        StartTime = new TimeSpan(8, 30, 0),
-                        EndTime = new TimeSpan(16, 30, 0)
-                    }
-                }
-            },
-            new Schedule
-            {
-                Intervals = new List<Interval>
-                {
-                    new Interval
-                    {
-                        DayOfWeek = DayOfWeek.Wednesday,
-                        StartTime = new TimeSpan(10, 0, 0),
-                        EndTime = new TimeSpan(18, 0, 0)
-                    }
-                }
-            }
+            DayOfWeek = DayOfWeek.Tuesday,
+            StartTime = new TimeSpan(9, 0, 0),
+            EndTime = new TimeSpan(17, 0, 0)
+        }
         };
 
+
         //Act
-        var results = new List<ScheduleDto>();
-        foreach (var sch in schedules)
-        {
-            var result = await dao.CreateAsync(sch);
-            results.Add(result);
-        }
+        var result = await dao.CreateAsync(intervals);
+
 
         //Assert
-        Assert.IsNotNull(results);
-        Assert.AreEqual(3, results.Count);
-        Assert.AreEqual(schedules[0].Intervals.Count(), results[0].Intervals.Count());
-        Assert.AreEqual(schedules[0].Intervals.FirstOrDefault()!.DayOfWeek,
-            results[0].Intervals.FirstOrDefault()!.DayOfWeek);
-        Assert.AreEqual(schedules[0].Intervals.FirstOrDefault()!.StartTime, results[0].Intervals.First().StartTime);
-        Assert.AreEqual(schedules[0].Intervals.FirstOrDefault()!.EndTime, results[0].Intervals.First().EndTime);
-        Assert.AreEqual(schedules[1].Intervals.Count(), results[1].Intervals.Count());
-        Assert.AreEqual(schedules[1].Intervals.FirstOrDefault()!.DayOfWeek,
-            results[1].Intervals.FirstOrDefault()!.DayOfWeek);
-        Assert.AreEqual(schedules[1].Intervals.FirstOrDefault()!.StartTime, results[1].Intervals.First().StartTime);
-        Assert.AreEqual(schedules[1].Intervals.FirstOrDefault()!.EndTime, results[1].Intervals.First().EndTime);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, result.Count());
+        Assert.AreEqual(intervals.Count(), result.Count());
+        Assert.AreEqual(intervals.FirstOrDefault()!.DayOfWeek,
+            result.FirstOrDefault()!.DayOfWeek);
+        Assert.AreEqual(intervals.FirstOrDefault()!.StartTime, result.First().StartTime);
+        Assert.AreEqual(intervals.FirstOrDefault()!.EndTime, result.First().EndTime);
+        Assert.AreEqual(intervals.Count(), result.Count());
+        Assert.AreEqual(intervals.FirstOrDefault()!.DayOfWeek,
+            result.FirstOrDefault()!.DayOfWeek);
+        Assert.AreEqual(intervals.FirstOrDefault()!.StartTime, result.First().StartTime);
+        Assert.AreEqual(intervals.FirstOrDefault()!.EndTime, result.First().EndTime);
     }
 
 
@@ -134,35 +102,32 @@ public class ScheduleDaoTest : DbTestBase
     [TestMethod]
     public async Task CreateSchedule_Boundary_ValidInput_Test()
     {
-        var schedule = new Schedule
+        IEnumerable<Interval> intervals = new List<Interval>
         {
-            Intervals = new List<Interval>
+            new Interval
             {
-                new Interval
-                {
-                    DayOfWeek = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(8), EndTime = TimeSpan.FromHours(12)
-                },
-                new Interval
-                {
-                    DayOfWeek = DayOfWeek.Tuesday, StartTime = TimeSpan.FromHours(10), EndTime = TimeSpan.FromHours(16)
-                },
-                new Interval
-                {
-                    DayOfWeek = DayOfWeek.Friday, StartTime = TimeSpan.FromHours(12), EndTime = TimeSpan.FromHours(18)
-                },
-            }
+                DayOfWeek = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(8), EndTime = TimeSpan.FromHours(12)
+            },
+            new Interval
+            {
+                DayOfWeek = DayOfWeek.Tuesday, StartTime = TimeSpan.FromHours(10), EndTime = TimeSpan.FromHours(16)
+            },
+            new Interval
+            {
+                DayOfWeek = DayOfWeek.Friday, StartTime = TimeSpan.FromHours(12), EndTime = TimeSpan.FromHours(18)
+            },
         };
-        var createdScheduleDto = await dao.CreateAsync(schedule);
+        
+        var createdScheduleDto = await dao.CreateAsync(intervals);
 
         Assert.IsNotNull(createdScheduleDto);
-        Assert.IsNotNull(createdScheduleDto.Id);
-        Assert.AreEqual(schedule.Intervals.Count(), createdScheduleDto.Intervals.Count());
-        Assert.AreEqual(schedule.Intervals.First().DayOfWeek, createdScheduleDto.Intervals.First().DayOfWeek);
-        Assert.AreEqual(schedule.Intervals.First().StartTime, createdScheduleDto.Intervals.First().StartTime);
-        Assert.AreEqual(schedule.Intervals.First().EndTime, createdScheduleDto.Intervals.First().EndTime);
-        Assert.AreEqual(schedule.Intervals.Last().DayOfWeek, createdScheduleDto.Intervals.Last().DayOfWeek);
-        Assert.AreEqual(schedule.Intervals.Last().StartTime, createdScheduleDto.Intervals.Last().StartTime);
-        Assert.AreEqual(schedule.Intervals.Last().EndTime, createdScheduleDto.Intervals.Last().EndTime);
+        Assert.AreEqual(intervals.Count(), createdScheduleDto.Count());
+        Assert.AreEqual(intervals.First().DayOfWeek, createdScheduleDto.First().DayOfWeek);
+        Assert.AreEqual(intervals.First().StartTime, createdScheduleDto.First().StartTime);
+        Assert.AreEqual(intervals.First().EndTime, createdScheduleDto.First().EndTime);
+        Assert.AreEqual(intervals.Last().DayOfWeek, createdScheduleDto.Last().DayOfWeek);
+        Assert.AreEqual(intervals.Last().StartTime, createdScheduleDto.Last().StartTime);
+        Assert.AreEqual(intervals.Last().EndTime, createdScheduleDto.Last().EndTime);
     }
 
     //B + E - Boundary + Exceptional behavior
@@ -192,13 +157,22 @@ public class ScheduleDaoTest : DbTestBase
     public async Task GetAsync_Test_ReturnsAllSchedules()
     {
         // Arrange
-        var expectedSchedules = new List<Schedule>
+        IEnumerable<Interval> intervals = new List<Interval>
         {
-            new Schedule { Id = 1, Intervals = new List<Interval>() },
-            new Schedule { Id = 2, Intervals = new List<Interval>() },
-            new Schedule { Id = 3, Intervals = new List<Interval>() }
+            new Interval
+            {
+                DayOfWeek = DayOfWeek.Monday, StartTime = TimeSpan.FromHours(8), EndTime = TimeSpan.FromHours(12)
+            },
+            new Interval
+            {
+                DayOfWeek = DayOfWeek.Tuesday, StartTime = TimeSpan.FromHours(10), EndTime = TimeSpan.FromHours(16)
+            },
+            new Interval
+            {
+                DayOfWeek = DayOfWeek.Friday, StartTime = TimeSpan.FromHours(12), EndTime = TimeSpan.FromHours(18)
+            },
         };
-        DbContext.Schedules.AddRange(expectedSchedules);
+        DbContext.Intervals.AddRange(intervals);
         await DbContext.SaveChangesAsync();
 
         // Act
@@ -206,42 +180,11 @@ public class ScheduleDaoTest : DbTestBase
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(expectedSchedules.Count(), result.Count());
-        foreach (var expectedSchedule in expectedSchedules)
+        Assert.AreEqual(intervals.Count(), result.Count());
+        foreach (var i in intervals)
         {
-            var actualSchedule = result.SingleOrDefault(s => s.Id == expectedSchedule.Id);
+            var actualSchedule = result.SingleOrDefault(s => s.Id == i.Id);
             Assert.IsNotNull(actualSchedule);
-        }
-    }
-
-    [TestMethod]
-    public async Task GetAsync_SchedulesWithIntervals_Test()
-    {
-        // Arrange
-        var intervals = new List<IntervalDto>
-        {
-            new IntervalDto { DayOfWeek = DayOfWeek.Monday, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(12, 0, 0) },
-            new IntervalDto { DayOfWeek = DayOfWeek.Wednesday, StartTime = new TimeSpan(14, 0, 0), EndTime = new TimeSpan(18, 0, 0) }
-        };
-        var expectedSchedules = new List<ScheduleDto>
-        {
-            new ScheduleDto { Id = 1, Intervals = intervals },
-            new ScheduleDto { Id = 2, Intervals = intervals }
-        };
-        DbContext.Schedules.AddRange(expectedSchedules.Select(s => new Schedule { Id = s.Id }));
-        DbContext.Intervals.AddRange(intervals.Select(i => new Interval { DayOfWeek = i.DayOfWeek, StartTime = i.StartTime, EndTime = i.EndTime }));
-        await DbContext.SaveChangesAsync();
-
-        // Act
-        var result = await dao.GetAsync();
-
-        // Assert
-        Assert.AreEqual(expectedSchedules.Count, result.Count());
-        foreach (var expectedSchedule in expectedSchedules)
-        {
-            var actualSchedule = result.SingleOrDefault(s => s.Id == expectedSchedule.Id);
-            Assert.IsNotNull(actualSchedule);
-            Assert.AreEqual(expectedSchedule.Id, actualSchedule.Id);
         }
     }
     
