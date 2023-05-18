@@ -390,24 +390,64 @@ public class PresetDaoTest :  DbTestBase
         Preset preset3 = await _presetDao.GetByIdAsync(1);
         Assert.AreEqual(preset3.Name, preset.Name);
         
-    }/*
+    }
     [TestMethod]
     public async Task DeleteAsync_TestDelete()
     {
-            //Act and Assert
-            await _presetDao.DeleteAsync(preset);
+            var preset = new Preset
+            {
+                Id = 1,
+                Name = "Tomato",
+                IsCurrent = true,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 1, Type = "temperature", MaxValue = 10, MinValue = 0 },
+                    new Threshold { Id = 2, Type = "humidity", MaxValue = 50, MinValue = 60 },
+                    new Threshold { Id = 3, Type = "co2", MaxValue = 1200, MinValue = 1250 }
+                }
+            };
+            // Act
+            await _presetDao.CreateAsync(preset);
             await DbContext.SaveChangesAsync();
-            Preset preset4 = await _presetDao.GetByIdAsync(1);
-                try
+            Assert.AreEqual(1, DbContext.Presets.Local.Count);
+            await _presetDao.DeleteAsync(preset);
+            Assert.AreEqual(0, DbContext.Presets.Local.Count);
+    }
+    [TestMethod]
+    public async Task DeleteAsync_TestDeleteCorrectPreset()
+    {
+        var preset1 = new Preset
+        {
+            Id = 1,
+            Name = "Tomato",
+            IsCurrent = true,
+            Thresholds = new List<Threshold>
             {
-                Console.WriteLine(preset4.Name);
+                new Threshold { Id = 1, Type = "temperature", MaxValue = 10, MinValue = 0 },
+                new Threshold { Id = 2, Type = "humidity", MaxValue = 50, MinValue = 60 },
+                new Threshold { Id = 3, Type = "co2", MaxValue = 1200, MinValue = 1250 }
             }
-            catch (Exception e) 
+        };
+        var preset2 = new Preset
+        {
+            Id = 2,
+            Name = "Tomato",
+            IsCurrent = false,
+            Thresholds = new List<Threshold>
             {
-                Console.WriteLine(e);
-                Assert.AreEqual($"Object reference not set to an instance of an object.", e.Message);
-                 throw; 
+                new Threshold { Id = 4, Type = "temperature", MaxValue = 10, MinValue = 0 },
+                new Threshold { Id = 5, Type = "humidity", MaxValue = 50, MinValue = 60 },
+                new Threshold { Id = 6, Type = "co2", MaxValue = 1200, MinValue = 1250 }
             }
+        };
+        // Act
+        await _presetDao.CreateAsync(preset1);
+        await DbContext.SaveChangesAsync();
+        await _presetDao.CreateAsync(preset2);
+        await DbContext.SaveChangesAsync();
+        await _presetDao.DeleteAsync(preset1);
+        await DbContext.SaveChangesAsync();
+        Assert.AreEqual(2, preset2.Id);
+    }
 
-    }*/
 }

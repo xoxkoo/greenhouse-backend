@@ -87,6 +87,23 @@ public class PresetEfcDao : IPresetDao
         };
     }
 
+
+    public async Task DeleteAsync(Preset preset)
+    {
+        
+            var thresholds = _context.Thresholds.Where(t => t.PresetId == preset.Id);
+            _context.Thresholds.RemoveRange(thresholds);
+            _context.Presets.Remove(preset);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Failed to save changes to database", ex);
+            }
+    }
+
     public async Task<Preset?> GetByIdAsync(int id)
     {
         try
@@ -105,18 +122,6 @@ public class PresetEfcDao : IPresetDao
             throw;
         }
     }
-
-
-    public async Task DeleteAsync(Preset preset)
-    {
-            _context.Presets.Remove(preset);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Failed to save changes to database", ex);
-            }
-    }
+    
+    
 }

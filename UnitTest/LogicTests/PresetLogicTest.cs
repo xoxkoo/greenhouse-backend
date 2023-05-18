@@ -287,7 +287,7 @@ public class PresetLogicTest
         Assert.AreEqual(expectedResult, result);
         _mockPresetDao.Verify(x => x.CreateAsync(It.IsAny<Preset>()), Times.Once);
     }
-    //Z - Zero
+   
     [TestMethod]
     public async Task DeleteAsync_ReturnsNull()
     {
@@ -300,7 +300,7 @@ public class PresetLogicTest
         var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _presetLogic.DeleteAsync(id));
         Assert.AreEqual($"Preset with ID {id} not found!", exception.Message);
     }
-    //O - One
+    
     [TestMethod]
     public async Task DeleteAsync_PresetIsApplied()
     {
