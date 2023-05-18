@@ -37,6 +37,8 @@ DotNetEnv.Env.TraversePath().Load();
 
 // Add the database context
 builder.Services.AddDbContext<Context>();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 
 var app = builder.Build();
 

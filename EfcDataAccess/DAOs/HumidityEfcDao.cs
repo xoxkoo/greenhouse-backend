@@ -46,8 +46,6 @@ public class HumidityEfcDao : IHumidityDao
 			list = _context.Humidities.Where(c => c.Date >= startTime && c.Date <= endTime);
 		}
 
-		Console.WriteLine(list.FirstOrDefault().Date);
-
 		IEnumerable<HumidityDto> result = await list.Select(h =>
 			new HumidityDto
 			{

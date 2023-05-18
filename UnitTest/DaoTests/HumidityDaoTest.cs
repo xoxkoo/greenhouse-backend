@@ -18,7 +18,7 @@ public class HumidityDaoTest : DbTestBase
     {
         dao = new HumidityEfcDao(DbContext);
     }
-    
+
     //CreateAsync() tests
     //Z - Zero
     [TestMethod]
@@ -26,7 +26,7 @@ public class HumidityDaoTest : DbTestBase
     {
         //Arrange
         Humidity humidity = null;
-        
+
         //Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => dao.CreateAsync(humidity));
     }
@@ -42,7 +42,7 @@ public class HumidityDaoTest : DbTestBase
         };
 
         var createdHumidity = await dao.CreateAsync(humidity);
-        
+
         Assert.IsNotNull(createdHumidity);
         Assert.AreEqual(1, createdHumidity.HumidityId);
         Assert.AreEqual(humidity.Value, createdHumidity.Value);
@@ -72,7 +72,7 @@ public class HumidityDaoTest : DbTestBase
                 Value = 60
             }
         };
-        
+
         //Act
         var results = new List<HumidityDto>();
         foreach (var humidity in humidities)
@@ -80,7 +80,7 @@ public class HumidityDaoTest : DbTestBase
             var result = await dao.CreateAsync(humidity);
             results.Add(result);
         }
-        
+
         //Assert
         Assert.IsNotNull(results);
         Assert.AreEqual(3, results.Count);
@@ -91,9 +91,9 @@ public class HumidityDaoTest : DbTestBase
         Assert.AreEqual(humidities[2].Date, results[2].Date);
         Assert.AreEqual(humidities[2].Value, results[2].Value);
     }
-    
-    
-    
+
+
+
     //GetAsync() test
     //Z - Zero
     [TestMethod]
@@ -111,7 +111,7 @@ public class HumidityDaoTest : DbTestBase
         Assert.IsFalse(result.Any());
     }
 
-    
+
     //O - One
     [TestMethod]
     public async Task GetHumidityAsync_One_Test()
@@ -138,7 +138,7 @@ public class HumidityDaoTest : DbTestBase
         Assert.AreEqual(humidity.Date, result.First().Date);
     }
 
-    
+
     //M - Many
     [TestMethod]
     public async Task GetHumidityAsync_Many_Test()
@@ -185,7 +185,7 @@ public class HumidityDaoTest : DbTestBase
         Assert.AreEqual(humidity2.Date, result.FirstOrDefault()?.Date);
         Assert.AreEqual(humidity2.Value, result.FirstOrDefault()?.Value);
     }
-    
+
     [TestMethod]
     public async Task GetHumidityAsync_Many_FilteredByEndDate_Test()
     {
