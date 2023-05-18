@@ -116,11 +116,11 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(true, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(10, result.First().Thresholds.First().MaxValue);
-        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual(10, result.First().Thresholds.First().Max);
+        Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
-        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
-        Assert.AreEqual(1200, result.First().Thresholds.Last().MinValue);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
     }
 
         [TestMethod]
@@ -226,11 +226,11 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(false, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(10, result.First().Thresholds.First().Max);
+        Assert.AreEqual(13, result.First().Thresholds.First().Max);
         Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
         Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
-        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
+        Assert.AreEqual(1230, result.First().Thresholds.Last().Min);
     }
 
     [TestMethod]
@@ -267,7 +267,6 @@ public class PresetDaoTest :  DbTestBase
         DbContext.Presets.AddRange(presets);
         await DbContext.SaveChangesAsync();
 
-        var searchParams = new SearchPresetParametersDto(2, false);
 
         // Act
         var result = await _presetDao.GetAsync(new SearchPresetParametersDto());
@@ -275,17 +274,17 @@ public class PresetDaoTest :  DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(List<PresetDto>));
-        Assert.AreEqual(1, result.Count());
-        Assert.AreEqual(2, result.First().Id);
-        Assert.AreEqual("Sunny Day", result.First().Name);
-        Assert.AreEqual(false, result.First().IsCurrent);
+        Assert.AreEqual(2, result.Count());
+        Assert.AreEqual(1, result.First().Id);
+        Assert.AreEqual("Tomato", result.First().Name);
+        Assert.AreEqual(true, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
-        Assert.AreEqual(13, result.First().Thresholds.First().Max);
+        Assert.AreEqual(10, result.First().Thresholds.First().Max);
         Assert.AreEqual(0, result.First().Thresholds.First().Min);
         Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
         Assert.AreEqual(1250, result.First().Thresholds.Last().Max);
-        Assert.AreEqual(1230, result.First().Thresholds.Last().Min);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().Min);
     }
 
     //B - Boundary
