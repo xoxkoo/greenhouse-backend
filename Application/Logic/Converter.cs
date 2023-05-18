@@ -230,8 +230,8 @@ public class Converter : IConverter
         //TODO handle flags
         string flags = data.Substring(0, 8);
         string temperature = data.Substring(8, 11);
-        string humidity = data.Substring(19, 7);
-        string co2 = data.Substring(26, 12);
+        string humidity = data.Substring(19, 10);
+        string co2 = data.Substring(29, 13);
 
         float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
 
