@@ -10,4 +10,6 @@ public interface IPresetLogic
     Task<PresetEfcDto> CreateAsync(PresetEfcDto dto);
     Task UpdateAsync(PresetDto dto);
     Task ApplyAsync(int id);
+    Task<PresetEfcDto> GetByIdAsync(int id);
+
 }

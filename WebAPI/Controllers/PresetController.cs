@@ -107,9 +107,7 @@ public class PresetController : ControllerBase
     {
         try
         {
-            SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(id, true);
-            var presets = await _logic.GetAsync(parametersDto);
-            var preset = presets.FirstOrDefault();
+            var preset = await _logic.GetByIdAsync(id);
             return Ok(preset);
         }
         catch (Exception e)

@@ -27,6 +27,7 @@ public class PresetLogic : IPresetLogic
         {
             throw new Exception("Preset not found");
         }
+
         var result = new List<PresetEfcDto>();
         foreach (var p in presets)
         {
@@ -115,6 +116,39 @@ public class PresetLogic : IPresetLogic
         await _presetDao.ApplyAsync(id);
         string payload = _converter.ConvertPresetToHex(presetToSend);
         await _socketServer.Send(payload);
+    }
+
+    public async Task<PresetEfcDto> GetByIdAsync(int id)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(id, true);
+        var presets = await _presetDao.GetAsync(parametersDto);
+        var preset = presets.FirstOrDefault();
+        if (preset == null)
+        {
+            throw new Exception(
+                $"Preset with id {id} was not found");
+        }
+
+        List<ThresholdDto> thresholdDtos = new List<ThresholdDto>();
+
+        foreach (var t in preset.Thresholds)
+        {
+            ThresholdDto thresholdDto = new ThresholdDto()
+            {
+                Max = t.MaxValue,
+                Min = t.MinValue
+            };
+            thresholdDtos.Add(thresholdDto);
+        }
+
+
+        PresetEfcDto presetEfcDto = new PresetEfcDto()
+        {
+            Id = preset.Id,
+            Name = preset.Name,
+            Thresholds = thresholdDtos
+        };
+        return presetEfcDto;
     }
 
     private void ValidateInput(PresetEfcDto dto)

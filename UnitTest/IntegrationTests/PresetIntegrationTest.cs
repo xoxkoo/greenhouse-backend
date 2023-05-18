@@ -380,7 +380,7 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsInstanceOfType(response.Result, typeof(OkObjectResult));
         var okResult = (OkObjectResult)response.Result;
         Assert.AreEqual(200, okResult.StatusCode);
-        var result = (PresetEfcDto)okResult.Value;
+        var result = okResult.Value as PresetEfcDto;
         Assert.IsNotNull(result);
         Assert.AreEqual(presetId, result.Id);
     }
