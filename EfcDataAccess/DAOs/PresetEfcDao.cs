@@ -36,6 +36,10 @@ public class PresetEfcDao : IPresetDao
         if (parametersDto.Id != null)
         {
             listPreset = listPreset.Where(s => s.Id == parametersDto.Id);
+            if (!listPreset.Any())
+            {
+                throw new Exception("Preset with id was not found");
+            }
         }
 
         IEnumerable<PresetDto> result = await listPreset.Select(p => 

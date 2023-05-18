@@ -2,13 +2,10 @@
 using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SocketServer;
-using WebAPI.Controllers;
-
 namespace Testing.LogicTests;
 
 [TestClass]
@@ -139,7 +136,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenHumidityThresholdValueIsOutOfRange()
     {
         // Arrange
-        PresetCreationDto dto = new PresetCreationDto
+        PresetEfcDto dto = new PresetEfcDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -155,7 +152,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentNullException_WhenDtoIsNull()
     {
         // Arrange
-        PresetCreationDto dto = null;
+        PresetEfcDto dto = null;
 
         // Act and Assert
         var exception = await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => _presetLogic.CreateAsync(dto));
@@ -166,7 +163,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenThresholdsIsNull()
     {
         // Arrange
-        PresetCreationDto dto = new PresetCreationDto
+        PresetEfcDto dto = new PresetEfcDto()
         {
             Thresholds = null
         };
@@ -180,7 +177,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenThresholdsCountIsNotThree()
     {
         // Arrange
-        PresetCreationDto dto = new PresetCreationDto
+        PresetEfcDto dto = new PresetEfcDto()
         {
             Thresholds = new List<ThresholdDto> { new ThresholdDto(), new ThresholdDto() }
         };
@@ -212,7 +209,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenThresholdTypeIsInvalid()
     {
         // Arrange
-        PresetCreationDto dto = new PresetCreationDto
+        PresetEfcDto dto = new PresetEfcDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -231,7 +228,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenMinValueIsBiggerThanMaxValue()
     {
         // Arrange
-        PresetCreationDto dto = new PresetCreationDto
+        PresetEfcDto dto = new PresetEfcDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -250,7 +247,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenCO2ThresholdValueIsOutOfRange()
     {
         // Arrange
-        PresetCreationDto dto = new PresetCreationDto
+        PresetEfcDto dto = new PresetEfcDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -268,7 +265,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ReturnsPresetEfcDto_WhenDataIsValid()
     {
         // Arrange
-        PresetCreationDto dto = new PresetCreationDto
+        PresetEfcDto dto = new PresetEfcDto()
         {
             Name = "Test Preset",
             Thresholds = new List<ThresholdDto>

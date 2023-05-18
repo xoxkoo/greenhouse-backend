@@ -23,6 +23,10 @@ public class PresetLogic : IPresetLogic
     public async Task<IEnumerable<PresetEfcDto>> GetAsync(SearchPresetParametersDto dto)
     {
         var presets = await _presetDao.GetAsync(dto);
+        if (presets == null)
+        {
+            throw new Exception("Preset not found");
+        }
         var result = new List<PresetEfcDto>();
         foreach (var p in presets)
         {
@@ -52,7 +56,7 @@ public class PresetLogic : IPresetLogic
 
         return result;
     }
-    public async Task<PresetEfcDto> CreateAsync(PresetCreationDto dto)
+    public async Task<PresetEfcDto> CreateAsync(PresetEfcDto dto)
     {
         ValidateInput(dto);
 
@@ -113,7 +117,7 @@ public class PresetLogic : IPresetLogic
         await _socketServer.Send(payload);
     }
 
-    private void ValidateInput(PresetCreationDto dto)
+    private void ValidateInput(PresetEfcDto dto)
     {
         if (dto == null)
         {

@@ -133,7 +133,7 @@ public class PresetControllerTests
     public async Task CreateAsync_ReturnsOkResult()
     {
         // Arrange
-        var presetCreationDto = new PresetCreationDto
+        var presetCreationDto = new PresetEfcDto()
         {
             Name = "Test Preset",
             Thresholds = new List<ThresholdDto>
@@ -158,7 +158,6 @@ public class PresetControllerTests
         var result = await _presetController.CreateAsync(presetCreationDto);
 
         // Assert
-        Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
         var okObjectResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okObjectResult);
         var createdPreset = okObjectResult.Value as PresetEfcDto;
@@ -172,7 +171,7 @@ public class PresetControllerTests
     public async Task CreateAsync_ReturnsInternalServerError_OnException()
     {
         // Arrange
-        var presetCreationDto = new PresetCreationDto
+        var presetCreationDto = new PresetEfcDto()
         {
             Name = "Test Preset",
             Thresholds = new List<ThresholdDto>

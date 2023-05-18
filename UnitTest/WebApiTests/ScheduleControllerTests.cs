@@ -54,10 +54,10 @@ public class ScheduleControllerTests
 
 
         // Assert
-        Assert.IsInstanceOfType(result.Result, typeof(CreatedResult));
-        CreatedResult createdResult = (CreatedResult)result.Result;
-        Assert.AreEqual("/schedule/" + createdDto.Id, createdResult.Location);
-        Assert.AreEqual(createdDto, createdResult.Value);
+        Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+        OkObjectResult createdResult = (OkObjectResult)result.Result;
+        var resultObj = createdResult.Value as ScheduleCreationDto;
+        Assert.AreEqual(createdDto.Intervals.Count(), resultObj.Intervals.Count());
     }
 
     [TestMethod]
@@ -68,7 +68,7 @@ public class ScheduleControllerTests
         logic.Setup(x => x.CreateAsync(dto)).ThrowsAsync(new Exception("An error occurred."));
 
         // Act
-        ActionResult<ScheduleDto> result = await _controller.CreateAsync(new List<IntervalDto>());
+        ActionResult<ScheduleCreationDto> result = await _controller.CreateAsync(new List<IntervalDto>());
 
         // Assert
         Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));

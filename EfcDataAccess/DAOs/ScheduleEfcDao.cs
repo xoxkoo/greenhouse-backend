@@ -37,7 +37,6 @@ public class ScheduleEfcDao : IScheduleDao
 
         IEnumerable<IntervalDto> intervalDtos = entity.Entity.Intervals?.Select(i => new IntervalDto
         {
-            Id = i.Id,
             DayOfWeek = i.DayOfWeek,
             StartTime = i.StartTime,
             EndTime = i.EndTime
@@ -54,7 +53,6 @@ public class ScheduleEfcDao : IScheduleDao
     {
         List<IntervalDto> intervalDtos = await _context.Intervals.Select(i => new IntervalDto
         {
-            Id = i.Id,
             DayOfWeek = i.DayOfWeek,
             StartTime = i.StartTime,
             EndTime = i.EndTime

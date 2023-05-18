@@ -50,9 +50,10 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
     [Route("preset")]
     [HttpPost]
-    public async Task<ActionResult<PresetEfcDto>> CreateAsync([FromBody] PresetCreationDto dto)
+    public async Task<ActionResult<PresetEfcDto>> CreateAsync([FromBody] PresetEfcDto dto)
     {
         try
         {
@@ -68,7 +69,7 @@ public class PresetController : ControllerBase
         }
     }
 
-    [HttpPatch]
+    [HttpPut]
     [Route("preset/{id:int}")]
     public async Task<ActionResult> UpdateAsync([FromBody] PresetDto dto, [FromRoute] int id)
     {
@@ -99,4 +100,25 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [Route("preset/{id:int}")]
+    [HttpGet]
+    public async Task<ActionResult<PresetEfcDto>> GetByIdAsync([FromRoute] int id)
+    {
+        try
+        {
+            SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(id, true);
+            var presets = await _logic.GetAsync(parametersDto);
+            var preset = presets.FirstOrDefault();
+            return Ok(preset);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    
+    
 }
