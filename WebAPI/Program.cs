@@ -3,9 +3,7 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
-using Microsoft.EntityFrameworkCore;
 using SocketServer;
-using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,9 +36,7 @@ builder.Services.AddScoped<IPresetDao, PresetEfcDao>();
 DotNetEnv.Env.TraversePath().Load();
 
 // Add the database context
-builder.Services.AddDbContext<Context>(options =>
-	options.UseSqlite(builder.Configuration.GetConnectionString($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};")));
-
+builder.Services.AddDbContext<Context>();
 
 var app = builder.Build();
 
@@ -64,17 +60,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-using (var scope = app.Services.CreateScope())
-{
-	var services = scope.ServiceProvider;
-
-	var context = services.GetRequiredService<Context>();
-	if (context.Database.GetPendingMigrations().Any())
-	{
-		context.Database.Migrate();
-	}
-}
 
 app.Run();
 
