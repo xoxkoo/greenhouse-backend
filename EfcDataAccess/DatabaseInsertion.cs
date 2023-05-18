@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace EfcDataAccess;
 
@@ -28,11 +27,11 @@ class DatabaseInsertion
         intervals.Add(intervalWednesday);
         intervals.Add(intervalFriday);
         await _context.Intervals.AddRangeAsync(intervals);
-        
+
         //Schedule
         Schedule schedule = new Schedule() { Id = 1, Intervals = intervals };
         await _context.Schedules.AddAsync(schedule);
-        
+
         //Thresholds
         Threshold threshold1 = new Threshold() { Id = 1, Type = "temperature", MinValue = 20, MaxValue = 40 };
         Threshold threshold2 = new Threshold() { Id = 2, Type = "humidity", MinValue = 20, MaxValue = 100 };
@@ -42,15 +41,15 @@ class DatabaseInsertion
         thresholds.Add(threshold2);
         thresholds.Add(threshold3);
         await _context.Thresholds.AddRangeAsync(thresholds);
-        
+
         //Preset
         Preset preset = new Preset() { Id = 1, Thresholds = thresholds, IsCurrent = true, Name = "Preset 1"};
         await _context.Presets.AddAsync(preset);
-        
+
         //Email
         Email email = new Email() { EmailAddress = "greenhousesep4@gmail.com" };
         await _context.Mails.AddAsync(email);
-        
+
         //ValveState
         ValveState valveState = new ValveState() { Toggle = false };
         await _context.ValveState.AddAsync(valveState);
@@ -71,7 +70,7 @@ class DatabaseInsertion
         _context.ValveState.RemoveRange(_context.ValveState);
         // Call the InsertMyEntitiesAsync method
         await InsertMyEntitiesAsync(10);
-        
+
         // Save changes to the database
         await _context.SaveChangesAsync();
     }

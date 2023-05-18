@@ -11,4 +11,6 @@ public interface IPresetLogic
     Task DeleteAsync(int id);
     
     
+    Task ApplyAsync(int id);
+    Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto);
 }

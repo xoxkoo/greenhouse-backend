@@ -29,11 +29,13 @@ public class TemperatureEfcDao : ITemperatureDao
 		};
 		return dto;
 	}
-	
+
 	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
+		DateTime startTime = searchMeasurement.StartTime ?? DateTime.MinValue; // Use DateTime.MinValue if StartTime is not provided
+		DateTime endTime = searchMeasurement.EndTime ?? DateTime.MaxValue; // Use DateTime.MaxValue if EndTime is not provided
+
 		var list = _context.Temperatures.AsQueryable();
-		long secondsPrecision = TimeSpan.TicksPerSecond;
 
 		// if current is requested, return just last
 		if (searchMeasurement.Current)
@@ -42,21 +44,9 @@ public class TemperatureEfcDao : ITemperatureDao
 				.OrderByDescending(h => h.Date)
 				.Take(1);
 		}
-		// return temperatures in interval
-		// DateTime of temperatures saved in database is converted to Ticks (the number of ticks that have elapsed since January 1, 0001, at 00:00:00.000 in the Gregorian calendar.)
-		// One tick is 0.0001 millisecond, we divide it by number of ticks in one second so that the precision is in seconds.
-		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
+		else
 		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision);
-		}
-		else if (searchMeasurement.StartTime != null)
-		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision  >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
-			
-		}
-		else if (searchMeasurement.EndTime != null)
-		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision  <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1 ).AsQueryable();
+			list = _context.Temperatures.Where(c => c.Date >= startTime && c.Date <= endTime);
 		}
 
 		IEnumerable<TemperatureDto> result = await list.Select(c =>

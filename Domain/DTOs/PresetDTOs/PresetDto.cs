@@ -7,6 +7,6 @@ public class PresetDto
     public int Id { get; set; }
     public string Name { get; set; }
     public bool IsCurrent { get; set; }
-    public IEnumerable<Threshold> Thresholds { get; set; }
+    public IEnumerable<ThresholdDto> Thresholds { get; set; }
 
 }

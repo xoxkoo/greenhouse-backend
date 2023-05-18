@@ -9,4 +9,6 @@ public interface IPresetDao
     Task<PresetEfcDto> CreateAsync(Preset preset);
     Task<Preset?> GetByIdAsync(int id);
     Task DeleteAsync(Preset preset);
+    Task ApplyAsync(int id);
+    Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto);
 }
