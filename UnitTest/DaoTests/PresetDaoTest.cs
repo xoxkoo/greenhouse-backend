@@ -2,6 +2,7 @@
 using Domain.DTOs;
 using Domain.Entities;
 using EfcDataAccess.DAOs;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Utils;
 
@@ -19,6 +20,7 @@ public class PresetDaoTest :  DbTestBase
         _presetDao = new PresetEfcDao(DbContext);
     }
 
+    //GetAsync()
     //Z - Zero
     [TestMethod]
     public async Task GetAsync_ReturnsZeroPreset()
@@ -92,36 +94,36 @@ public class PresetDaoTest :  DbTestBase
                 Thresholds = new List<Threshold>
                 {
                     new Threshold { Id = 4, Type = "temperature", MaxValue = 13, MinValue = 0 },
-                    new Threshold { Id = 5, Type = "humidity", MaxValue = 55, MinValue = 60 },
-                    new Threshold { Id = 6, Type = "co2", MaxValue = 1230, MinValue = 1250 }
+                    new Threshold { Id = 5, Type = "humidity", MaxValue = 60, MinValue = 50 },
+                    new Threshold { Id = 6, Type = "co2", MaxValue = 1250, MinValue = 1230 }
                 }
             },
         };
         DbContext.Presets.AddRange(presets);
         await DbContext.SaveChangesAsync();
 
+        var searchParams = new SearchPresetParametersDto(1, null);
+
         // Act
-        var result = await _presetDao.GetAsync(new SearchPresetParametersDto());
+        var result = await _presetDao.GetAsync(searchParams);
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(presets.Count, result.Count());
-
-        var preset1 = result.First(p => p.Id == 1);
-        Assert.AreEqual("Tomato", preset1.Name);
-        Assert.IsTrue(preset1.IsCurrent);
-        Assert.IsNotNull(preset1.Thresholds);
-        Assert.AreEqual(3, preset1.Thresholds.Count());
-
-        var preset2 = result.First(p => p.Id == 2);
-        Assert.AreEqual("Sunny Day", preset2.Name);
-        Assert.IsFalse(preset2.IsCurrent);
-        Assert.IsNotNull(preset2.Thresholds);
-        Assert.AreEqual(3, preset2.Thresholds.Count());
+        Assert.IsInstanceOfType(result, typeof(List<PresetDto>));
+        Assert.AreEqual(1, result.Count());
+        Assert.AreEqual(1, result.First().Id);
+        Assert.AreEqual("Tomato", result.First().Name);
+        Assert.AreEqual(true, result.First().IsCurrent);
+        Assert.AreEqual(3, result.First().Thresholds.Count());
+        Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
+        Assert.AreEqual(10, result.First().Thresholds.First().MaxValue);
+        Assert.AreEqual(0, result.First().Thresholds.First().MinValue);
+        Assert.AreEqual("co2", result.First().Thresholds.Last().Type);
+        Assert.AreEqual(1250, result.First().Thresholds.Last().MaxValue);
+        Assert.AreEqual(1200, result.First().Thresholds.Last().MinValue);
     }
 
-
-    [TestMethod]
+        [TestMethod]
     public async Task GetAsync_GetCurrentPreset()
     {
         // Arrange
@@ -210,7 +212,7 @@ public class PresetDaoTest :  DbTestBase
         DbContext.Presets.AddRange(presets);
         await DbContext.SaveChangesAsync();
 
-        var searchParams = new SearchPresetParametersDto(1, null);
+        var searchParams = new SearchPresetParametersDto(2, false);
 
         // Act
         var result = await _presetDao.GetAsync(searchParams);
@@ -219,9 +221,9 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(List<PresetDto>));
         Assert.AreEqual(1, result.Count());
-        Assert.AreEqual(1, result.First().Id);
-        Assert.AreEqual("Tomato", result.First().Name);
-        Assert.AreEqual(true, result.First().IsCurrent);
+        Assert.AreEqual(2, result.First().Id);
+        Assert.AreEqual("Sunny Day", result.First().Name);
+        Assert.AreEqual(false, result.First().IsCurrent);
         Assert.AreEqual(3, result.First().Thresholds.Count());
         Assert.AreEqual("temperature", result.First().Thresholds.First().Type);
         Assert.AreEqual(10, result.First().Thresholds.First().Max);
@@ -257,8 +259,8 @@ public class PresetDaoTest :  DbTestBase
                 Thresholds = new List<Threshold>
                 {
                     new Threshold { Id = 4, Type = "temperature", MaxValue = 13, MinValue = 0 },
-                    new Threshold { Id = 5, Type = "humidity", MaxValue = 60, MinValue = 50 },
-                    new Threshold { Id = 6, Type = "co2", MaxValue = 1250, MinValue = 1230 }
+                    new Threshold { Id = 5, Type = "humidity", MaxValue = 55, MinValue = 60 },
+                    new Threshold { Id = 6, Type = "co2", MaxValue = 1230, MinValue = 1250 }
                 }
             },
         };
@@ -268,7 +270,7 @@ public class PresetDaoTest :  DbTestBase
         var searchParams = new SearchPresetParametersDto(2, false);
 
         // Act
-        var result = await _presetDao.GetAsync(searchParams);
+        var result = await _presetDao.GetAsync(new SearchPresetParametersDto());
 
         // Assert
         Assert.IsNotNull(result);
@@ -286,6 +288,7 @@ public class PresetDaoTest :  DbTestBase
         Assert.AreEqual(1230, result.First().Thresholds.Last().Min);
     }
 
+    //B - Boundary
     [TestMethod]
     public async Task GetAsync_AppliedParametersIdAndIsCurrent_ExpectedEmptyList()
     {
@@ -330,6 +333,8 @@ public class PresetDaoTest :  DbTestBase
         Assert.IsInstanceOfType(result, typeof(List<PresetDto>));
         Assert.AreEqual(0, result.Count());
     }
+
+    //CreateAsync()
     [TestMethod]
     public async Task CreateAsync_CreatesPresetAndReturnsPresetDto()
     {
@@ -367,4 +372,175 @@ public class PresetDaoTest :  DbTestBase
 
         // The test should throw ArgumentNullException
     }
+
+
+    //ApplyAsync(int id)
+    //Z - Zero
+    [TestMethod]
+    public async Task ApplyAsync_NoValueInSetUp()
+    {
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<Exception>(() => _presetDao.ApplyAsync(1));
+    }
+
+    //O - One
+    [TestMethod]
+    public async Task ApplyAsync_SetsPresetAsCurrent_OneInSetUp()
+    {
+        // Arrange
+        var presets = new List<Preset>
+        {
+            new Preset
+            {
+                Id = 1,
+                Name = "Tomato",
+                IsCurrent = false,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 1, Type = "temperature", MaxValue = 10, MinValue = 0 },
+                    new Threshold { Id = 2, Type = "humidity", MaxValue = 60, MinValue = 50 },
+                    new Threshold { Id = 3, Type = "co2", MaxValue = 1250, MinValue = 1200 }
+                }
+            }
+        };
+        DbContext.Presets.AddRange(presets);
+        await DbContext.SaveChangesAsync();
+
+        int presetId = 1;
+
+        // Act
+        await _presetDao.ApplyAsync(presetId);
+
+        // Assert
+        Preset preset1 = DbContext.Presets.FirstOrDefault(p => p.Id == presetId);
+        Assert.IsNotNull(preset1);
+        Assert.IsTrue(preset1.IsCurrent);
+    }
+
+    //M - Many
+    [TestMethod]
+    public async Task ApplyAsync_SetsPresetAsCurrent_ManyInSetUp()
+    {
+        // Arrange
+        var presets = new List<Preset>
+        {
+            new Preset
+            {
+                Id = 1,
+                Name = "Tomato",
+                IsCurrent = false,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 1, Type = "temperature", MaxValue = 10, MinValue = 0 },
+                    new Threshold { Id = 2, Type = "humidity", MaxValue = 60, MinValue = 50 },
+                    new Threshold { Id = 3, Type = "co2", MaxValue = 1250, MinValue = 1200 }
+                }
+            },
+            new Preset
+            {
+                Id = 2,
+                Name = "Sunny Day",
+                IsCurrent = false,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 4, Type = "temperature", MaxValue = 13, MinValue = 0 },
+                    new Threshold { Id = 5, Type = "humidity", MaxValue = 60, MinValue = 50 },
+                    new Threshold { Id = 6, Type = "co2", MaxValue = 1250, MinValue = 1230 }
+                }
+            },
+        };
+        DbContext.Presets.AddRange(presets);
+        await DbContext.SaveChangesAsync();
+
+        int presetId = 2;
+
+        // Act
+        await _presetDao.ApplyAsync(presetId);
+
+        // Assert
+        Preset? preset2 = await DbContext.Presets.FirstOrDefaultAsync(p => p.Id == presetId);
+        Assert.IsNotNull(preset2);
+        Assert.IsTrue(preset2.IsCurrent);
+
+        // Other presets should remain unchanged
+        Preset? preset1 = await DbContext.Presets.FirstOrDefaultAsync(p => p.Id == 1);
+        Assert.IsNotNull(preset1);
+        Assert.IsFalse(preset1.IsCurrent);
+    }
+
+    [TestMethod]
+    public async Task ApplyAsync_SetsPresetAsCurrent_WhenExistingCurrent()
+    {
+        // Arrange
+        var presets = new List<Preset>
+        {
+            new Preset
+            {
+                Id = 1,
+                Name = "Preset 1",
+                IsCurrent = false
+            },
+            new Preset
+            {
+                Id = 2,
+                Name = "Preset 2",
+                IsCurrent = false
+            },
+            new Preset
+            {
+                Id = 3,
+                Name = "Preset 3",
+                IsCurrent = true
+            }
+        };
+        DbContext.Presets.AddRange(presets);
+        await DbContext.SaveChangesAsync();
+
+        var presetId = 2;
+        var presetDao = new PresetEfcDao(DbContext);
+
+        // Act
+        await presetDao.ApplyAsync(presetId);
+
+        // Assert
+        var updatedPreset = await DbContext.Presets.FindAsync(presetId);
+        Assert.IsNotNull(updatedPreset);
+        Assert.IsTrue(updatedPreset.IsCurrent);
+
+        var nonCurrentPresets = DbContext.Presets.Where(p => p.Id != presetId);
+        foreach (var preset in nonCurrentPresets)
+        {
+            Assert.IsFalse(preset.IsCurrent);
+        }
+    }
+
+    //E - Exception
+    [TestMethod]
+    public async Task ApplyAsync_ThrowsExceptionForInvalidPresetId()
+    {
+        // Arrange
+        var presets = new List<Preset>
+        {
+            new Preset
+            {
+                Id = 1,
+                Name = "Tomato",
+                IsCurrent = false,
+                Thresholds = new List<Threshold>
+                {
+                    new Threshold { Id = 1, Type = "temperature", MaxValue = 10, MinValue = 0 },
+                    new Threshold { Id = 2, Type = "humidity", MaxValue = 60, MinValue = 50 },
+                    new Threshold { Id = 3, Type = "co2", MaxValue = 1250, MinValue = 1200 }
+                }
+            },
+        };
+        DbContext.Presets.AddRange(presets);
+        await DbContext.SaveChangesAsync();
+
+        int presetId = 2; // Invalid preset ID
+
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<Exception>(() => _presetDao.ApplyAsync(presetId));
+    }
+
 }

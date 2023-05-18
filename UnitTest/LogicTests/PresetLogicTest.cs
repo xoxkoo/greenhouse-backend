@@ -6,6 +6,7 @@ using Domain.DTOs.CreationDTOs;
 using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using SocketServer;
 using WebAPI.Controllers;
 
 namespace Testing.LogicTests;
@@ -15,13 +16,18 @@ public class PresetLogicTest
 {
     private Mock<IPresetDao> _mockPresetDao;
     private IPresetLogic _presetLogic;
+    private Mock<IWebSocketServer> _socketServer;
+    private Mock<IConverter> _converter;
 
     [TestInitialize]
     public void TestInitialize()
     {
         _mockPresetDao = new Mock<IPresetDao>();
-        _presetLogic = new PresetLogic(_mockPresetDao.Object);
+        _socketServer = new Mock<IWebSocketServer>();
+        _converter = new Mock<IConverter>();
+        _presetLogic = new PresetLogic(_mockPresetDao.Object, _socketServer.Object, _converter.Object);
     }
+    
     //Z - Zero
     [TestMethod]
     public async Task GetAsync_ZeroPresets_ReturnsEmptyPresetDtoList()

@@ -33,7 +33,7 @@ public class PresetController : ControllerBase
         }
     }
 
-    [Route("preset-current")]
+    [Route("current-preset")]
     [HttpGet]
     public async Task<ActionResult<PresetDto>> GetCurrentAsync()
     {
@@ -76,7 +76,7 @@ public class PresetController : ControllerBase
 		    {
 			    throw new Exception("Id does not match object!");
 		    }
-		    
+
 		    PresetEfcDto updated = await _logic.UpdateAsync(dto);
 
 		    return Ok(updated);
@@ -85,6 +85,22 @@ public class PresetController : ControllerBase
 	    {
 		    Console.WriteLine(e);
 		    return StatusCode(500, e.Message);
+	    }
+    }
+
+    [HttpPost]
+    [Route("current-preset")]
+    public async Task<ActionResult> ApplyAsync([FromBody] int id)
+    {
+	    try
+	    {
+		    await _logic.ApplyAsync(id);
+		    return Ok();
+	    }
+	    catch (Exception e)
+	    {
+		    Console.WriteLine(e);
+		    throw;
 	    }
     }
 }
