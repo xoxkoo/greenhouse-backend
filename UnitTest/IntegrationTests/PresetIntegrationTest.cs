@@ -343,9 +343,11 @@ public class PresetIntegrationTest : DbTestBase
     {
         // Arrange
         int presetId = 1; // ID of the preset to apply
-        
-        //Act & Assert
-        await Assert.ThrowsExceptionAsync<Exception>(() => _controller.ApplyAsync(presetId));
+        var response = await _controller.ApplyAsync(presetId);
+        Assert.IsNotNull(response);
+        Assert.IsInstanceOfType(response, typeof(ObjectResult));
+        var statusCode = (ObjectResult)response;
+        Assert.AreEqual(500, statusCode.StatusCode);
     }
     
     

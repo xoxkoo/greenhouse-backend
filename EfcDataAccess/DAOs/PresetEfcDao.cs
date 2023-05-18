@@ -36,10 +36,6 @@ public class PresetEfcDao : IPresetDao
         if (parametersDto.Id != null)
         {
             listPreset = listPreset.Where(s => s.Id == parametersDto.Id);
-            if (!listPreset.Any())
-            {
-                throw new Exception("Preset with id was not found");
-            }
         }
 
         IEnumerable<PresetDto> result = await listPreset.Select(p => 
@@ -112,7 +108,7 @@ public class PresetEfcDao : IPresetDao
             preset.IsCurrent = false;
             _context.Presets.Update(preset);
         }
-        Preset? presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
+        Preset presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
         if (presetToBeCurrent == null)
         {
             throw new Exception($"Preset with id {id} not found");
