@@ -17,11 +17,6 @@ jobs:
           registry: ${{ env.REGISTRY }} #parse REGISTRY env value to here. Make sure it is correctly stating ghcr.io
           username: ${{ github.actor }} #this will be our github account
           password: ${{ secrets.GITHUB_TOKEN }} #parse the value of repository secret called CR_PAT that we have created earlier
-      - name: Build Docker Image
-        env:
-          IMAGE_NAME: greenhouse-v2 #create env called IMAGE_NAME consisted of actual name of Docker Image after we build
-          PROJECT_ID: noted-palisade-385613
-        run: docker build -t $IMAGE_NAME:latest . #build the docker image
 
       - name: Extract metadata (tags, labels) for Docker GHCR
         env:
