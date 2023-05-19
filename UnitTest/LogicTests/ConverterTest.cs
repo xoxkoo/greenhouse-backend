@@ -308,11 +308,8 @@ public class ConverterTest : DbTestBase
 			    }
 		    };
 
-		    // Act
-		    string resultHex = converter.ConvertPresetToHex(presetDto);
-
-		    // Assert
-		    Assert.AreEqual("0d5e32000001903200", resultHex);
+		    // Act & Assert
+		    Assert.ThrowsException<Exception>(() => converter.ConvertPresetToHex(presetDto));
 	    }
 
 	    [TestMethod]

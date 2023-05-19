@@ -14,6 +14,7 @@ public class Context : DbContext
 	public DbSet<Email> Mails { get; set; }
 	public DbSet<Preset> Presets { get; set; }
 	public DbSet<Threshold> Thresholds { get; set; }
+	public DbSet<User> Users { get; set; }
 	public Context()
 	{
 

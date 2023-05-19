@@ -108,7 +108,7 @@ public class PresetEfcDao : IPresetDao
             preset.IsCurrent = false;
             _context.Presets.Update(preset);
         }
-        Preset? presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
+        Preset presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
         if (presetToBeCurrent == null)
         {
             throw new Exception($"Preset with id {id} not found");

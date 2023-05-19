@@ -182,7 +182,7 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
 	    }
 
-
+	    
 	    //Humidity range - 14 bits
 	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
 	    if (humidityThreshold == null)
@@ -201,7 +201,7 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)humidityThreshold.Max, 7));
 	    }
 
-
+	    
 	    //CO2 range - 24 bits
 	    ThresholdDto co2Threshold = thresholds.FirstOrDefault(t => t.Type.Equals("co2"));
 	    if (co2Threshold == null)
@@ -254,7 +254,7 @@ public class Converter : IConverter
         await co2Logic.CreateAsync(co2Dto);
         await humidityLogic.CreateAsync(humidityDto);
         await temperatureLogic.CreateAsync(tempDto);
-
+        
         await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
