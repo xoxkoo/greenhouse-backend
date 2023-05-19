@@ -33,6 +33,7 @@ static class RunWebSocket
 
 		var serviceProvider = services.BuildServiceProvider();
 
+		AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 		WebSocketClient socket = serviceProvider.GetService<WebSocketClient>();
 
 		try

@@ -16,8 +16,8 @@ public class EmailLogicTest
     private Mock<IEmailDao> _mockEmailDao;
     private Mock<IPresetDao> _mockPresetDao;
     private IEmailLogic _emailLogic;
-    
-    
+
+
     [TestInitialize]
     public void TestInitialize()
     {
@@ -33,11 +33,11 @@ public class EmailLogicTest
     {
         // Arrange
         EmailDto nullDto = null;
-        
+
         // Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => _emailLogic.CreateAsync(nullDto));
     }
-    
+
     //O - One
     [TestMethod]
     public async Task CreateAsync_ValidEmail_Test()
@@ -53,7 +53,7 @@ public class EmailLogicTest
         Assert.IsNotNull(result);
         Assert.AreEqual(validEmail, result.EmailAdress);
     }
-    
+
     //E - Exception
     [TestMethod]
     public async Task CreateAsync_EmailAddressIsEmpty_ThrowsArgumentException()
@@ -63,11 +63,11 @@ public class EmailLogicTest
         {
             EmailAdress = ""
         };
-        
+
         //Act & Assert
         await Assert.ThrowsExceptionAsync<ArgumentException>(() => _emailLogic.CreateAsync(dto));
     }
-    
+
     [TestMethod]
     public async Task CreateAsync_InvalidEmail_ThrowsArgumentException_Test()
     {
@@ -78,7 +78,7 @@ public class EmailLogicTest
         // Act & Assert
         await Assert.ThrowsExceptionAsync<ArgumentException>(async () => await _emailLogic.CreateAsync(emailDto));
     }
-    
+
     //GetAsync()
     [TestMethod]
     public async Task GetAsync_ReturnsEmailDto()
@@ -109,11 +109,11 @@ public class EmailLogicTest
         var humidity = 80;
         var co2 = 2000;
 
-        var thresholds = new List<Threshold>
+        var thresholds = new List<ThresholdDto>
         {
-            new Threshold() { Type = "temperature", MinValue = 10, MaxValue = 25 },
-            new Threshold() { Type = "humidity", MinValue = 30, MaxValue = 60 },
-            new Threshold() { Type = "co2", MinValue = 400, MaxValue = 1000 },
+            new ThresholdDto() { Type = "temperature", Min = 10, Max = 25 },
+            new ThresholdDto() { Type = "humidity", Min = 30, Max = 60 },
+            new ThresholdDto() { Type = "co2", Min = 400, Max = 1000 },
         };
 
         var presetDto = new PresetDto { Thresholds = thresholds };

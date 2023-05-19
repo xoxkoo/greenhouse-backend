@@ -33,7 +33,12 @@ builder.Services.AddScoped<IScheduleDao, ScheduleEfcDao>();
 builder.Services.AddScoped<IEmailDao, EmailEfcDao>();
 builder.Services.AddScoped<IPresetDao, PresetEfcDao>();
 
+DotNetEnv.Env.TraversePath().Load();
+
+// Add the database context
 builder.Services.AddDbContext<Context>();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 
 var app = builder.Build();
 
@@ -59,3 +64,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
