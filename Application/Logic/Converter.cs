@@ -112,8 +112,11 @@ public class Converter : IConverter
 	    }
 
 	    // set the ide to be 2 or 3, depending if we want to clear intervals
-	    // (2 -> 10 in binary)
+	    // (2 -> 10 in binary) - clear intervals
+	    // (3 -> 11 in binary) - append intervals
 	    string payloadBinary = (clear) ? "11" : "10";
+
+	    Console.WriteLine(payloadBinary);
 
 
 	    // loop through the intervals and convert
