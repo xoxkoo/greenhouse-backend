@@ -98,11 +98,11 @@ public class ScheduleEfcDao : IScheduleDao
     
     public async Task<IntervalDto> GetByIdAsync(int id)
     {
-        Interval interval= await _context.Intervals.FirstOrDefaultAsync(i => i.Id == id);
+        Interval? interval= await _context.Intervals.FirstOrDefaultAsync(i => i.Id == id);
 
         if (interval == null)
         {
-            return null;
+            throw new Exception($"Interval with id {id} was not found");
         }
         IntervalDto intervalDto = new IntervalDto()
         {

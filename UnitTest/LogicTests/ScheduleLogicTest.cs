@@ -116,7 +116,6 @@ public class ScheduleLogicTest
             }
         }
     }
-    //B - Boundaries
 
     //E - Exceptional behaviour
     [TestMethod]
@@ -172,7 +171,30 @@ public class ScheduleLogicTest
         await Assert.ThrowsExceptionAsync<ArgumentException>(() => logic.CreateAsync(intervals));
     }
 
+    [TestMethod]
+    public async Task CreateSchedule_OverlappingIntervalsMinutes_Test()
+    {
+        //Arrange
+        IEnumerable<IntervalDto> intervals = new List<IntervalDto>
+        {
+            new IntervalDto
+            {
+                DayOfWeek = DayOfWeek.Monday,
+                StartTime = new TimeSpan(10, 20, 0),
+                EndTime = new TimeSpan(10, 50, 0)
+            },
+            new IntervalDto
+            {
+                DayOfWeek = DayOfWeek.Monday,
+                StartTime = new TimeSpan(10, 19, 0),
+                EndTime = new TimeSpan(10, 33, 0)
+            }
+        };
 
+        //Act and Assert
+        await Assert.ThrowsExceptionAsync<ArgumentException>(() => logic.CreateAsync(intervals));
+    }
+    
     //GetAsync() tests
     [TestMethod]
     public async Task TestGetSchedules_ReturnsSchedulesFromDao()
@@ -299,5 +321,88 @@ public class ScheduleLogicTest
 
         // Assert
         dao.Verify(x => x.GetScheduleForDay(dayOfWeek), Times.Once);
+    }
+    
+    
+    // PutAsync() tests
+    // Z - Zero
+    [TestMethod]
+    public async Task PutAsync_NullReference_Test()
+    {
+        // Arrange
+        IntervalDto intervalDto = null;
+
+        dao
+            .Setup(x => x.GetByIdAsync(It.IsAny<int>()))
+            .ThrowsAsync(new Exception());
+
+        IEnumerable<Interval> createdIntervals = null;
+
+        dao
+            .Setup(x => x.CreateAsync(It.IsAny<IEnumerable<Interval>>()))
+            .Callback<IEnumerable<Interval>>(intervals => createdIntervals = intervals);
+        
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<NullReferenceException>(() => logic.PutAsync(intervalDto));
+    }
+
+    // O - One
+    [TestMethod]
+    public async Task PutAsync_OneInterval_Test()
+    {
+        // Arrange
+        IntervalDto intervalDto = new IntervalDto
+        {
+            Id = 1,
+            DayOfWeek = DayOfWeek.Monday,
+            StartTime = new TimeSpan(8, 0, 0),
+            EndTime = new TimeSpan(17, 0, 0)
+        };
+
+        dao
+            .Setup(x => x.GetByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(intervalDto);
+
+        // Act
+        await logic.PutAsync(intervalDto);
+
+        // Assert
+        dao.Verify(x => x.CreateAsync(It.IsAny<IEnumerable<Interval>>()), Times.Never());
+        dao.Verify(x => x.PutAsync(intervalDto), Times.Once());
+    }
+
+
+    [TestMethod]
+    public async Task PutAsync_OverlappingIntervals_Test()
+    {
+        // Arrange
+        IntervalDto dto = new IntervalDto
+        {
+            Id = 1,
+            DayOfWeek = DayOfWeek.Monday,
+            StartTime = new TimeSpan(8, 0, 0),
+            EndTime = new TimeSpan(9, 0, 0)
+        };
+
+        IEnumerable<IntervalDto> intervalsInDatabase = new List<IntervalDto>
+        {
+            new IntervalDto
+            {
+                DayOfWeek = DayOfWeek.Monday,
+                StartTime = new TimeSpan(8, 30, 0),
+                EndTime = new TimeSpan(10, 0, 0)
+            }
+        };
+
+        dao
+            .Setup(x => x.GetByIdAsync(It.IsAny<int>()))
+            .ReturnsAsync(dto);
+
+        dao
+            .Setup(x => x.GetAsync())
+            .ReturnsAsync(intervalsInDatabase);
+
+        // Act and Assert
+        await Assert.ThrowsExceptionAsync<ArgumentException>(() => logic.PutAsync(dto));
     }
 }

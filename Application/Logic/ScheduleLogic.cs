@@ -76,7 +76,7 @@ public class ScheduleLogic : IScheduleLogic
                 if (intervals[i].DayOfWeek == intervals[j].DayOfWeek &&
                     intervals[i].StartTime < intervals[j].EndTime &&
                     intervals[j].StartTime < intervals[i].EndTime)
-                {
+                { 
                     throw new ArgumentException("Intervals cannot overlap");
                 }
             }
@@ -92,18 +92,26 @@ public class ScheduleLogic : IScheduleLogic
 
 	    List<Interval> intervalsToRemove = new List<Interval>();
 
-	    foreach (var interval in intervals)
-	    {
-		    // Check for old intervals
-		    foreach (var oldInterval in intervalsInDatabase)
-		    {
-                // If it is already in the database
-				    if (interval.StartTime.Equals(oldInterval.StartTime) &&
-				        interval.EndTime.Equals(oldInterval.EndTime) &&
-				        interval.DayOfWeek.Equals(oldInterval.DayOfWeek))
-				    {
-					    intervalsToRemove.Add(interval);
-				    }
+        for (int i = 0; i < intervals.Count; i++)
+        {
+            for (int j = i + 1; j < intervals.Count; j++)
+            {
+                if (intervals[i].DayOfWeek == intervals[j].DayOfWeek &&
+                    intervals[i].StartTime < intervals[j].EndTime &&
+                    intervals[j].StartTime < intervals[i].EndTime)
+                {
+                    throw new ArgumentException("Intervals in the input list cannot overlap");
+                }
+            }
+
+            foreach (var oldInterval in intervalsInDatabase)
+            {
+                if (intervals[i].DayOfWeek == oldInterval.DayOfWeek &&
+                    intervals[i].StartTime < oldInterval.EndTime &&
+                    oldInterval.StartTime < intervals[i].EndTime)
+                {
+                    throw new ArgumentException("Interval conflicts with an existing interval in the database");
+                }
             }
         }
 
@@ -122,7 +130,7 @@ public class ScheduleLogic : IScheduleLogic
 
     public async Task PutAsync(IntervalDto dto)
     {
-        IntervalDto intervalDto = await _scheduleDao.GetByIdAsync(dto.Id);
+        IntervalDto? intervalDto = await _scheduleDao.GetByIdAsync(dto.Id);
         if (intervalDto == null)
         {
 
@@ -140,6 +148,15 @@ public class ScheduleLogic : IScheduleLogic
         }
         else
         {
+            List<Interval> intervals = new List<Interval>();
+            Interval interval = new Interval()
+            {
+                DayOfWeek = dto.DayOfWeek,
+                EndTime = dto.EndTime,
+                StartTime = dto.StartTime
+            };
+            intervals.Add(interval);
+            await CheckForIntervalsInDatabase(intervals);
             await _scheduleDao.PutAsync(dto);
         }
     }
