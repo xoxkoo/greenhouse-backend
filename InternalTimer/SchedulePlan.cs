@@ -19,10 +19,17 @@ public class SchedulePlan : IJob
 		{
 			var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
 
-			string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
-			//TODO discuss if we want to use socket here or call the logic
-			Console.WriteLine(hexPayload);
-			socket?.Send(hexPayload);
+			// send just one message
+			if (intervals.Count() <= 5)
+			{
+				string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
+				Console.WriteLine(hexPayload);
+				socket?.Send(hexPayload);
+			}
+			else
+			{
+
+			}
 		}
 		catch (Exception e)
 		{
