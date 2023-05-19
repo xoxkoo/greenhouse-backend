@@ -31,7 +31,6 @@ public class ScheduleLogic : IScheduleLogic
 
         List<Interval> intervals = dto.Select(i => new Interval
         {
-            Id = i.Id,
             DayOfWeek = i.DayOfWeek,
             EndTime = i.EndTime,
             StartTime = i.StartTime
@@ -138,7 +137,6 @@ public class ScheduleLogic : IScheduleLogic
             {
                 new Interval()
                 {
-                    Id = dto.Id,
                     DayOfWeek = dto.DayOfWeek,
                     StartTime = dto.StartTime,
                     EndTime = dto.EndTime
