@@ -48,7 +48,7 @@ public class WateringSystemLogic : IWateringSystemLogic
 	        State = dto.State
         };
         string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
-        _socketServer.Send(payload);
+        await _socketServer.Send(payload);
         return await _wateringSystemDao.CreateAsync(entity);
     }
 
