@@ -20,11 +20,45 @@ public class PresetLogic : IPresetLogic
         _converter = converter;
     }
 
-    public async Task<IEnumerable<PresetDto>> GetAsync(SearchPresetParametersDto dto)
+    public async Task<IEnumerable<PresetEfcDto>> GetAsync(SearchPresetParametersDto dto)
     {
-        return await _presetDao.GetAsync(dto);
+        var presets = await _presetDao.GetAsync(dto);
+        if (presets == null)
+        {
+            throw new Exception("Preset not found");
+        }
+
+        var result = new List<PresetEfcDto>();
+        foreach (var p in presets)
+        {
+            var thresholds = new List<ThresholdDto>();
+            if (p.Thresholds != null)
+            {
+                foreach (var t in p.Thresholds)
+                {
+                    var threshold = new ThresholdDto()
+                    {
+                        Max = t.Max,
+                        Min = t.Min,
+                        Type = t.Type
+                    };
+                    thresholds.Add(threshold);
+                }
+            }
+
+            var presetToSend = new PresetEfcDto()
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Thresholds = thresholds
+            };
+            result.Add(presetToSend);
+        }
+
+        return result;
     }
-    public async Task<PresetEfcDto> CreateAsync(PresetCreationDto dto)
+    
+    public async Task<PresetEfcDto> CreateAsync(PresetEfcDto dto)
     {
         ValidateInput(dto);
 
@@ -41,19 +75,6 @@ public class PresetLogic : IPresetLogic
         return await _presetDao.CreateAsync(preset);
     }
 
-    public async Task ApplyAsync(int id)
-    {
-	    //Change the value isCurrent to be true in database
-	    await _presetDao.ApplyAsync(id);
-	    //Find the preset which should be applied as a current and send to the IoT device
-	    PresetDto? presetToSend = GetAsync(new SearchPresetParametersDto(id, null)).Result.FirstOrDefault();
-	    if (presetToSend == null)
-	    {
-		    throw new Exception($"Preset with id {id} not found");
-	    }
-	    string payload = _converter.ConvertPresetToHex(presetToSend);
-	    await _socketServer.Send(payload);
-    }
 
     public async Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto)
     {
@@ -72,9 +93,54 @@ public class PresetLogic : IPresetLogic
         return await _presetDao.UpdateAsync(dto);
     }
 
-    
+    public async Task ApplyAsync(int id)
+    {
+        //Find the preset which should be applied as a current and send to the IoT device
+        PresetDto presetToSend = _presetDao.GetAsync(new SearchPresetParametersDto(id, null)).Result.FirstOrDefault();
+        if (presetToSend == null)
+        {
+            throw new Exception($"Preset with id {id} not found");
+        }
+        //Change the value isCurrent to be true in database
+        await _presetDao.ApplyAsync(id);
+        string payload = _converter.ConvertPresetToHex(presetToSend);
+        await _socketServer.Send(payload);
+    }
 
-    private void ValidateInput(PresetCreationDto dto)
+    public async Task<PresetEfcDto> GetByIdAsync(int id)
+    {
+        SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(id, true);
+        var presets = await _presetDao.GetAsync(parametersDto);
+        var preset = presets.FirstOrDefault();
+        if (preset == null)
+        {
+            throw new Exception(
+                $"Preset with id {id} was not found");
+        }
+
+        List<ThresholdDto> thresholdDtos = new List<ThresholdDto>();
+
+        foreach (var t in preset.Thresholds)
+        {
+            ThresholdDto thresholdDto = new ThresholdDto()
+            {
+                Max = t.Max,
+                Min = t.Min
+            };
+            thresholdDtos.Add(thresholdDto);
+        }
+
+
+        PresetEfcDto presetEfcDto = new PresetEfcDto()
+        {
+            Id = preset.Id,
+            Name = preset.Name,
+            Thresholds = thresholdDtos
+        };
+        return presetEfcDto;
+    }
+
+    private void ValidateInput(PresetEfcDto dto)
     {
         if (dto == null)
         {

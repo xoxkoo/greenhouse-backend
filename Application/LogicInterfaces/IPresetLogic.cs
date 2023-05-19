@@ -6,7 +6,9 @@ namespace Application.LogicInterfaces;
 
 public interface IPresetLogic
 {
-    Task<IEnumerable<PresetDto>> GetAsync(SearchPresetParametersDto dto);
-    Task<PresetEfcDto> CreateAsync(PresetCreationDto dto);
+    Task<IEnumerable<PresetEfcDto>> GetAsync(SearchPresetParametersDto dto);
+    Task<PresetEfcDto> CreateAsync(PresetEfcDto dto);
     Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto);
-    Task ApplyAsync(int id); }
+    Task ApplyAsync(int id);
+    Task<PresetEfcDto> GetByIdAsync(int id);
+}
