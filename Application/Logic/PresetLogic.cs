@@ -57,20 +57,21 @@ public class PresetLogic : IPresetLogic
 
     public async Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto)
     {
-	    if (dto == null)
-	    {
-		    throw new ArgumentNullException(nameof(dto), "Provided data cannot be null");
-	    }
-	    if (dto.Thresholds == null || dto.Thresholds.Count() != 3)
-	    {
-		    throw new ArgumentException("Exactly three thresholds must be provided");
-	    }
+        if (dto == null)
+        {
+            throw new ArgumentNullException(nameof(dto), "Provided data cannot be null");
+        }
+        if (dto.Thresholds == null || dto.Thresholds.Count() != 3)
+        {
+            throw new ArgumentException("Exactly three thresholds must be provided");
+        }
 
-	    List<Threshold> thresholds = MapThresholds(dto.Thresholds);
-	    ValidateThresholds(thresholds);
+        List<Threshold> thresholds = MapThresholds(dto.Thresholds);
+        ValidateThresholds(thresholds);
 
-	    return await _presetDao.UpdateAsync(dto);
+        return await _presetDao.UpdateAsync(dto);
     }
+
     
 
     private void ValidateInput(PresetCreationDto dto)

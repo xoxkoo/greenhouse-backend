@@ -2,7 +2,6 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
-
 namespace Application.Logic;
 
 public class ScheduleLogic : IScheduleLogic
