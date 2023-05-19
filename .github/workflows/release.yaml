@@ -6,14 +6,15 @@ on:
       - '*'
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
-      - uses: ncipollo/release-action@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Release
+        uses: ncipollo/release-action@v1
         with:
           artifacts: "release.tar.gz,foo/*.txt"
           bodyFile: "body.md"

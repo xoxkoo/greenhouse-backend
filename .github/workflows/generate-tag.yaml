@@ -1,7 +1,7 @@
 name: generate-tag
 
 on:
-  pull_request:
+  push:
     branches: ["dev-release-and-tags"]
     #branches: ["dev", "main"]
 
