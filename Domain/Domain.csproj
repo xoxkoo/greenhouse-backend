@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <Compile Remove="DTOs\IntervalDto.cs" />
-    </ItemGroup>
-
 </Project>

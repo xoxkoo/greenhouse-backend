@@ -17,15 +17,18 @@ public class SchedulePlan : IJob
 
 		try
 		{
+			// number of intervals we want to send
 			int maxIntervals = 5;
 			var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
+
+			await socket?.Connect();
 
 			// send just one message
 			// clear all previous intervals
 			if (intervals.Count() <= maxIntervals)
 			{
 				string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals}, true);
-				socket?.Send(hexPayload);
+				socket.Send(hexPayload);
 			}
 			else
 			{
@@ -41,6 +44,8 @@ public class SchedulePlan : IJob
 					socket?.Send(hexPayload);
 				}
 			}
+
+			await socket.Disconnect();
 		}
 		catch (Exception e)
 		{
