@@ -103,7 +103,7 @@ public class Converter : IConverter
      *
      * @param intervals
      */
-    public string ConvertIntervalToHex(ScheduleToSendDto intervals)
+    public string ConvertIntervalToHex(ScheduleToSendDto intervals, bool clear = false)
     {
 	    // max allowed count is 7
 	    if (intervals.Intervals.Count() > 7)
@@ -111,8 +111,9 @@ public class Converter : IConverter
 		    throw new Exception("Too many intervals");
 	    }
 
-	    // set the ide to be 2 (2 -> 10 in binary)
-	    string payloadBinary = "10";
+	    // set the ide to be 2 or 3, depending if we want to clear intervals
+	    // (2 -> 10 in binary)
+	    string payloadBinary = (clear) ? "11" : "10";
 
 
 	    // loop through the intervals and convert
