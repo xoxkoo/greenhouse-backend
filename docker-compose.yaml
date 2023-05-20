@@ -1,6 +1,4 @@
-﻿name: Docker Compose
-on:
-  workflow_call:
+﻿version: '3'
 services:
   webapi:
     build:
