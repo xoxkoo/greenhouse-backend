@@ -4,12 +4,10 @@ on:
   push:
     branches:
     - dev-docker_image
-
 jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
-  publish:
-    name: Publishing to the cloud
-    uses: ./.github/workflows/publish.yaml
+
+  
 
