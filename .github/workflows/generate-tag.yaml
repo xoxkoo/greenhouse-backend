@@ -25,5 +25,5 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "release.tar.gz,foo/*.txt"
-          bodyFile: "body.md"
+          tag: ${{ steps.generate_release_tag.outputs.new_tag }}
+          artifacts: "build/*.hex"
