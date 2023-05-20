@@ -4,7 +4,6 @@ on:
   push:
     branches:
     - dev-docker_image
-
 jobs:
   unit_test:
     name: Unit Test
