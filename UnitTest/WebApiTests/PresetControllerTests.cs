@@ -160,14 +160,16 @@ public class PresetControllerTests
 	    var result = await _presetController.CreateAsync(presetCreationDto);
 
 	    // Assert
-	    Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
-	    var okObjectResult = result.Result as OkObjectResult;
-	    Assert.IsNotNull(okObjectResult);
-	    var createdPreset = okObjectResult.Value as PresetEfcDto;
+	    Assert.IsInstanceOfType(result.Result, typeof(CreatedResult));
+	    var createdResult = result.Result as CreatedResult;
+	    Assert.IsNotNull(createdResult);
+	    Assert.AreEqual($"/presets/1", createdResult.Location);
+	    Assert.AreEqual(201, createdResult.StatusCode);
+
+	    var createdPreset = createdResult.Value as PresetEfcDto;
 	    Assert.IsNotNull(createdPreset);
 	    Assert.AreEqual(presetEfcDto.Id, createdPreset.Id);
 	    Assert.AreEqual(presetEfcDto.Name, createdPreset.Name);
-	    // Assert other properties and thresholds as needed
 	}
 
 	[TestMethod]
