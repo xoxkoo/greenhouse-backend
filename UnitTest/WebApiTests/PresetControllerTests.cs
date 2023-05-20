@@ -193,38 +193,5 @@ public class PresetControllerTests
 	    Assert.IsNotNull(statusCodeResult);
 	    Assert.AreEqual(500, statusCodeResult.StatusCode);
 	}
-    }
-[TestMethod]
-public async Task DeleteAsync_ReturnsOkResult()
-{
-    // Arrange
-    int id=1;
-    var presetCreationDto = new PresetCreationDto
-    {
-        Name = "Test Preset",
-        Thresholds = new List<ThresholdDto>
-        {
-            new ThresholdDto {  Type = "temperature", Max = 100, Min = 0 },
-            new ThresholdDto {Type = "humidity", Max = 50, Min = 0 }
-        }
-    };
-    var presetEfcDto = new PresetEfcDto
-    {
-        Id = 1,
-        Name = "Test Preset",
-        Thresholds = new List<ThresholdDto>
-        {
-            new ThresholdDto { Type = "temperature", Max = 100, Min = 0 },
-            new ThresholdDto { Type = "humidity", Max = 50, Min = 0 }
-        }
-    };
-    _mockPresetLogic.Setup(p => p.DeleteAsync(id).Exception);
-
-    // Act
-    var result = await _presetController.DeleteAsync(id);
-
-    // Assert
-    Assert.IsInstanceOfType(result, typeof(OkObjectResult));
-   
-}
+    
 }

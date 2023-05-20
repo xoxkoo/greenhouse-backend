@@ -9,7 +9,8 @@ jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
-  publish:
-    name: Publishing to the cloud
-    uses: ./.github/workflows/publish.yaml
+  compose:
+    name: Docker Compose
+    uses: docker-compose.yaml
+  
 
