@@ -6,9 +6,21 @@ on:
     - dev-docker_image
 
 jobs:
-  unit_test:
-    name: Unit Test
-    uses: ./.github/workflows/unit_test.yaml
+  build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
 
-  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
+      - name: Build and Push Docker images
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./docker-compose.yaml
+          push: true
+         
+
+      - name: Unit Test
+        uses: ./.github/workflows/unit_test.yaml
