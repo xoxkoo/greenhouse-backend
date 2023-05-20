@@ -10,6 +10,9 @@ services:
     build:
       context: .
       dockerfile: DockerfileSocket
-    
+  timer:
+    build:
+      context: .
+      dockerfile: DockerfileTimer
 
     
