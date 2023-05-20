@@ -17,12 +17,35 @@ public class SchedulePlan : IJob
 
 		try
 		{
+			// number of intervals we want to send
+			int maxIntervals = 5;
 			var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
 
-			string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals});
-			//TODO discuss if we want to use socket here or call the logic
-			Console.WriteLine(hexPayload);
-			socket?.Send(hexPayload);
+			await socket?.Connect();
+
+			// send just one message
+			// clear all previous intervals
+			if (intervals.Count() <= maxIntervals)
+			{
+				string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals}, true);
+				socket.Send(hexPayload);
+			}
+			else
+			{
+				// clear all previous intervals
+				var intervalsToSend = intervals.Take(maxIntervals);
+				string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto() { Intervals = intervalsToSend }, true);
+
+				// Send remaining intervals in groups of 5
+				for (int i = maxIntervals; i < intervals.Count(); i += maxIntervals)
+				{
+					intervalsToSend = intervals.Skip(i).Take(maxIntervals);
+					hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto { Intervals = intervalsToSend });
+					socket?.Send(hexPayload);
+				}
+			}
+
+			await socket.Disconnect();
 		}
 		catch (Exception e)
 		{

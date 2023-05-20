@@ -35,7 +35,7 @@ public class ConverterTest : DbTestBase
     [TestMethod]
     public async Task THCPayload_SavedToDB()
     {
-	    await converter.ConvertFromHex("07817b1f4ff0");
+	    await converter.ConvertFromHex("07817b0707f0");
 
         // Assert
         tempLogic.Verify(x => x.CreateAsync(It.Is<TemperatureCreateDto>(dto =>
@@ -44,20 +44,20 @@ public class ConverterTest : DbTestBase
         )), Times.Once);
 
         co2logic.Verify(x => x.CreateAsync(It.Is<CO2CreateDto>(dto =>
-	        dto.Value == 1279
+	        dto.Value == 2032
         )), Times.Once);
 
         humidityLogic.Verify(x => x.CreateAsync(It.Is<HumidityCreationDto>(dto =>
-	        dto.Value == 31
+	        dto.Value == 56
         )), Times.Once);
     }
 
     [TestMethod]
     public async Task THCPayload_ResponseStringIsCorrect()
     {
-	    string result = await converter.ConvertFromHex("07817b1f4ff0");
+	    string result = await converter.ConvertFromHex("07817b0707f0");
 
-	    Assert.AreEqual("25.8, 31, 1279", result);
+	    Assert.AreEqual("25.8, 56, 2032", result);
     }
 
     [TestMethod]

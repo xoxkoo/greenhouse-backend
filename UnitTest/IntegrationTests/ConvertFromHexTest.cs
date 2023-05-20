@@ -41,7 +41,7 @@ public class ConvertFromHexTest : DbTestBase
         _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _emailLogic);
         socket = new Mock<IWebSocketServer>();
         _waterLogic = new WateringSystemLogic(wateringSystemDao,_converter,socket.Object);
-        
+
     }
 
 
@@ -87,7 +87,7 @@ public class ConvertFromHexTest : DbTestBase
 	    await DbContext.Mails.AddAsync(email);
 	    await DbContext.Presets.AddAsync(preset);
 	    await DbContext.SaveChangesAsync();
-	    string result = await _converter.ConvertFromHex("07817b1f4ff0");
+	    string result = await _converter.ConvertFromHex("07817b0707f0");
 
 	    // Check if records were created in the database
 	    var temperatureRecord = await DbContext.Temperatures.FirstOrDefaultAsync();
@@ -97,7 +97,7 @@ public class ConvertFromHexTest : DbTestBase
 	    Assert.IsNotNull(temperatureRecord);
 	    Assert.IsNotNull(co2Record);
 	    Assert.IsNotNull(humidityRecord);
-	    Assert.AreEqual("25.8, 31, 1279", result);
+	    Assert.AreEqual("25.8, 56, 2032", result);
     }
 
     [TestMethod]
