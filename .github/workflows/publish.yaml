@@ -22,9 +22,6 @@ jobs:
 
       - name: Push image to Container Registry
         run: docker compose -f docker-compose.yaml push
-      - name: Generate release tag
-        id: generate_release_tag
-        uses: 
       #- name: Extract metadata (tags, labels) for Docker GHCR
       #  env:
       #    REGISTRY: ghcr.io
