@@ -69,4 +69,3 @@ jobs:
           CUSTOM_TAG: ${{ steps.increment_tag.outputs.tag }}
           WITH_V: true
           PRERELEASE: true
-          #test patch tag
