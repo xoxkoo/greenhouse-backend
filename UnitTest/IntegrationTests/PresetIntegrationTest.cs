@@ -1,8 +1,10 @@
 using Application.Logic;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SocketServer;
 using Testing.Utils;
@@ -18,7 +20,16 @@ public class PresetIntegrationTest : DbTestBase
 	[TestInitialize]
 	public void Initialize()
 	{
-		_controller = new PresetController(new PresetLogic(new PresetEfcDao(DbContext),new WebSocketServer(), new Converter(new TemperatureLogic(new TemperatureEfcDao(DbContext)), new CO2Logic(new CO2EfcDao(DbContext)), new HumidityLogic(new HumidityEfcDao(DbContext)), new EmailLogic(new EmailEfcDao(DbContext), new PresetEfcDao(DbContext)))));
+		var services = new ServiceCollection();
+		// Register DbContext and other dependencies
+		services.AddScoped<Context>(provider => DbContext);
+
+		// Register services from the Startup class
+		var startup = new Startup();
+		startup.ConfigureServices(services);
+
+		// Resolve PresetController using dependency injection
+		_controller = services.BuildServiceProvider().GetService<PresetController>();
 	}
 
 	[TestMethod]

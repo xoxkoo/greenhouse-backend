@@ -15,13 +15,8 @@ public class Startup
 {
 	public void ConfigureServices(IServiceCollection services)
 	{
-		var r = new DbTestBase();
-		services.AddScoped<Context>(provider => r.DbContext);
 		services.AddScoped<IPresetDao, PresetEfcDao>();
 		services.AddScoped<IWebSocketServer, WebSocketServer>();
-		services.AddScoped<IPresetLogic, PresetLogic>();
-		services.AddScoped<IEmailLogic, EmailLogic>();
-		services.AddScoped<IEmailDao, EmailEfcDao>();
 		services.AddScoped<IConverter, Converter>();
 		services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 		services.AddScoped<ITemperatureDao, TemperatureEfcDao>();
@@ -29,7 +24,20 @@ public class Startup
 		services.AddScoped<ICO2Dao, CO2EfcDao>();
 		services.AddScoped<IHumidityLogic, HumidityLogic>();
 		services.AddScoped<IHumidityDao, HumidityEfcDao>();
-		services.AddScoped<PresetController>();
+		services.AddScoped<IEmailLogic, EmailLogic>();
+		services.AddScoped<IEmailDao, EmailEfcDao>();
+
+		// Register PresetController with its dependencies
+		services.AddScoped<PresetController>(provider =>
+		{
+			var presetLogic = new PresetLogic(
+				provider.GetService<IPresetDao>(),
+				provider.GetService<IWebSocketServer>(),
+				provider.GetService<Converter>()
+			);
+
+			return new PresetController(presetLogic);
+		});
 
 	}
 }
