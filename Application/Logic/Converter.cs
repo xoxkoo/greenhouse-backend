@@ -116,9 +116,6 @@ public class Converter : IConverter
 	    // (3 -> 11 in binary) - append intervals
 	    string payloadBinary = (clear) ? "11" : "10";
 
-	    Console.WriteLine(payloadBinary);
-
-
 	    // loop through the intervals and convert
 	    foreach (var interval in intervals.Intervals)
 	    {
