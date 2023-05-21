@@ -293,4 +293,42 @@ public class PresetLogicTest
         Assert.AreEqual(expectedResult, result);
         _mockPresetDao.Verify(x => x.CreateAsync(It.IsAny<Preset>()), Times.Once);
     }
+   
+    [TestMethod]
+    public async Task DeleteAsync_ReturnsNull()
+    {
+       // Arrange
+        int id=1;
+        _mockPresetDao
+            .Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Preset)null);
+
+        //Act and Assert
+        var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _presetLogic.DeleteAsync(id));
+        Assert.AreEqual($"Preset with ID {id} not found!", exception.Message);
+    }
+    
+    [TestMethod]
+    public async Task DeleteAsync_PresetIsApplied()
+    {
+        // Arrange
+        int id=1;
+        Preset preset = new Preset
+        {
+            Id=1,
+            Thresholds = new List<Threshold>
+            {
+                new Threshold(),
+                new Threshold()
+            },
+            IsCurrent=true,
+            Name="Test preset"
+        };
+        _mockPresetDao
+            .Setup(x => x.GetByIdAsync(id)).ReturnsAsync(preset);
+
+        //Act and Assert
+        var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _presetLogic.DeleteAsync(id));
+        Assert.AreEqual($"Preset with ID {id} is currently applied and therefore cannot be removed!", exception.Message);
+    }
+   
 }

@@ -114,7 +114,7 @@ public class PresetControllerTests
         var preset = okResult.Value as PresetDto;
         Assert.IsNotNull(preset);
     }
-
+    
     [TestMethod]
     public async Task GetCurrentAsync_ReturnsInternalServerError_OnException()
     {
@@ -130,7 +130,6 @@ public class PresetControllerTests
         Assert.IsNotNull(statusCodeResult);
         Assert.AreEqual(500, statusCodeResult.StatusCode);
     }
-
     [TestMethod]
 	public async Task CreateAsync_ReturnsOkResult()
 	{
@@ -194,4 +193,5 @@ public class PresetControllerTests
 	    Assert.IsNotNull(statusCodeResult);
 	    Assert.AreEqual(500, statusCodeResult.StatusCode);
 	}
+    
 }

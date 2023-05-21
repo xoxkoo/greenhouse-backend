@@ -41,6 +41,20 @@ public class PresetLogic : IPresetLogic
         return await _presetDao.CreateAsync(preset);
     }
 
+    public async Task DeleteAsync(int id)
+    {
+        Preset? existing = await _presetDao.GetByIdAsync(id);
+        if (existing == null)
+        {
+            throw new Exception($"Preset with ID {id} not found!");
+        }
+        if (existing.IsCurrent)
+        {
+            throw new Exception($"Preset with ID {id} is currently applied and therefore cannot be removed!");
+        }
+        await _presetDao.DeleteAsync(existing);
+    }
+
     public async Task ApplyAsync(int id)
     {
 	    //Change the value isCurrent to be true in database
