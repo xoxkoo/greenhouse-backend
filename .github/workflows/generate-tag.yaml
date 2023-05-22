@@ -75,4 +75,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ steps.increment_tag.outputs.tag }}
           WITH_V: true
-          PRERELEASE: true #patch
+          PRERELEASE: true #minor
