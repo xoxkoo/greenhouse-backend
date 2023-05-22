@@ -63,6 +63,8 @@ public class PresetEfcDao : IPresetDao
         {
             throw new ArgumentNullException(nameof(preset), "Preset data cannot be null");
         }
+
+
         EntityEntry<Preset> entity = await _context.Presets.AddAsync(preset);
         await _context.SaveChangesAsync();
 

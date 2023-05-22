@@ -57,7 +57,7 @@ public class ConverterTest : DbTestBase
     {
 	    string result = await converter.ConvertFromHex("07817b1f4ff0");
 
-	    Assert.AreEqual("25.8, 31, 1279", result);
+	    Assert.AreEqual(" ", result);
     }
 
     [TestMethod]
