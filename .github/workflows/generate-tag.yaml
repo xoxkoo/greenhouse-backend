@@ -1,9 +1,9 @@
 name: generate-tag
 
 on:
-  pull_request:
+  push:
     branches:
-      - dev
+      - dev-generate-tags-fix-v2
 
 jobs:
   build:
