@@ -1,9 +1,9 @@
 name: generate-tag
 
 on:
-  push:
+  pull_request:
     branches:
-      - dev-generate-tags-fix-v2
+      - dev
 
 jobs:
   build:
@@ -75,4 +75,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ steps.increment_tag.outputs.tag }}
           WITH_V: true
-          PRERELEASE: true #minor
+          PRERELEASE: true
