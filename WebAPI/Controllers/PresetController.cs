@@ -15,7 +15,7 @@ public class PresetController : ControllerBase
     {
         _logic = logic;
     }
-
+    
     [Route("preset")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PresetDto>>> GetAsync()
@@ -102,5 +102,20 @@ public class PresetController : ControllerBase
 		    Console.WriteLine(e);
 		    throw;
 	    }
+    }
+    [Route("preset/{id:int}")]
+    [HttpDelete]
+    public async Task<ActionResult> DeleteAsync(int id)
+    {
+        try
+        {
+            await _logic.DeleteAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
     }
 }
