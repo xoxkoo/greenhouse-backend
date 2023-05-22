@@ -3,7 +3,7 @@ name: generate-tag
 on:
   pull_request:
     branches:
-      - dev
+      - dev-generate-tags-fix-v2
 
 jobs:
   build:
