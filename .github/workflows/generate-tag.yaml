@@ -3,7 +3,7 @@ name: generate-tag
 on:
   push:
     branches:
-      - dev-create-tag-fix
+      - dev
 
 jobs:
   build:
