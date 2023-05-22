@@ -53,7 +53,7 @@ public class ScheduleEfcDao : IScheduleDao
             StartTime = i.StartTime,
             EndTime = i.EndTime
         }).ToListAsync() ?? new List<IntervalDto>();
-        
+
         return intervalDtos;
     }
 
@@ -85,17 +85,20 @@ public class ScheduleEfcDao : IScheduleDao
 
     public async Task PutAsync(IntervalDto dto)
     {
-        Interval interval = new Interval()
-        {
-            Id = dto.Id,
-            DayOfWeek = dto.DayOfWeek,
-            EndTime = dto.EndTime,
-            StartTime = dto.StartTime
-        };
-        _context.Intervals.Update(interval);
+	    Interval? interval = await _context.Intervals.FindAsync(dto.Id);
+
+	    if (interval == null)
+	    {
+		    return;
+	    }
+
+	    interval.EndTime = dto.EndTime;
+	    interval.StartTime = dto.StartTime;
+	    interval.DayOfWeek = interval.DayOfWeek;
+
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task<IntervalDto> GetByIdAsync(int id)
     {
         Interval? interval= await _context.Intervals.FirstOrDefaultAsync(i => i.Id == id);
