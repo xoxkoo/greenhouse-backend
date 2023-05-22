@@ -1,5 +1,5 @@
 name: generate-tag
-
+#only on accepted pull request
 on:
   pull_request:
     branches:
