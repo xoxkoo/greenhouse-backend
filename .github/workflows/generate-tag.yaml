@@ -1,7 +1,7 @@
 name: generate-tag
 
 on:
-  push:
+  pull_request:
     branches:
       - dev
 
@@ -33,33 +33,38 @@ jobs:
 
       - name: Get last release tag
         id: get_last_tag
-        run: echo ::set-output name=tag::$(git describe --tags --abbrev=0)
+        run: |
+          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "::set-output name=tag::${last_tag}"
 
       - name: Increment tag version
         id: increment_tag
         run: |
           last_tag=${{ steps.get_last_tag.outputs.tag }}
+          if [[ "${last_tag}" == "v0.0.0" ]]; then
+            new_tag="v0.1.0"
+          else
           tag_parts=(${last_tag//./ })
-          major=${tag_parts[0]}
-          minor=${tag_parts[1]}
-          patch=${tag_parts[2]}
-          increment=${{ steps.determine_version.outputs.increment }}
+            major=${tag_parts[0]}
+            minor=${tag_parts[1]}
+            patch=${tag_parts[2]}
+            increment=${{ steps.determine_version.outputs.increment }}
 
-          case $increment in
-            major)
-              new_major=$((major + 1))
-              new_tag="${new_major}.${minor}.${patch}"
-              ;;
-            minor)
-              new_minor=$((minor + 1))
-              new_tag="${major}.${new_minor}.${patch}"
-              ;;
-            patch)
-              new_patch=$((patch + 1))
-              new_tag="${major}.${minor}.${new_patch}"
-              ;;
-          esac
-
+            case $increment in
+              major)
+                new_major=$((major + 1))
+                new_tag="${new_major}.${minor}.${patch}"
+                ;;
+              minor)
+                new_minor=$((minor + 1))
+                new_tag="${major}.${new_minor}.${patch}"
+                ;;
+              patch)
+                new_patch=$((patch + 1))
+                new_tag="${major}.${minor}.${new_patch}"
+                ;;
+            esac
+          fi
           echo "::set-output name=tag::${new_tag}"
 
       - name: Generate release tag and push tag
