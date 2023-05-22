@@ -15,10 +15,10 @@ public class PresetController : ControllerBase
     {
         _logic = logic;
     }
-    
+
     [Route("preset")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PresetDto>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<PresetEfcDto>>> GetAsync()
     {
         try
         {
@@ -35,7 +35,7 @@ public class PresetController : ControllerBase
 
     [Route("current-preset")]
     [HttpGet]
-    public async Task<ActionResult<PresetDto>> GetCurrentAsync()
+    public async Task<ActionResult<PresetEfcDto>> GetCurrentAsync()
     {
         try
         {
@@ -50,6 +50,7 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
     [Route("preset")]
     [HttpPost]
     public async Task<ActionResult<PresetEfcDto>> CreateAsync([FromBody] PresetCreationDto dto)
@@ -92,16 +93,32 @@ public class PresetController : ControllerBase
     [Route("current-preset")]
     public async Task<ActionResult> ApplyAsync([FromBody] int id)
     {
-	    try
-	    {
-		    await _logic.ApplyAsync(id);
-		    return Ok();
-	    }
-	    catch (Exception e)
-	    {
-		    Console.WriteLine(e);
-		    throw;
-	    }
+        try
+        {
+            await _logic.ApplyAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [Route("preset/{id:int}")]
+    [HttpGet]
+    public async Task<ActionResult<PresetEfcDto>> GetByIdAsync([FromRoute] int id)
+    {
+        try
+        {
+            var preset = await _logic.GetByIdAsync(id);
+            return Ok(preset);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
     }
     [Route("preset/{id:int}")]
     [HttpDelete]

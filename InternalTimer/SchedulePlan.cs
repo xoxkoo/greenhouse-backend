@@ -27,20 +27,20 @@ public class SchedulePlan : IJob
 			// clear all previous intervals
 			if (intervals.Count() <= maxIntervals)
 			{
-				string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto(){Intervals = intervals}, true);
+				string? hexPayload = converter?.ConvertIntervalToHex(intervals, true);
 				socket.Send(hexPayload);
 			}
 			else
 			{
 				// clear all previous intervals
 				var intervalsToSend = intervals.Take(maxIntervals);
-				string? hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto() { Intervals = intervalsToSend }, true);
+				string? hexPayload = converter?.ConvertIntervalToHex( intervalsToSend , true);
 
 				// Send remaining intervals in groups of 5
 				for (int i = maxIntervals; i < intervals.Count(); i += maxIntervals)
 				{
 					intervalsToSend = intervals.Skip(i).Take(maxIntervals);
-					hexPayload = converter?.ConvertIntervalToHex(new ScheduleToSendDto { Intervals = intervalsToSend });
+					hexPayload = converter?.ConvertIntervalToHex( intervalsToSend);
 					socket?.Send(hexPayload);
 				}
 			}

@@ -103,10 +103,10 @@ public class Converter : IConverter
      *
      * @param intervals
      */
-    public string ConvertIntervalToHex(ScheduleToSendDto intervals, bool clear = false)
+    public string ConvertIntervalToHex(IEnumerable<IntervalToSendDto> intervals, bool clear = false)
     {
 	    // max allowed count is 7
-	    if (intervals.Intervals.Count() > 7)
+	    if (intervals.Count() > 7)
 	    {
 		    throw new Exception("Too many intervals");
 	    }
@@ -117,7 +117,7 @@ public class Converter : IConverter
 	    string payloadBinary = (clear) ? "11" : "10";
 
 	    // loop through the intervals and convert
-	    foreach (var interval in intervals.Intervals)
+	    foreach (var interval in intervals)
 	    {
 
 		    int startHours = interval.StartTime.Hours;
@@ -161,9 +161,16 @@ public class Converter : IConverter
 		    throw new NullReferenceException("Thresholds cannot be null");
 	    }
 
-	    if (thresholds.Count() == 0)
+	    if (thresholds.Count() != 3)
 	    {
-		    throw new Exception("In the preset there have to be at least one threshold");
+		    throw new Exception("In the preset there have to be three thresholds");
+	    }
+	    
+	    foreach (var t in thresholds)
+	    {
+		    if (t.Type.ToLower() != "temperature" && t.Type.ToLower() != "co2" && t.Type.ToLower() != "humidity")		    {
+			    throw new Exception("In the preset the types of the thresholds have to be: temperature, co2 or humidity");
+		    }
 	    }
 
 	    //Temperature range - 22 bits
@@ -183,7 +190,7 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
 	    }
 
-
+	    
 	    //Humidity range - 14 bits
 	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
 	    if (humidityThreshold == null)

@@ -9,12 +9,12 @@ public class Context : DbContext
 	public DbSet<Humidity> Humidities { get; set; }
 	public DbSet<Temperature> Temperatures { get; set; }
 	public DbSet<CO2> CO2s { get; set; }
-	public DbSet<Schedule> Schedules { get; set; }
 	public DbSet<Interval> Intervals { get; set; }
 	public DbSet<ValveState> ValveState { get; set; }
 	public DbSet<Email> Mails { get; set; }
 	public DbSet<Preset> Presets { get; set; }
 	public DbSet<Threshold> Thresholds { get; set; }
+	public DbSet<User> Users { get; set; }
 	public Context()
 	{
 

@@ -1,3 +1,4 @@
+using Domain.Entities;
 using EfcDataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

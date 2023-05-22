@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/email")]
 public class EmailController : ControllerBase
 {
     private readonly IEmailLogic _logic;

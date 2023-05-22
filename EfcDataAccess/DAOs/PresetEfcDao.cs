@@ -61,15 +61,11 @@ public class PresetEfcDao : IPresetDao
         {
             throw new ArgumentNullException(nameof(preset), "Preset data cannot be null");
         }
+
+
         EntityEntry<Preset> entity = await _context.Presets.AddAsync(preset);
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Failed to save changes to database", ex);
-        }
+        await _context.SaveChangesAsync();
+
 
         IEnumerable<ThresholdDto> thresholdDtos = entity.Entity.Thresholds?.Select(t => new ThresholdDto
         {
@@ -107,13 +103,18 @@ public class PresetEfcDao : IPresetDao
     {
         try
         {
-            Preset? preset = await _context.Presets.FindAsync(id);
+            var list = _context.Presets.AsQueryable();
+            list = list.Include(p => p.Thresholds);
+            Preset? preset = await list.Where(p => p.Id == id).FirstOrDefaultAsync();
+
+            Console.WriteLine(preset.Id);
+            
             if (preset == null)
             {
                 return null;
             }
-            EntityEntry<Preset> entity = _context.Entry(preset);
-            return entity.Entity;
+
+            return preset;
         }
         catch (Exception e)
         {
@@ -144,7 +145,7 @@ public class PresetEfcDao : IPresetDao
             preset.IsCurrent = false;
             _context.Presets.Update(preset);
         }
-        Preset? presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
+        Preset presetToBeCurrent = await _context.Presets.FirstOrDefaultAsync(p => p.Id == id);
         if (presetToBeCurrent == null)
         {
             throw new Exception($"Preset with id {id} not found");

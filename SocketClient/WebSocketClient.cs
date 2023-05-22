@@ -58,7 +58,6 @@ namespace SocketClient
 	            {
 		            string message = Encoding.ASCII.GetString(receiveBuffer, 0, receiveResult.Count);
 
-		            //todo maybe this should be handled differently
 		            // check for the object that we want to receive
 		            if (message.Substring(1,10).Equals("\"cmd\":\"rx\""))
 		            {

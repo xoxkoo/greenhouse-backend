@@ -1,6 +1,4 @@
-using Domain.Entities;
-
-namespace Domain.DTOs.CreationDTOs;
+﻿namespace Domain.DTOs;
 
 public class PresetCreationDto
 {

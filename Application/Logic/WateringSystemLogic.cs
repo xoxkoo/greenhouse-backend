@@ -51,7 +51,7 @@ public class WateringSystemLogic : IWateringSystemLogic
         string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
 
         await _socketServer.Connect();
-        _socketServer.Send(payload);
+        await _socketServer.Send(payload);
         await _socketServer.Disconnect();
 
         return await _wateringSystemDao.CreateAsync(entity);
