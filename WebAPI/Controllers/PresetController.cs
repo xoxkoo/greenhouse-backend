@@ -59,7 +59,7 @@ public class PresetController : ControllerBase
         {
 	        PresetEfcDto created = await _logic.CreateAsync(dto);
 
-            return Ok(created);
+            return Created($"/preset/{created.Id}", created);
         }
         catch (Exception e)
         {

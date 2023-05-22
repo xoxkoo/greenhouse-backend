@@ -9,5 +9,4 @@ public class Interval
 	public TimeSpan StartTime { get; set; }
 	public TimeSpan EndTime { get; set; }
 	public DayOfWeek DayOfWeek { get; set; }
-	public int ScheduleId { get; set; }
 }
