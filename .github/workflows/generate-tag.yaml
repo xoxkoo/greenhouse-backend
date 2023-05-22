@@ -41,30 +41,32 @@ jobs:
         id: increment_tag
         run: |
           last_tag=${{ steps.get_last_tag.outputs.tag }}
-          if [[ "${last_tag}" == "v0.0.0" ]]; then
-            new_tag="v0.1.0"
-          else
-            tag_parts=(${last_tag//./ })
-            major=${tag_parts[0]}
-            minor=${tag_parts[1]}
-            patch=${tag_parts[2]}
-            increment=${{ steps.determine_version.outputs.increment }}
+          tag_parts=(${last_tag//./ })
+          major=${tag_parts[0]}
+          minor=${tag_parts[1]}
+          patch=${tag_parts[2]}
+          increment=${{ steps.determine_version.outputs.increment }}
 
-            case $increment in
-              major)
-                new_major=$((major + 1))
-                new_tag="${new_major}.${minor}.${patch}"
-                ;;
-              minor)
-                new_minor=$((minor + 1))
-                new_tag="${major}.${new_minor}.${patch}"
-                ;;
-              patch)
-                new_patch=$((patch + 1))
-                new_tag="${major}.${minor}.${new_patch}"
-                ;;
-            esac
-          fi
+          case $increment in
+            major)
+              new_major=$((major + 1))
+              new_tag="${new_major}.${minor}.${patch}"
+              ;;
+            minor)
+              new_minor=$((minor + 1))
+              new_tag="${major}.${new_minor}.${patch}"
+              ;;
+            patch)
+              new_patch=$((patch + 1))
+              new_tag="${major}.${minor}.${new_patch}"
+              ;;
+          esac
+
+          while git rev-parse --verify --quiet "${new_tag}" >/dev/null; do
+            new_patch=$((new_patch + 1))
+            new_tag="${major}.${minor}.${new_patch}"
+          done
+
           echo "::set-output name=tag::${new_tag}"
 
       - name: Generate release tag and push tag
