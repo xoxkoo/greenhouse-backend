@@ -32,7 +32,7 @@ public class ScheduleController : ControllerBase
                 intervalDtosToLogic.Add(newInterval);
             }
             IEnumerable<IntervalDto> intervalDtos = await Logic.CreateAsync(intervalDtosToLogic);
-            return Ok(intervalDtos);
+            return Created($"/intervals/{intervalDtos}", intervalDtos);
         }
         catch (Exception e)
         {

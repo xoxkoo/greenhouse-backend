@@ -158,7 +158,7 @@ public class PresetControllerTests
         var result = await _presetController.CreateAsync(presetCreationDto);
 
         // Assert
-        var okObjectResult = result.Result as OkObjectResult;
+        var okObjectResult = result.Result as CreatedResult;
         Assert.IsNotNull(okObjectResult);
         var createdPreset = okObjectResult.Value as PresetEfcDto;
         Assert.IsNotNull(createdPreset);

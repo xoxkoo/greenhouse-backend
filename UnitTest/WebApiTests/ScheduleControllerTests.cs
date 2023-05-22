@@ -58,8 +58,8 @@ public class ScheduleControllerTests
 
 
         // Assert
-        Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
-        OkObjectResult createdResult = (OkObjectResult)result.Result;
+        Assert.IsInstanceOfType(result.Result, typeof(CreatedResult));
+        CreatedResult createdResult = (CreatedResult)result.Result;
         Assert.AreEqual(intervals, createdResult.Value);
     }
 
