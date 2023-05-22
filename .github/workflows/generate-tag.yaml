@@ -63,7 +63,7 @@ jobs:
           esac
 
           while git rev-parse --verify --quiet "${new_tag}" >/dev/null; do
-            new_patch=$((new_minor + 1))
+            new_minor=$((new_minor + 1))
             new_tag="${major}.${new_minor}.${patch}"
           done
 
