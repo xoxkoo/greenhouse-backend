@@ -128,12 +128,12 @@ public class PresetControllerTests
         Assert.IsNotNull(statusCodeResult);
         Assert.AreEqual(500, statusCodeResult.StatusCode);
     }
-    
+
     [TestMethod]
     public async Task CreateAsync_ReturnsOkResult()
     {
         // Arrange
-        var presetCreationDto = new PresetEfcDto()
+        var presetCreationDto = new PresetCreationDto()
         {
             Name = "Test Preset",
             Thresholds = new List<ThresholdDto>
@@ -171,7 +171,7 @@ public class PresetControllerTests
     public async Task CreateAsync_ReturnsInternalServerError_OnException()
     {
         // Arrange
-        var presetCreationDto = new PresetEfcDto()
+        var presetCreationDto = new PresetCreationDto()
         {
             Name = "Test Preset",
             Thresholds = new List<ThresholdDto>

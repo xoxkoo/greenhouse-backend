@@ -103,7 +103,7 @@ public class Converter : IConverter
      *
      * @param intervals
      */
-    public string ConvertIntervalToHex(IEnumerable<IntervalToSendDto> intervals)
+    public string ConvertIntervalToHex(IEnumerable<IntervalToSendDto> intervals, bool clear = false)
     {
 	    // max allowed count is 7
 	    if (intervals.Count() > 7)
@@ -111,9 +111,10 @@ public class Converter : IConverter
 		    throw new Exception("Too many intervals");
 	    }
 
-	    // set the ide to be 2 (2 -> 10 in binary)
-	    string payloadBinary = "10";
-
+	    // set the ide to be 2 or 3, depending if we want to clear intervals
+	    // (2 -> 10 in binary) - clear intervals
+	    // (3 -> 11 in binary) - append intervals
+	    string payloadBinary = (clear) ? "11" : "10";
 
 	    // loop through the intervals and convert
 	    foreach (var interval in intervals)
@@ -167,7 +168,7 @@ public class Converter : IConverter
 	    
 	    foreach (var t in thresholds)
 	    {
-		    if (t.Type != "temperature" && t.Type != "co2" && t.Type != "humidity")		    {
+		    if (t.Type.ToLower() != "temperature" && t.Type.ToLower() != "co2" && t.Type.ToLower() != "humidity")		    {
 			    throw new Exception("In the preset the types of the thresholds have to be: temperature, co2 or humidity");
 		    }
 	    }
@@ -208,7 +209,7 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)humidityThreshold.Max, 7));
 	    }
 
-	    
+
 	    //CO2 range - 24 bits
 	    ThresholdDto co2Threshold = thresholds.FirstOrDefault(t => t.Type.Equals("co2"));
 	    if (co2Threshold == null)
@@ -237,8 +238,8 @@ public class Converter : IConverter
         //TODO handle flags
         string flags = data.Substring(0, 8);
         string temperature = data.Substring(8, 11);
-        string humidity = data.Substring(19, 7);
-        string co2 = data.Substring(26, 12);
+        string humidity = data.Substring(19, 10);
+        string co2 = data.Substring(29, 13);
 
         float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
 
@@ -261,7 +262,7 @@ public class Converter : IConverter
         await co2Logic.CreateAsync(co2Dto);
         await humidityLogic.CreateAsync(humidityDto);
         await temperatureLogic.CreateAsync(tempDto);
-        
+
         await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }

@@ -1,0 +1,76 @@
+name: generate-tag
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Determine version increment
+        id: determine_version
+        run: |
+          commit_message=$(git log --format=%B -n 1 ${{ github.sha }})
+          if [[ $commit_message == *"#major"* ]]; then
+            echo "::set-output name=increment::major"
+          elif [[ $commit_message == *"#minor"* ]]; then
+            echo "::set-output name=increment::minor"
+          elif [[ $commit_message == *"#patch"* ]]; then
+            echo "::set-output name=increment::patch"
+          else
+            echo "::set-output name=increment::minor"
+          fi
+
+      - name: Get last release tag
+        id: get_last_tag
+        run: |
+          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "::set-output name=tag::${last_tag}"
+
+      - name: Increment tag version
+        id: increment_tag
+        run: |
+          last_tag=${{ steps.get_last_tag.outputs.tag }}
+          if [[ "${last_tag}" == "v0.0.0" ]]; then
+            new_tag="v0.1.0"
+          else
+          tag_parts=(${last_tag//./ })
+            major=${tag_parts[0]}
+            minor=${tag_parts[1]}
+            patch=${tag_parts[2]}
+            increment=${{ steps.determine_version.outputs.increment }}
+
+            case $increment in
+              major)
+                new_major=$((major + 1))
+                new_tag="${new_major}.${minor}.${patch}"
+                ;;
+              minor)
+                new_minor=$((minor + 1))
+                new_tag="${major}.${new_minor}.${patch}"
+                ;;
+              patch)
+                new_patch=$((patch + 1))
+                new_tag="${major}.${minor}.${new_patch}"
+                ;;
+            esac
+          fi
+          echo "::set-output name=tag::${new_tag}"
+
+      - name: Generate release tag and push tag
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ steps.increment_tag.outputs.tag }}
+          WITH_V: true
+          PRERELEASE: true

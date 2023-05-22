@@ -25,7 +25,7 @@ public class EmailController : ControllerBase
         try
         {
             EmailDto created = await _logic.CreateAsync(dto);
-            return Ok(created);
+            return Created("/email", created);
         }
         catch (Exception e)
         {
