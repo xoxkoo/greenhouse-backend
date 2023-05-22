@@ -37,6 +37,18 @@ jobs:
           last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           echo "::set-output name=tag::${last_tag}"
 
+      - name: Extract custom tag from commit message
+        id: extract_custom_tag
+        run: |
+          commit_message=$(git log --format=%B -n 1 ${{ github.sha }})
+          tag_regex="#custom-v([0-9]+\.[0-9]+\.[0-9]+)"
+          if [[ $commit_message =~ $tag_regex ]]; then
+            custom_tag="${BASH_REMATCH[1]}"
+            echo "::set-output name=custom_tag::${custom_tag}"
+          else
+            echo "::set-output name=custom_tag::"
+          fi
+            
       - name: Increment tag version
         id: increment_tag
         run: |
@@ -73,6 +85,6 @@ jobs:
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ steps.increment_tag.outputs.tag }}
+          CUSTOM_TAG: ${{ steps.extract_custom_tag.outputs.custom_tag }}
           WITH_V: true
           PRERELEASE: true #
