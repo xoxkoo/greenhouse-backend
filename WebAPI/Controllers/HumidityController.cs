@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/humidity")]
 public class HumidityController:ControllerBase
 {
     private readonly IHumidityLogic _logic;

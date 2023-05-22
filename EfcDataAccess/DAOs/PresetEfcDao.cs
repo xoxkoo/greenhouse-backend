@@ -64,14 +64,8 @@ public class PresetEfcDao : IPresetDao
             throw new ArgumentNullException(nameof(preset), "Preset data cannot be null");
         }
         EntityEntry<Preset> entity = await _context.Presets.AddAsync(preset);
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Failed to save changes to database", ex);
-        }
+        await _context.SaveChangesAsync();
+
 
         IEnumerable<ThresholdDto> thresholdDtos = entity.Entity.Thresholds?.Select(t => new ThresholdDto
         {

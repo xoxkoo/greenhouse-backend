@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/schedule")]
 public class ScheduleController : ControllerBase
 {
     private readonly IScheduleLogic Logic;

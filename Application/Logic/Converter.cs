@@ -160,9 +160,16 @@ public class Converter : IConverter
 		    throw new NullReferenceException("Thresholds cannot be null");
 	    }
 
-	    if (thresholds.Count() == 0)
+	    if (thresholds.Count() != 3)
 	    {
-		    throw new Exception("In the preset there have to be at least one threshold");
+		    throw new Exception("In the preset there have to be three thresholds");
+	    }
+	    
+	    foreach (var t in thresholds)
+	    {
+		    if (t.Type != "temperature" && t.Type != "co2" && t.Type != "humidity")		    {
+			    throw new Exception("In the preset the types of the thresholds have to be: temperature, co2 or humidity");
+		    }
 	    }
 
 	    //Temperature range - 22 bits
