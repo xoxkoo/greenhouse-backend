@@ -64,7 +64,7 @@ jobs:
 
           while git rev-parse --verify --quiet "${new_tag}" >/dev/null; do
             new_patch=$((new_minor + 1))
-            new_tag="${major}.${minor}.${new_patch}"
+            new_tag="${major}.${new_minor}.${patch}"
           done
 
           echo "::set-output name=tag::${new_tag}"
