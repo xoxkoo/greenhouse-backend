@@ -19,7 +19,6 @@ public class Context : DbContext
 	{
 
 	}
-
 	public Context(DbContextOptions<Context> options) : base(options)
 	{
 	}
@@ -27,7 +26,6 @@ public class Context : DbContext
 	{
 		// loads environment variables and sets the path
 		DotNetEnv.Env.TraversePath().Load();
-		Console.WriteLine($"{DotNetEnv.Env.GetString("DB_CONNECTION")};");
 		// optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
 	    optionsBuilder.UseNpgsql($"{DotNetEnv.Env.GetString("DB_CONNECTION")}");
 

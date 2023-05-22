@@ -58,7 +58,7 @@ public class PresetLogic : IPresetLogic
         return result;
     }
     
-    public async Task<PresetEfcDto> CreateAsync(PresetEfcDto dto)
+    public async Task<PresetEfcDto> CreateAsync(PresetCreationDto dto)
     {
         ValidateInput(dto);
 
@@ -75,6 +75,19 @@ public class PresetLogic : IPresetLogic
         return await _presetDao.CreateAsync(preset);
     }
 
+    public async Task DeleteAsync(int id)
+    {
+        Preset? existing = await _presetDao.GetByIdAsync(id);
+        if (existing == null)
+        {
+            throw new Exception($"Preset with ID {id} not found!");
+        }
+        if (existing.IsCurrent)
+        {
+            throw new Exception($"Preset with ID {id} is currently applied and therefore cannot be removed!");
+        }
+        await _presetDao.DeleteAsync(existing);
+    }
 
     public async Task<PresetEfcDto> UpdateAsync(PresetEfcDto dto)
     {
@@ -110,8 +123,7 @@ public class PresetLogic : IPresetLogic
     public async Task<PresetEfcDto> GetByIdAsync(int id)
     {
         SearchPresetParametersDto parametersDto = new SearchPresetParametersDto(id, true);
-        var presets = await _presetDao.GetAsync(parametersDto);
-        var preset = presets.FirstOrDefault();
+        var preset = await _presetDao.GetByIdAsync(id);
         if (preset == null)
         {
             throw new Exception(
@@ -124,8 +136,8 @@ public class PresetLogic : IPresetLogic
         {
             ThresholdDto thresholdDto = new ThresholdDto()
             {
-                Max = t.Max,
-                Min = t.Min
+                Max = t.MaxValue,
+                Min = t.MinValue
             };
             thresholdDtos.Add(thresholdDto);
         }
@@ -140,7 +152,7 @@ public class PresetLogic : IPresetLogic
         return presetEfcDto;
     }
 
-    private void ValidateInput(PresetEfcDto dto)
+    private void ValidateInput(PresetCreationDto dto)
     {
         if (dto == null)
         {

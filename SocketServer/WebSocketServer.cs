@@ -16,7 +16,7 @@ public class WebSocketServer : IWebSocketServer
 	/**
 	 * Connect to the websocket server with  uri
 	 */
-	private async Task Connect()
+	public async Task Connect()
 	{
 		try
 		{
@@ -36,7 +36,6 @@ public class WebSocketServer : IWebSocketServer
 
 	public async Task Send(string hexData)
 	{
-		await Connect();
 
 		if (_webSocket.State == WebSocketState.Open)
 		{
@@ -52,11 +51,17 @@ public class WebSocketServer : IWebSocketServer
 			byte[] sendBuffer = Encoding.UTF8.GetBytes(json);
 			await _webSocket.SendAsync(new ArraySegment<byte>(sendBuffer), WebSocketMessageType.Text, true, CancellationToken.None);
 
-			Console.WriteLine("Message sent!");
+			Console.WriteLine("Message {" + hexData + "} was sent!");
 		}
 		else
 		{
 			Console.WriteLine("WebSocket connection is not open!");
 		}
+	}
+
+	public async Task Disconnect()
+	{
+		await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing the connection", CancellationToken.None);
+		Console.WriteLine("WebSocket connection is closed!");
 	}
 }

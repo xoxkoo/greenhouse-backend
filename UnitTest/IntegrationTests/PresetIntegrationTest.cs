@@ -244,7 +244,7 @@ public class PresetIntegrationTest : DbTestBase
     public async Task CreateAsync_ReturnsCreatedPreset()
     {
         // Arrange
-        var presetDto = new PresetEfcDto
+        var presetDto = new PresetCreationDto()
         {
             Name = "New Preset",
             Thresholds = new List<ThresholdDto>
@@ -274,7 +274,7 @@ public class PresetIntegrationTest : DbTestBase
     public async Task CreateAsync_ReturnsBadRequestOnNullDto()
     {
         // Arrange
-        PresetEfcDto presetDto = null;
+        PresetCreationDto presetDto = null;
 
         // Act
         var response = await _controller.CreateAsync(presetDto);
@@ -290,7 +290,7 @@ public class PresetIntegrationTest : DbTestBase
     public async Task CreateAsync_ReturnsCreatedPresetWithZeroThresholds()
     {
         // Arrange
-        var presetDto = new PresetEfcDto
+        var presetDto = new PresetCreationDto()
         {
             Name = "New Preset",
             Thresholds = new List<ThresholdDto>()

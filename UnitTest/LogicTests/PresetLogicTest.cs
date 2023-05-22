@@ -139,7 +139,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenHumidityThresholdValueIsOutOfRange()
     {
         // Arrange
-        PresetEfcDto dto = new PresetEfcDto()
+        PresetCreationDto dto = new PresetCreationDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -156,7 +156,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentNullException_WhenDtoIsNull()
     {
         // Arrange
-        PresetEfcDto dto = null;
+        PresetCreationDto dto = null;
 
         // Act and Assert
         var exception = await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => _presetLogic.CreateAsync(dto));
@@ -167,7 +167,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenThresholdsIsNull()
     {
         // Arrange
-        PresetEfcDto dto = new PresetEfcDto()
+        PresetCreationDto dto = new PresetCreationDto()
         {
             Thresholds = null
         };
@@ -180,7 +180,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenThresholdsCountIsNotThree()
     {
         // Arrange
-        PresetEfcDto dto = new PresetEfcDto()
+        PresetCreationDto dto = new PresetCreationDto()
         {
             Thresholds = new List<ThresholdDto> { new ThresholdDto(), new ThresholdDto() }
         };
@@ -212,7 +212,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenThresholdTypeIsInvalid()
     {
         // Arrange
-        PresetEfcDto dto = new PresetEfcDto()
+        PresetCreationDto dto = new PresetCreationDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -231,7 +231,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenMinValueIsBiggerThanMaxValue()
     {
         // Arrange
-        PresetEfcDto dto = new PresetEfcDto()
+        PresetCreationDto dto = new PresetCreationDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -250,7 +250,7 @@ public class PresetLogicTest
     public async Task CreateAsync_ThrowsArgumentException_WhenCO2ThresholdValueIsOutOfRange()
     {
         // Arrange
-        PresetEfcDto dto = new PresetEfcDto()
+        PresetCreationDto dto = new PresetCreationDto()
         {
             Thresholds = new List<ThresholdDto>
             {
@@ -269,7 +269,7 @@ public class PresetLogicTest
     {
         // Arrange
         // Arrange
-        PresetEfcDto dto = new PresetEfcDto()
+        PresetCreationDto dto = new PresetCreationDto()
         {
             Name = "Test Preset",
             Thresholds = new List<ThresholdDto>
@@ -293,4 +293,42 @@ public class PresetLogicTest
         Assert.AreEqual(expectedResult, result);
         _mockPresetDao.Verify(x => x.CreateAsync(It.IsAny<Preset>()), Times.Once);
     }
+   
+    [TestMethod]
+    public async Task DeleteAsync_ReturnsNull()
+    {
+       // Arrange
+        int id=1;
+        _mockPresetDao
+            .Setup(x => x.GetByIdAsync(id)).ReturnsAsync((Preset)null);
+
+        //Act and Assert
+        var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _presetLogic.DeleteAsync(id));
+        Assert.AreEqual($"Preset with ID {id} not found!", exception.Message);
+    }
+    
+    [TestMethod]
+    public async Task DeleteAsync_PresetIsApplied()
+    {
+        // Arrange
+        int id=1;
+        Preset preset = new Preset
+        {
+            Id=1,
+            Thresholds = new List<Threshold>
+            {
+                new Threshold(),
+                new Threshold()
+            },
+            IsCurrent=true,
+            Name="Test preset"
+        };
+        _mockPresetDao
+            .Setup(x => x.GetByIdAsync(id)).ReturnsAsync(preset);
+
+        //Act and Assert
+        var exception = await Assert.ThrowsExceptionAsync<Exception>(() => _presetLogic.DeleteAsync(id));
+        Assert.AreEqual($"Preset with ID {id} is currently applied and therefore cannot be removed!", exception.Message);
+    }
+   
 }
