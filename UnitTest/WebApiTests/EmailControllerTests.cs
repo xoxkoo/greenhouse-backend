@@ -50,8 +50,8 @@ public class EmailControllerTests
         var result = await _emailController.CreateAsync(emailDto);
 
         // Assert
-        Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
-        var okResult = (OkObjectResult)result.Result;
+        Assert.IsInstanceOfType(result.Result, typeof(CreatedResult));
+        var okResult = (CreatedResult)result.Result;
         Assert.AreEqual(createdDto, okResult.Value);
     }
     
