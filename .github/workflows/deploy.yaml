@@ -18,7 +18,9 @@ jobs:
 
       - name: Configure Docker
         run: |
-          gcloud auth configure-docker --quiet
+          Get-Content { secrets.SERVICE_ACCOUNT_KEY } |
+          docker login -u _json_key --password-stdin https://eu.gcr.io
+          #gcloud auth configure-docker --quiet
 
       - name: Build and Push Docker Images
         run: |
