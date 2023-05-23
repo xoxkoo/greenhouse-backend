@@ -1,6 +1,4 @@
-﻿name: deploy_to_cluster
-
-on:
+﻿on:
   workflow_call:
 
 jobs:
@@ -11,10 +9,7 @@ jobs:
       - name: Authenticate with Google Cloud
         uses: google-github-actions/setup-gcloud@v0.5.0
         with:
-          project_id: noted-palisade-385613
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-      - name: Login to Google Cloud
-        run: gcloud auth login --quiet
       - name: Configure kubectl
         run: gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
       - name: Apply deployment
