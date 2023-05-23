@@ -18,8 +18,8 @@ jobs:
 
       - name: Configure Docker
         run: |
-          Get-Content noted-palisade-385613-8b4261eb7e3b (1) |
-          docker login -u _json_key --password-stdin https://eu.gcr.io
+          echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > key.json
+          docker login -u _json_key --password-stdin https://eu.gcr.io < key.json
           #gcloud auth configure-docker --quiet
 
       - name: Build and Push Docker Images
