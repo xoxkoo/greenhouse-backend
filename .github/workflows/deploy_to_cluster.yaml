@@ -14,10 +14,12 @@ jobs:
         with:
           project_id: noted-palisade-385613
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-      - name: get user     
-        run:
-          gcloud auth list
-      - name: Configure kubectl
-        run: gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
+      - name: Set up Kubernetes
+        run: |
+          echo "$KUBECONFIG" > kubeconfig.yaml
+          gcloud auth activate-service-account --key-file=kubeconfig.yaml
+          gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}     
       - name: Apply deployment
         run: kubectl apply -f deployment.yaml
