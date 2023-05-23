@@ -1,0 +1,28 @@
+﻿
+name: deploy
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
+jobs:
+  push-images:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.5.0
+        with:
+          project_id: noted-palisade-385613
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker --quiet
+
+      - name: Build and Push Docker Image
+        run: |
+          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-webapi:v1
