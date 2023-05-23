@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.682" branch-rate="0.65" version="1.9" timestamp="1684837965" lines-covered="1195" lines-valid="1752" branches-covered="260" branches-valid="400">
+<coverage line-rate="0.682" branch-rate="0.65" version="1.9" timestamp="1684838647" lines-covered="1195" lines-valid="1752" branches-covered="260" branches-valid="400">
   <sources>
     <source>/home/runner/work/greenhouse-backend/greenhouse-backend/</source>
   </sources>
