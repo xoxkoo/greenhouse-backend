@@ -11,6 +11,7 @@ jobs:
         with:
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
           service_account_email: greenhouse@noted-palisade-385613.iam.gserviceaccount.com
+      - name: get user     
         run:
           gcloud auth list
       - name: Configure kubectl
