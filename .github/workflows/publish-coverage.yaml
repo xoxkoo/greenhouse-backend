@@ -23,8 +23,13 @@ jobs:
           dotnet build
           dotnet test --collect:"XPlat Code Coverage" --results-directory:"./TestResults"  # Replace with your MSTest command
 
+      - name: Copy code coverage results
+        run: |
+          mkdir -p ./docs
+          cp -R ./TestResults/. ./docs
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./TestResults  # Replace with 
+          publish_dir: ./docs
