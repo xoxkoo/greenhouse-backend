@@ -15,11 +15,11 @@ jobs:
       - name: Build and run tests
         run: |
           dotnet build
-          dotnet test --collect:"XPlat Code Coverage" --results-directory:"./UnitTest/TestResults"
+          dotnet test --collect:"XPlat Code Coverage" --results-directory:"./UnitTest/TestResults/83ff94a8-74ae-45bc-bba9-8cfbddfaf090"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./UnitTest/TestResults
+          publish_dir: ./UnitTest/TestResults/83ff94a8-74ae-45bc-bba9-8cfbddfaf090
           publish_branch: gh-pages
