@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.4407" branch-rate="0.65" version="1.9" timestamp="1684840957" lines-covered="1195" lines-valid="2711" branches-covered="260" branches-valid="400">
+<coverage line-rate="0.4407" branch-rate="0.65" version="1.9" timestamp="1684848875" lines-covered="1195" lines-valid="2711" branches-covered="260" branches-valid="400">
   <sources>
     <source>C:\Users\natal\RiderProjects\greenhouse-backend\</source>
   </sources>
