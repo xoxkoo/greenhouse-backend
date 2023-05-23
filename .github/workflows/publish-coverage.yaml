@@ -26,5 +26,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CR_PAT }}
-          publish_dir: coverage-report
+          publish_dir: ./coverage-report
           publish_branch: gh-pages
