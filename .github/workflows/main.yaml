@@ -3,11 +3,13 @@ name: main
 on:
   push:
     branches:
-    - dev-docker_image
+    - dev-create_automated_deployment
 jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
-
+  deploy_to_cluster:
+    name: deploy to cluster
+    uses: ./.github/workflows/deploy_to_cluster.yaml
   
 

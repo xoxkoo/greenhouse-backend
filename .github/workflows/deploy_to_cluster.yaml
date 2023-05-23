@@ -1,0 +1,10 @@
+﻿name: deploy_to_cluster
+
+on:
+  workflow_call:
+jobs:
+  steps:
+    - name: use command
+      run: |
+        gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
+        kubectl apply -f deployment.yaml
