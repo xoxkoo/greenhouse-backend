@@ -2,9 +2,20 @@
 
 on:
   workflow_call:
+
 jobs:
-  steps:
-    - name: use command
-      run: |
-        gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
-        kubectl apply -f deployment.yaml
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/setup-gcloud@v0.3.0
+        with:
+          project_id: noted-palisade-385613
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
+      - name: Configure kubectl
+        run: gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
+
+      - name: Apply deployment
+        run: kubectl apply -f deployment.yaml
