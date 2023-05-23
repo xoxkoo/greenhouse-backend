@@ -1,6 +1,5 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.CreationDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -26,6 +25,11 @@ public class PresetController : ControllerBase
             var presets = await _logic.GetAsync(parametersDto);
             return Ok(presets);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -44,13 +48,18 @@ public class PresetController : ControllerBase
             var preset = presets.FirstOrDefault();
             return Ok(preset);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [Route("preset")]
     [HttpPost]
     public async Task<ActionResult<PresetEfcDto>> CreateAsync([FromBody] PresetCreationDto dto)
@@ -61,6 +70,11 @@ public class PresetController : ControllerBase
 
             return Created($"/preset/{created.Id}", created);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -69,7 +83,7 @@ public class PresetController : ControllerBase
     }
 
     [HttpPut("preset/{id:int}")]
-    public async Task<ActionResult<PresetEfcDto>> UpdateAsync(int id, [FromBody] PresetEfcDto dto)
+    public async Task<ActionResult<PresetEfcDto>> UpdateAsync([FromRoute] int id, [FromBody] PresetEfcDto dto)
     {
 	    try
 	    {
@@ -81,6 +95,11 @@ public class PresetController : ControllerBase
 		    PresetEfcDto updated = await _logic.UpdateAsync(dto);
 
 		    return Ok(updated);
+	    }
+	    catch (ArgumentException e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(400, e.Message);
 	    }
 	    catch (Exception e)
 	    {
@@ -98,13 +117,18 @@ public class PresetController : ControllerBase
             await _logic.ApplyAsync(id);
             return Ok();
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [Route("preset/{id:int}")]
     [HttpGet]
     public async Task<ActionResult<PresetEfcDto>> GetByIdAsync([FromRoute] int id)
@@ -113,6 +137,11 @@ public class PresetController : ControllerBase
         {
             var preset = await _logic.GetByIdAsync(id);
             return Ok(preset);
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {
@@ -128,6 +157,11 @@ public class PresetController : ControllerBase
         {
             await _logic.DeleteAsync(id);
             return Ok();
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {

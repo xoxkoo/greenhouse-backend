@@ -165,7 +165,7 @@ public class Converter : IConverter
 	    {
 		    throw new Exception("In the preset there have to be three thresholds");
 	    }
-	    
+
 	    foreach (var t in thresholds)
 	    {
 		    if (t.Type.ToLower() != "temperature" && t.Type.ToLower() != "co2" && t.Type.ToLower() != "humidity")		    {
@@ -190,7 +190,7 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
 	    }
 
-	    
+
 	    //Humidity range - 14 bits
 	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
 	    if (humidityThreshold == null)
@@ -235,8 +235,7 @@ public class Converter : IConverter
 
     private async Task<string> ReadTHCPayload(string data)
     {
-        //TODO handle flags
-        string flags = data.Substring(0, 8);
+	    string flags = data.Substring(0, 8);
         string temperature = data.Substring(8, 11);
         string humidity = data.Substring(19, 10);
         string co2 = data.Substring(29, 13);
@@ -259,11 +258,20 @@ public class Converter : IConverter
             Date = DateTime.Now,
             Value = Convert.ToInt32(humidity, 2)
         };
-        await co2Logic.CreateAsync(co2Dto);
-        await humidityLogic.CreateAsync(humidityDto);
-        await temperatureLogic.CreateAsync(tempDto);
+
+
+        // check if sensors measurements are valid
+        if (Int32.Parse(flags.Substring(0,1)) == 1)
+	        await temperatureLogic.CreateAsync(tempDto);
+
+        if (Int32.Parse(flags.Substring(1,1)) == 1)
+			await humidityLogic.CreateAsync(humidityDto);
+
+        if (Int32.Parse(flags.Substring(2,1)) == 1)
+			await co2Logic.CreateAsync(co2Dto);
 
         await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
+
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 

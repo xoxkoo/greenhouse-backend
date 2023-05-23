@@ -151,10 +151,9 @@ public class CO2IntegrationTest : DbTestBase
 
         var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
         var endTime = new DateTime(2023, 1, 2, 10, 35, 10);
-        var current = false;
 
         // Act
-        ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(current, startTime, endTime);
+        ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(null, startTime, endTime);
 
         // Assert
         Assert.IsNotNull(response);
@@ -182,10 +181,9 @@ public class CO2IntegrationTest : DbTestBase
 
         var startTime = new DateTime(2023, 1, 3);
         var endTime = new DateTime(2023, 1, 1);
-        var current = false;
 
         // Act
-        ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(current, startTime, endTime);
+        ActionResult<IEnumerable<CO2Dto>> response = await _controller.GetAsync(null, startTime, endTime);
 
         // Assert
         Assert.IsNotNull(response);
