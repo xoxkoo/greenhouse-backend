@@ -12,12 +12,12 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.5.0
         with:
-          project_id: noted-palisade-385613
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+          project_id: noted-palisade-385613
       - name: Set up Kubernetes
         run: |
           echo "$KUBECONFIG" > kubeconfig.yaml
-          gcloud auth activate-service-account --key-file=kubeconfig.yaml
+          
           gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}     
