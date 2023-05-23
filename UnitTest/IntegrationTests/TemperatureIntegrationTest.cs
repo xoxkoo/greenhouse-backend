@@ -103,10 +103,9 @@ public class TemperatureIntegrationTest : DbTestBase
 
 		var startTime = new DateTime(2023, 1, 2, 10, 29, 0);
 		var endTime = new DateTime(2023, 1, 2, 10, 36, 10);
-		var current = false;
 
 		// Act
-		ActionResult<IEnumerable<TemperatureDto>> response = await _controller.GetAsync(current, startTime, endTime);
+		ActionResult<IEnumerable<TemperatureDto>> response = await _controller.GetAsync(null, startTime, endTime);
 		// Assert
 		Assert.IsNotNull(response);
 		var createdResult = (ObjectResult?)response.Result;
@@ -148,10 +147,9 @@ public class TemperatureIntegrationTest : DbTestBase
 
 		var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
 		var endTime = new DateTime(2023, 1, 2, 10, 36, 10);
-		var current = false;
 
 		// Act
-		ActionResult<IEnumerable<TemperatureDto>> response = await _controller.GetAsync(current, null, endTime);
+		ActionResult<IEnumerable<TemperatureDto>> response = await _controller.GetAsync(null, null, endTime);
 		// Assert
 		Assert.IsNotNull(response);
 		var createdResult = (ObjectResult?)response.Result;
@@ -213,10 +211,9 @@ public class TemperatureIntegrationTest : DbTestBase
 
 		var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
 		var endTime = new DateTime(2023, 1, 2, 10, 35, 10);
-		var current = false;
 
 		// Act
-		ActionResult<IEnumerable<TemperatureDto>> response = await _controller.GetAsync(current, startTime, endTime);
+		ActionResult<IEnumerable<TemperatureDto>> response = await _controller.GetAsync(null, startTime, endTime);
 
 		// Assert
 		Assert.IsNotNull(response);

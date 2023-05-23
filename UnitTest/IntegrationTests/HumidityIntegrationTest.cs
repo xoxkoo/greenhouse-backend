@@ -106,10 +106,9 @@ public class HumidityIntegrationTest : DbTestBase
 
         var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
         var endTime = new DateTime(2023, 1, 2, 10, 35, 10);
-        var current = false;
 
         // Act
-        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(current, startTime, endTime);
+        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(null, startTime, endTime);
 
         // Assert
         Assert.IsNotNull(response);
@@ -127,7 +126,7 @@ public class HumidityIntegrationTest : DbTestBase
     {
         await CreateHumidities(10);
         // minutes are 0 and 2, so it should return 3 temperatures (0, 1, 2)
-        var result = await _controller.GetAsync(false, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 16, 2, 0));
+        var result = await _controller.GetAsync(null, new DateTime(2023, 5, 7, 16, 0, 0), new DateTime(2023, 5, 7, 16, 2, 0));
         var createdResult = (ObjectResult?)result.Result;
         Assert.IsNotNull(createdResult);
         var list = (IEnumerable<HumidityDto>?)createdResult.Value;
@@ -202,10 +201,9 @@ public class HumidityIntegrationTest : DbTestBase
 
         var startTime = new DateTime(2023, 1, 3);
         var endTime = new DateTime(2023, 1, 1);
-        var current = false;
 
         // Act
-        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(current, startTime, endTime);
+        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(null, startTime, endTime);
 
         // Assert
         Assert.IsNotNull(response);

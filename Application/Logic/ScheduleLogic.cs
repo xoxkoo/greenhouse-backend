@@ -45,9 +45,11 @@ public class ScheduleLogic : IScheduleLogic
 
         for (int i = 0; i < intervals.Count; i++)
         {
+	        //check all new intervals with old intervals
 	        if (IntervalsOverlap(await GetAsync(), dto.ToList()[i]))
 		        throw new ArgumentException("Intervals cannot overlap!");
 
+	        // check intervals with new intervals
 	        if (IntervalsOverlap(dto, dto.ToList()[i]))
 		        throw new ArgumentException("Intervals cannot overlap!");
 
@@ -105,7 +107,7 @@ public class ScheduleLogic : IScheduleLogic
 	    foreach (var i in dbIntervals)
 	    {
 		    // exclude checking for interval that is updated
-		    if (i.Id != newInterval.Id)
+		    if (i.Id != newInterval.Id || newInterval.Id == 0)
 		    {
 
 			    Console.WriteLine(newInterval.EndTime + " " + newInterval.StartTime);
