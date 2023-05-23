@@ -16,19 +16,18 @@ public class TemperatureController:ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetAsync([FromQuery] bool current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
+    public async Task<ActionResult<IEnumerable<TemperatureDto>>> GetAsync([FromQuery] bool? current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
     {
-	    Console.WriteLine(startTime);
 	    try
-        {
-            SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime, endTime);
-            var temperatures = await Logic.GetAsync(parameters);
-            return Ok(temperatures);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+	    {
+		    var parameters = current != null ? new SearchMeasurementDto(true) : new SearchMeasurementDto(false, startTime, endTime);
+		    var temperatures = await Logic.GetAsync(parameters);
+		    return Ok(temperatures);
+	    }
+	    catch (Exception e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(500, e.Message);
+	    }
     }
 }

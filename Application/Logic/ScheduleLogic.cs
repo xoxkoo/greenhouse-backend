@@ -47,7 +47,11 @@ public class ScheduleLogic : IScheduleLogic
         {
 	        if (IntervalsOverlap(await GetAsync(), dto.ToList()[i]))
 		        throw new ArgumentException("Intervals cannot overlap!");
-        }
+
+	        if (IntervalsOverlap(dto, dto.ToList()[i]))
+		        throw new ArgumentException("Intervals cannot overlap!");
+
+	    }
 
         return await _scheduleDao.CreateAsync(intervals);
     }
@@ -73,37 +77,6 @@ public class ScheduleLogic : IScheduleLogic
 
 
 	    await _scheduleDao.PutAsync(dto);
-	    // IntervalDto? intervalDto = await _scheduleDao.GetByIdAsync(dto.Id);
-	    // if (intervalDto == null)
-	    // {
-	    //
-	    //     IEnumerable<Interval> intervals = new List<Interval>()
-	    //     {
-	    //         new Interval()
-	    //         {
-	    //             DayOfWeek = dto.DayOfWeek,
-	    //             StartTime = dto.StartTime,
-	    //             EndTime = dto.EndTime
-	    //         }
-	    //     };
-	    //     await _scheduleDao.CreateAsync(intervals);
-	    // }
-	    // else
-	    // {
-	    //     List<Interval> intervals = new List<Interval>();
-	    //     Interval interval = new Interval()
-	    //     {
-	    //         DayOfWeek = dto.DayOfWeek,
-	    //         EndTime = dto.EndTime,
-	    //         StartTime = dto.StartTime
-	    //     };
-	    //
-	    //     intervals.Add(interval);
-
-	    // await CheckForIntervalsInDatabase(intervals);
-	    //
-	    // await _scheduleDao.PutAsync(dto);
-	    // }
     }
 
 
@@ -134,6 +107,10 @@ public class ScheduleLogic : IScheduleLogic
 		    // exclude checking for interval that is updated
 		    if (i.Id != newInterval.Id)
 		    {
+
+			    Console.WriteLine(newInterval.EndTime + " " + newInterval.StartTime);
+			    Console.WriteLine(i.EndTime + " " + i.StartTime);
+			    Console.WriteLine();
 			    if (i.DayOfWeek == newInterval.DayOfWeek &&
 			        newInterval.StartTime < i.EndTime &&
 			        newInterval.StartTime > i.StartTime)
