@@ -68,7 +68,7 @@ public class PresetController : ControllerBase
     }
 
     [HttpPut("preset/{id:int}")]
-    public async Task<ActionResult<PresetEfcDto>> UpdateAsync(int id, [FromBody] PresetEfcDto dto)
+    public async Task<ActionResult<PresetEfcDto>> UpdateAsync([FromRoute] int id, [FromBody] PresetEfcDto dto)
     {
 	    try
 	    {
