@@ -8,15 +8,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build and run tests
         run: |
           dotnet build
-          dotnet test --collect:"XPlat Code Coverage" --results-directory:"./UnitTest/TestResults"  # Replace with your MSTest command
+          dotnet test --collect:"XPlat Code Coverage" --results-directory:"./UnitTest/TestResults"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
