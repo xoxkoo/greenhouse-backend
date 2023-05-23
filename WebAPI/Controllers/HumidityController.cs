@@ -16,19 +16,19 @@ public class HumidityController:ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<HumidityDto>>> GetAsync([FromQuery] bool current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
-    { 
-        try
-        {
-            SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime,endTime);
-            var humidities = await _logic.GetAsync(parameters);
+    public async Task<ActionResult<IEnumerable<HumidityDto>>> GetAsync([FromQuery] bool? current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
+    {
+	    try
+	    {
+		    var parameters = current != null ? new SearchMeasurementDto(true) : new SearchMeasurementDto(false, startTime, endTime);
+		    var humidities = await _logic.GetAsync(parameters);
 
-            return Ok(humidities);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+		    return Ok(humidities);
+	    }
+	    catch (Exception e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(500, e.Message);
+	    }
     }
 }

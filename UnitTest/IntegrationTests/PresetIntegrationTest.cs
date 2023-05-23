@@ -22,16 +22,16 @@ public class PresetIntegrationTest : DbTestBase
     private ICO2Dao _co2Dao;
     private ITemperatureDao _temperatureDao;
     private IEmailDao _emailDao;
-    
+
     private IHumidityLogic _humidityLogic;
     private ITemperatureLogic _temperatureLogic;
     private ICO2Logic _co2Logic;
     private IEmailLogic _emailLogic;
     private IConverter _converter;
     private IPresetLogic _presetLogic;
-    
+
     private PresetController _controller;
-    
+
     [TestInitialize]
     public void SetUp()
     {
@@ -102,10 +102,10 @@ public class PresetIntegrationTest : DbTestBase
         var result = (IEnumerable<PresetEfcDto>)okResult.Value;
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        
+
     }
-    
-    
+
+
     //M - Many
     [TestMethod]
     public async Task GetAsync_ReturnsPresetList_Test()
@@ -153,9 +153,9 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(presets.Count, result.Count());
     }
-    
+
     //GetCurrentAsync()
-    
+
     //Z - Zero
     [TestMethod]
     public async Task GetCurrentAsync_ReturnsNoCurrentPreset()
@@ -237,7 +237,7 @@ public class PresetIntegrationTest : DbTestBase
         Assert.AreEqual(preset.Name, result.Name);
         Assert.AreEqual(preset.Thresholds.Count(), result.Thresholds.Count());
     }
-    
+
     //CreateAsync()
     //O - One
     [TestMethod]
@@ -283,9 +283,9 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response.Result, typeof(ObjectResult));
         var badRequestResult = (ObjectResult)response.Result;
-        Assert.AreEqual(500, badRequestResult.StatusCode);
+        Assert.AreEqual(400, badRequestResult.StatusCode);
     }
-    
+
     [TestMethod]
     public async Task CreateAsync_ReturnsCreatedPresetWithZeroThresholds()
     {
@@ -303,10 +303,10 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response.Result, typeof(ObjectResult));
         var okResult = (ObjectResult)response.Result;
-        Assert.AreEqual(500, okResult.StatusCode);
+        Assert.AreEqual(400, okResult.StatusCode);
     }
-    
-    
+
+
     //ApplyAsync() tests
     [TestMethod]
     public async Task ApplyAsync_ReturnsOkResult()
@@ -335,8 +335,8 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response, typeof(OkResult));
     }
-    
-    
+
+
     //E - Exception
     [TestMethod]
     public async Task ApplyAsync_NoIdInDatabase()
@@ -349,8 +349,8 @@ public class PresetIntegrationTest : DbTestBase
         var statusCode = (ObjectResult)response;
         Assert.AreEqual(500, statusCode.StatusCode);
     }
-    
-    
+
+
     //GetByIdAsync()
     [TestMethod]
     public async Task GetByIdAsync_ReturnsPresetWithMatchingId()
@@ -371,7 +371,7 @@ public class PresetIntegrationTest : DbTestBase
         };
         DbContext.Presets.Add(preset);
         await DbContext.SaveChangesAsync();
-        
+
         // Act
         var response = await _controller.GetByIdAsync(presetId);
 
@@ -384,7 +384,7 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(presetId, result.Id);
     }
-    
+
     [TestMethod]
     public async Task GetByIdAsync_NoIdInDatabase()
     {
@@ -400,5 +400,5 @@ public class PresetIntegrationTest : DbTestBase
         var notFoundResult = (ObjectResult)response.Result;
         Assert.AreEqual(500, notFoundResult.StatusCode);
     }
-    
+
 }

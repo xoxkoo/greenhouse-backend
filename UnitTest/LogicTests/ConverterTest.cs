@@ -53,6 +53,27 @@ public class ConverterTest : DbTestBase
     }
 
     [TestMethod]
+    public async Task THCPayload_IncorrectMeasurementSensor()
+    {
+	    await converter.ConvertFromHex("04017b0707f0");
+
+        // Assert
+        // values shouldn't be saved
+        tempLogic.Verify(x => x.CreateAsync(It.Is<TemperatureCreateDto>(dto =>
+	        // tolerance because of rounding problems
+	        Math.Abs(dto.Value - 25.8) < 0.1
+        )), Times.Never);
+
+        co2logic.Verify(x => x.CreateAsync(It.Is<CO2CreateDto>(dto =>
+	        dto.Value == 2032
+        )), Times.Never);
+
+        humidityLogic.Verify(x => x.CreateAsync(It.Is<HumidityCreationDto>(dto =>
+	        dto.Value == 56
+        )), Times.Never);
+    }
+
+    [TestMethod]
     public async Task THCPayload_ResponseStringIsCorrect()
     {
 	    string result = await converter.ConvertFromHex("07817b0707f0");
