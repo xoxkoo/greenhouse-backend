@@ -25,8 +25,8 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-            docker-compose -f docker-compose.yml build
-            docker-compose -f docker-compose.yml push
+            docker-compose -f docker-compose.yaml build
+            docker-compose -f docker-compose.yaml push
 
       - name: Update image tags
         run: |
