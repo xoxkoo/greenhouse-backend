@@ -18,8 +18,7 @@ jobs:
 
       - name: Configure Docker
         run: |
-          echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > key.json
-          docker login -u _json_key --password-stdin https://eu.gcr.io < key.json
+          echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | docker login -u _json_key --password-stdin https://eu.gcr.io
           #gcloud auth configure-docker --quiet
 
       - name: Build and Push Docker Images
