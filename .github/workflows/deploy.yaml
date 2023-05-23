@@ -30,16 +30,16 @@ jobs:
 
       - name: Update image tags
         run: |
-            docker tag greenhouse-backend-webapi:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend-webapi:${IMAGE_TAG}
-            docker tag greenhouse-backend-socket:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend-socket:${IMAGE_TAG}
-            docker tag greenhouse-backend-timer:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend-timer:${IMAGE_TAG}
+            docker tag greenhouse-backend_webapi:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
+            docker tag greenhouse-backend_socket:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_socket:${IMAGE_TAG}
+            docker tag greenhouse-backend_timer:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:${IMAGE_TAG}
         env:
             IMAGE_TAG: v2
 
       - name: Push updated image tags to Google Container Registry
         run: |
-            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-webapi:${IMAGE_TAG}
-            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-socket:${IMAGE_TAG}
-            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-timer:${IMAGE_TAG}
+            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
+            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_socket:${IMAGE_TAG}
+            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:${IMAGE_TAG}
         env:
             IMAGE_TAG: v2
