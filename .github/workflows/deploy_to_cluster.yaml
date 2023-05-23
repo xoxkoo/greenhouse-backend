@@ -17,6 +17,5 @@ jobs:
         run: gcloud auth login --quiet
       - name: Configure kubectl
         run: gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
-
       - name: Apply deployment
         run: kubectl apply -f deployment.yaml
