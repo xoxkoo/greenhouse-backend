@@ -23,6 +23,23 @@ jobs:
         run: |
           gcloud auth configure-docker --quiet
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Docker Images
         run: |
-          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-webapi:v1
+            docker-compose -f docker-compose.yml build
+            docker-compose -f docker-compose.yml push
+
+      - name: Update image tags
+        run: |
+            docker tag greenhouse-backend-webapi:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend-webapi:${IMAGE_TAG}
+            docker tag greenhouse-backend-socket:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend-socket:${IMAGE_TAG}
+            docker tag greenhouse-backend-timer:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend-timer:${IMAGE_TAG}
+        env:
+            IMAGE_TAG: v2
+
+      - name: Push updated image tags to Google Container Registry
+        run: |
+            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-webapi:${IMAGE_TAG}
+            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-socket:${IMAGE_TAG}
+            docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend-timer:${IMAGE_TAG}
+        env:
+            IMAGE_TAG: v2
