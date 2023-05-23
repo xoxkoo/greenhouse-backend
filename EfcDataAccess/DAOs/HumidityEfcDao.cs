@@ -17,13 +17,8 @@ public class HumidityEfcDao : IHumidityDao
 
 	public async Task<HumidityDto> CreateAsync(Humidity humidity)
 	{
-		if (humidity == null)
-		{
-			throw new ArgumentNullException(nameof(humidity), "Humidity object cannot be null");
-		}
 		EntityEntry<Humidity> entity = await _context.Humidities.AddAsync(humidity);
 		await _context.SaveChangesAsync();
-
 		return new HumidityDto
 		{
 			Date = entity.Entity.Date,
@@ -31,12 +26,13 @@ public class HumidityEfcDao : IHumidityDao
 			Value = entity.Entity.Value
 		};
 	}
-	
+
 	public async Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
+		DateTime startTime = searchMeasurement.StartTime ?? DateTime.MinValue; // Use DateTime.MinValue if StartTime is not provided
+		DateTime endTime = searchMeasurement.EndTime ?? DateTime.MaxValue; // Use DateTime.MaxValue if EndTime is not provided
 
 		var list = _context.Humidities.AsQueryable();
-
 
 		// if current is requested, return just last
 		if (searchMeasurement.Current)
@@ -45,19 +41,9 @@ public class HumidityEfcDao : IHumidityDao
 				.OrderByDescending(h => h.Date)
 				.Take(1);
 		}
-		// return humidities in interval
-		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
+		else
 		{
-			list = list.Where(h => h.Date >= searchMeasurement.StartTime && h.Date <= searchMeasurement.EndTime);
-		}
-		else if (searchMeasurement.StartTime != null)
-		{
-			list = list.Where(c => c.Date >= searchMeasurement.StartTime).AsQueryable();
-			
-		}
-		else if (searchMeasurement.EndTime != null)
-		{
-			list = list.Where(c => c.Date <= searchMeasurement.EndTime).AsQueryable();
+			list = _context.Humidities.Where(c => c.Date >= startTime && c.Date <= endTime);
 		}
 
 		IEnumerable<HumidityDto> result = await list.Select(h =>
@@ -70,5 +56,5 @@ public class HumidityEfcDao : IHumidityDao
 
 		return result;
 	}
-	
+
 }

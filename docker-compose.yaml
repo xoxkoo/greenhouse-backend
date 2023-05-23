@@ -1,21 +1,18 @@
-﻿version: '3.4'
-
+﻿version: '3'
 services:
-  socket:
-    image: 'socket:latest'
-    build: 
-      context: ./
-    ports:
-      - 5001:5001
   webapi:
-    image: 'webapi:latest'
     build:
-      context: ./
+      context: .
+      dockerfile: DockerfileWeb
     ports:
-      - 5060:5060
-  database:
-    image: 'database:latest'
+      - 7070:7071
+  socket:
     build:
-      context: ./
-    ports:
-      - 5002:5002
+      context: .
+      dockerfile: DockerfileSocket
+  timer:
+    build:
+      context: .
+      dockerfile: DockerfileTimer
+
+    

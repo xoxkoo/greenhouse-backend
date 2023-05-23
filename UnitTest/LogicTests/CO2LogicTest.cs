@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 
 [TestClass]
 public class CO2LogicTest : DbTestBase
@@ -31,8 +31,8 @@ public class CO2LogicTest : DbTestBase
             .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100 });
         CO2CreateDto dto = new CO2CreateDto
         {
-            Date = new DateTime(2023, 4, 19, 19, 50, 0), 
-            Value = 100 
+            Date = new DateTime(2023, 4, 19, 19, 50, 0),
+            Value = 100
         };
         CO2Dto created = await logic.CreateAsync(dto);
         Assert.AreEqual(dto.Date, created.Date);
@@ -46,7 +46,7 @@ public class CO2LogicTest : DbTestBase
             .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100 });
         CO2CreateDto dto = new CO2CreateDto
         {
-            Date = new DateTime(2023, 4, 19, 19, 50, 0), 
+            Date = new DateTime(2023, 4, 19, 19, 50, 0),
             Value = 1001
         };
         var expectedValues = "Wrong CO2 value, must be between 0 and 1000.";
@@ -129,5 +129,41 @@ public class CO2LogicTest : DbTestBase
         IEnumerable<CO2Dto> co2s = await logic.GetAsync(search);
         Assert.AreEqual(1, co2s.Count());
         Assert.AreEqual(tempDto, co2s.FirstOrDefault());
+    }
+    //B + E - Boundary + Exceptional behavior
+    [TestMethod]
+    public async Task CreateTemperature_AboveRange_Test()
+    {
+        var co2 = new CO2CreateDto()
+        {
+            Date = new DateTime(2023, 04, 23),
+            Value = 5000
+        };
+
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(co2));
+    }
+
+    [TestMethod]
+    public async Task CreateTemperature_BelowRange_Test()
+    {
+        var co2 = new CO2CreateDto()
+        {
+            Date = new DateTime(2023, 04, 23),
+            Value = -1
+        };
+
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(co2));
+    }
+
+    [TestMethod]
+    public async Task CreateTemperature_FutureDate_Test()
+    {
+        var co2 = new CO2CreateDto()
+        {
+            Date = DateTime.Now.AddDays(1),
+            Value = 25
+        };
+
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(co2));
     }
 }

@@ -17,20 +17,20 @@ public class CO2DaoTest : DbTestBase
     {
         dao = new CO2EfcDao(DbContext);
     }
-    
+
     [TestMethod]
     public async Task SaveCO2_NullException_Test()
     {
         //Arrange
         CO2 co2 = null;
-        
+
         //Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => dao.CreateAsync(co2));
     }
-    
+
     //O - One
     [TestMethod]
-    public async Task SaveCO2Test()
+    public async Task SaveCO2_Test()
     {
         var co2 = new CO2
         {
@@ -39,13 +39,13 @@ public class CO2DaoTest : DbTestBase
         };
 
         var savedCO2 = await dao.CreateAsync(co2);
-        
+
         Assert.IsNotNull(savedCO2);
         Assert.AreEqual(1, savedCO2.CO2Id);
         Assert.AreEqual(co2.Value, savedCO2.Value);
         Assert.AreEqual(co2.Date, savedCO2.Date);
     }
-    
+
     //M - Many
     [TestMethod]
     public async Task SaveCO2_Many_Test()
@@ -69,7 +69,7 @@ public class CO2DaoTest : DbTestBase
                 Value = 1750
             }
         };
-        
+
         //Act
         var results = new List<CO2Dto>();
         foreach (var co2 in co2s)
@@ -77,7 +77,7 @@ public class CO2DaoTest : DbTestBase
             var result = await dao.CreateAsync(co2);
             results.Add(result);
         }
-        
+
         //Assert
         Assert.IsNotNull(results);
         Assert.AreEqual(3, results.Count);
@@ -88,7 +88,7 @@ public class CO2DaoTest : DbTestBase
         Assert.AreEqual(co2s[2].Date, results[2].Date);
         Assert.AreEqual(co2s[2].Value, results[2].Value);
     }
-    
+
     //B - Boundary
     [TestMethod]
     public async Task SaveCO2_MinimumBoundary_Test()
@@ -100,12 +100,12 @@ public class CO2DaoTest : DbTestBase
         };
 
         var savedCO2 = await dao.CreateAsync(co2);
-        
+
         Assert.IsNotNull(savedCO2);
         Assert.AreEqual(co2.Value, savedCO2.Value);
         Assert.AreEqual(co2.Date, savedCO2.Date);
     }
-    
+
     [TestMethod]
     public async Task SaveCO2_MaximumBoundary_Test()
     {
@@ -116,50 +116,13 @@ public class CO2DaoTest : DbTestBase
         };
 
         var savedCO2 = await dao.CreateAsync(co2);
-        
+
         Assert.IsNotNull(savedCO2);
         Assert.AreEqual(co2.Value, savedCO2.Value);
         Assert.AreEqual(co2.Date, savedCO2.Date);
     }
-    
-    //B + E - Boundary + Exceptional behavior
-    [TestMethod]
-    public async Task CreateTemperature_AboveRange_Test()
-    {
-        var co2 = new CO2()
-        {
-            Date = new DateTime(2023, 04, 23),
-            Value = 5000
-        };
-        
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(co2));
-    }
-    
-    [TestMethod]
-    public async Task CreateTemperature_BelowRange_Test()
-    {
-        var co2 = new CO2()
-        {
-            Date = new DateTime(2023, 04, 23),
-            Value = -1
-        };
 
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(co2));
-    }
-    
-    [TestMethod]
-    public async Task CreateTemperature_FutureDate_Test()
-    {
-        var co2 = new CO2()
-        {
-            Date = DateTime.Now.AddDays(1),
-            Value = 25
-        };
 
-        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => dao.CreateAsync(co2));
-    }
-    
-    
     //GetAsync() test
     //Z - Zero
     [TestMethod]
@@ -189,10 +152,10 @@ public class CO2DaoTest : DbTestBase
         };
         await DbContext.CO2s.AddAsync(co2);
         await DbContext.SaveChangesAsync();
-        
+
         //Assert
         var co2Dtos = await dao.GetAsync(parameters);
-        
+
         //Act
         Assert.IsNotNull(co2Dtos);
         Assert.AreEqual(1, co2Dtos.Count());
@@ -202,14 +165,14 @@ public class CO2DaoTest : DbTestBase
         Assert.AreEqual(co2.Value, co2Dtos.First().Value);
         Assert.AreEqual(co2.Date, co2Dtos.First().Date);
     }
-    
-    
+
+
     [TestMethod]
     public async Task GetAsync_Many_WhenNoFiltersApplied_Test()
     {
         // Arrange
-        var co21 = new CO2 { Date = new DateTime(2023, 4, 10), Value = 500 };
-        var co22 = new CO2 { Date = new DateTime(2023, 4, 11), Value = 600 };
+        var co21 = new CO2 { Date = new DateTime(2023, 4, 10, 10, 10, 0), Value = 500 };
+        var co22 = new CO2 { Date = new DateTime(2023, 4, 11, 10, 10, 0), Value = 600 };
         await DbContext.CO2s.AddAsync(co21);
         await DbContext.CO2s.AddAsync(co22);
         await DbContext.SaveChangesAsync();
@@ -224,7 +187,7 @@ public class CO2DaoTest : DbTestBase
         Assert.IsTrue(result.Any(c => c.CO2Id == co21.CO2Id && c.Value == co21.Value && c.Date == co21.Date));
         Assert.IsTrue(result.Any(c => c.CO2Id == co22.CO2Id && c.Value == co22.Value && c.Date == co22.Date));
     }
-    
+
     [TestMethod]
     public async Task GetAsync_ReturnsDataFilteredByStartDate_Test()
     {
@@ -255,7 +218,7 @@ public class CO2DaoTest : DbTestBase
         await DbContext.CO2s.AddAsync(co22);
         await DbContext.SaveChangesAsync();
         var search = new SearchMeasurementDto(false, null, new DateTime(2023, 5, 1));
-        
+
         // Act
         var result = await dao.GetAsync(search);
 

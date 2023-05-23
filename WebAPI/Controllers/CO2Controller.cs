@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/co2")]
 public class CO2Controller:ControllerBase
 {
     private readonly ICO2Logic Logic;
@@ -19,7 +19,7 @@ public class CO2Controller:ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync([FromQuery] DateTime? startTime,[FromQuery] DateTime? endTime, [FromQuery] Boolean current)
+    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync([FromQuery] Boolean current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
     {
         try
         {
@@ -39,7 +39,7 @@ public class CO2Controller:ControllerBase
         try
         {
             CO2Dto created = await Logic.CreateAsync(dto);
-            return Created($"/co2s/{created}", created);
+            return Created($"/co2s/{created.CO2Id}", created);
         }
         catch (Exception e)
         {

@@ -22,26 +22,9 @@ public class CO2EfcDao : ICO2Dao
 
 	public async Task<CO2Dto> CreateAsync(CO2 co2)
 	{
-		if (co2 == null)
-		{
-			throw new ArgumentNullException(nameof(co2), "CO2 data cannot be null.");
-		}
-
-		if (co2.Value < 0)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Value), "CO2 value cannot be negative.");
-		}
-		if (co2.Value > 4095)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Value), "CO2 value cannot be bigger than 4095 ppm.");
-		}
-		if (co2.Date > DateTime.Now)
-		{
-			throw new ArgumentOutOfRangeException(nameof(co2.Date), "Date of temperature cannot be in the future");
-		}
-
 		EntityEntry<CO2> entity = await _context.CO2s.AddAsync(co2);
 		await _context.SaveChangesAsync();
+
 		return new CO2Dto()
 		{
 			Date = entity.Entity.Date,
@@ -49,10 +32,13 @@ public class CO2EfcDao : ICO2Dao
 			Value = entity.Entity.Value
 		};
 	}
+
 	public async Task<IEnumerable<CO2Dto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
-		var list = _context.CO2s.AsQueryable();
+		DateTime startTime = searchMeasurement.StartTime ?? DateTime.MinValue; // Use DateTime.MinValue if StartTime is not provided
+		DateTime endTime = searchMeasurement.EndTime ?? DateTime.MaxValue; // Use DateTime.MaxValue if EndTime is not provided
 
+		var list = _context.CO2s.AsQueryable();
 
 		// if current is requested, return just last
 		if (searchMeasurement.Current)
@@ -61,19 +47,9 @@ public class CO2EfcDao : ICO2Dao
 				.OrderByDescending(h => h.Date)
 				.Take(1);
 		}
-		// return co2s in interval
-		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
+		else
 		{
-			list = list.Where(c => c.Date >= searchMeasurement.StartTime && c.Date <= searchMeasurement.EndTime);
-		}
-		else if (searchMeasurement.StartTime != null)
-		{
-			list = list.Where(c => c.Date >= searchMeasurement.StartTime).AsQueryable();
-			
-		}
-		else if (searchMeasurement.EndTime != null)
-		{
-			list = list.Where(c => c.Date <= searchMeasurement.EndTime).AsQueryable();
+			list = _context.CO2s.Where(c => c.Date >= startTime && c.Date <= endTime);
 		}
 
 		IEnumerable<CO2Dto> result = await list.Select(c =>
@@ -86,6 +62,5 @@ public class CO2EfcDao : ICO2Dao
 
 		return result;
 	}
-
 
 }

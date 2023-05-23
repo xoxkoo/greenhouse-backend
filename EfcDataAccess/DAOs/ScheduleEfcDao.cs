@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using Application.DaoInterfaces;
+﻿using Application.DaoInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.ScheduleDTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -18,14 +16,14 @@ public class ScheduleEfcDao : IScheduleDao
     }
 
 
-    public async Task<ScheduleDto> CreateAsync(Schedule schedule)
+    public async Task<IEnumerable<IntervalDto>> CreateAsync(IEnumerable<Interval> intervals)
     {
-        if (schedule == null)
+        if (intervals == null)
         {
-            throw new ArgumentNullException(nameof(schedule), "Schedule data cannot be null");
+            throw new ArgumentNullException(nameof(intervals), "Schedule data cannot be null");
         }
 
-        EntityEntry<Schedule> entity = await _context.Schedules.AddAsync(schedule);
+        await _context.Intervals.AddRangeAsync(intervals);
         try
         {
             await _context.SaveChangesAsync();
@@ -35,52 +33,98 @@ public class ScheduleEfcDao : IScheduleDao
             throw new Exception("Failed to save changes to database", ex);
         }
 
-        IEnumerable<IntervalDto> intervalDtos = entity.Entity.Intervals?.Select(i => new IntervalDto
+        IEnumerable<IntervalDto> intervalDtos = intervals.Select(i => new IntervalDto
         {
+            Id = i.Id,
             DayOfWeek = i.DayOfWeek,
             StartTime = i.StartTime,
             EndTime = i.EndTime
         }) ?? Enumerable.Empty<IntervalDto>();
 
-        return new ScheduleDto
-        {
-            Id = entity.Entity.Id,
-            Intervals = intervalDtos
-        };
+        return intervalDtos;
     }
 
-    public async Task<IEnumerable<ScheduleDto>> GetAsync()
+    public async Task<IEnumerable<IntervalDto>> GetAsync()
     {
         List<IntervalDto> intervalDtos = await _context.Intervals.Select(i => new IntervalDto
         {
+            Id = i.Id,
             DayOfWeek = i.DayOfWeek,
             StartTime = i.StartTime,
             EndTime = i.EndTime
         }).ToListAsync() ?? new List<IntervalDto>();
 
-        IEnumerable<ScheduleDto> result = await _context.Schedules.AsQueryable()
-            .Select(s => new ScheduleDto() { Intervals = intervalDtos, Id = s.Id })
-            .ToListAsync();
-        return result;
+        return intervalDtos;
     }
 
 
     public async Task<IEnumerable<IntervalToSendDto>> GetScheduleForDay(DayOfWeek dayOfWeek)
     {
         IEnumerable<IntervalDto> result = await _context.Intervals
-            .Where(i => i.DayOfWeek == dayOfWeek) // Filter by Monday
-            .Select(i => new IntervalDto() { DayOfWeek = i.DayOfWeek, StartTime = i.StartTime, EndTime = i.EndTime })
+            .Where(i => i.DayOfWeek == dayOfWeek)
+            .Select(i => new IntervalDto()
+            {
+                Id = i.Id,
+                StartTime = i.StartTime,
+                EndTime = i.EndTime,
+            })
             .ToListAsync();
 
-        IEnumerable<IntervalToSendDto> filteredIntervals = new List<IntervalToSendDto>();
-        foreach (var interval in result)
+        List<IntervalToSendDto> filteredIntervals = new List<IntervalToSendDto>();
+        foreach (IntervalDto interval in result)
         {
             IntervalToSendDto dto = new IntervalToSendDto
             {
                 StartTime = interval.StartTime,
                 EndTime = interval.EndTime
             };
+            filteredIntervals.Add(dto);
         }
         return filteredIntervals;
+    }
+
+    public async Task PutAsync(IntervalDto dto)
+    {
+	    Interval? interval = await _context.Intervals.FindAsync(dto.Id);
+
+	    if (interval == null)
+	    {
+		    return;
+	    }
+
+	    interval.EndTime = dto.EndTime;
+	    interval.StartTime = dto.StartTime;
+	    interval.DayOfWeek = interval.DayOfWeek;
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<IntervalDto> GetByIdAsync(int id)
+    {
+        Interval? interval= await _context.Intervals.FirstOrDefaultAsync(i => i.Id == id);
+
+        if (interval == null)
+        {
+            throw new Exception($"Interval with id {id} was not found");
+        }
+        IntervalDto intervalDto = new IntervalDto()
+        {
+            Id = interval.Id,
+            DayOfWeek = interval.DayOfWeek,
+            StartTime = interval.StartTime,
+            EndTime = interval.EndTime
+        };
+        return intervalDto;
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        Interval interval = await _context.Intervals.FirstOrDefaultAsync(i => i.Id == id);
+        if (interval == null)
+        {
+            throw new Exception($"Interval with id {id} was not found");
+        }
+        _context.Intervals.Remove(interval);
+        await _context.SaveChangesAsync();
     }
 }

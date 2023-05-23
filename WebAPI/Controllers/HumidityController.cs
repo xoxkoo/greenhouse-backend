@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/humidity")]
 public class HumidityController:ControllerBase
 {
     private readonly IHumidityLogic _logic;
@@ -17,7 +17,7 @@ public class HumidityController:ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<HumidityDto>>> GetAsync([FromQuery] bool current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
-    {
+    { 
         try
         {
             SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime,endTime);
@@ -31,5 +31,4 @@ public class HumidityController:ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
 }

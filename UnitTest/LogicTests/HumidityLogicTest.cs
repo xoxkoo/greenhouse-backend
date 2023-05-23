@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
 
-namespace Testing.WebApiTests;
+namespace Testing.LogicTests;
 [TestClass]
 public class HumidityLogicTest : DbTestBase
 {
@@ -42,8 +42,76 @@ public class HumidityLogicTest : DbTestBase
         Assert.AreEqual(dto.Value, createdHumidity.Value);
         Assert.IsTrue(createdHumidity.Date > DateTime.Now.AddSeconds(-1));
     }
+    [TestMethod]
+    public async Task CreateAsync_ValidHumidity_ReturnsCreatedHumidity()
+    {
+        DateTime now = new DateTime();
+        now = DateTime.Now.AddDays(-1);
+        // Arrange
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = now, Value = 10 });
 
+        var dto = new HumidityCreationDto()
+        {
+            Value = 10,
+            Date = now
+        };
 
+        // Act
+        var createdHumidity = await logic.CreateAsync(dto);
+
+        // Assert
+        Assert.IsNotNull(createdHumidity);
+        Assert.AreEqual(1, createdHumidity.HumidityId);
+        Assert.AreEqual(dto.Value, createdHumidity.Value);
+        Assert.AreEqual(dto.Date, createdHumidity.Date);
+    }
+    [TestMethod]
+    public async Task CreateAsync_NegativeValue_ThrowsArgumentOutOfRangeException()
+    {
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = DateTime.Now.AddDays(-1), Value = -10 });
+
+        // Arrange
+        var dto = new HumidityCreationDto()
+        {
+            Value = -10,
+            Date = DateTime.Now.AddDays(-1)
+        };
+
+        // Act and Assert
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(dto));
+    }
+    [TestMethod]
+    public async Task CreateAsync_ValueGreaterThan100_ThrowsArgumentOutOfRangeException()
+    {
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = DateTime.Now.AddDays(-1), Value = 110 });
+        // Arrange
+        var dto = new HumidityCreationDto()
+        {
+            Value = 110,
+            Date = DateTime.Now.AddDays(-1)
+        };
+
+        // Act and Assert
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(dto));
+    }
+    [TestMethod]
+    public async Task CreateAsync_DateInFuture_ThrowsArgumentOutOfRangeException()
+    {
+        dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = DateTime.Now.AddDays(1), Value = 50 });
+        // Arrange
+        var dto = new HumidityCreationDto()
+        {
+            Value = 50,
+            Date = DateTime.Now.AddDays(1)
+        };
+
+        // Act and Assert
+        await Assert.ThrowsExceptionAsync<ArgumentOutOfRangeException>(() => logic.CreateAsync(dto));
+    }
     [TestMethod]
     public async Task HumidityGetAsyncTest()
     {
@@ -63,9 +131,9 @@ public class HumidityLogicTest : DbTestBase
         Assert.AreEqual(humDto.Date, humidities.First().Date);
         Assert.AreEqual(humDto.Value, humidities.First().Value);
     }
-    
-    
-    
+
+
+
     [TestMethod]
     public async Task HumidityGetAsyncCurrentTrueCorrectTest()
     {

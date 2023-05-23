@@ -2,6 +2,6 @@
 
 public class ValveStateDto
 {
-    public bool Toggle { get; set; }
+    public bool State { get; set; }
 
 }

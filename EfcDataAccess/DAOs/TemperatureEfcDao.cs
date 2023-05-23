@@ -17,22 +17,6 @@ public class TemperatureEfcDao : ITemperatureDao
 
 	public async Task<TemperatureDto> CreateAsync(Temperature temperature)
 	{
-		if (temperature == null)
-		{
-			throw new ArgumentNullException(nameof(temperature), "Temperature object cannot be null");
-		}
-		if (temperature.Value < -50)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Value), "Value of temperature cannot be below -50°C");
-		}
-		if (temperature.Value > 60)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Value), "Value of temperature cannot be above 60°C");
-		}
-		if (temperature.Date > DateTime.Now)
-		{
-			throw new ArgumentOutOfRangeException(nameof(temperature.Date), "Date of temperature cannot be in the future");
-		}
 
 		EntityEntry<Temperature> entity = await _context.Temperatures.AddAsync(temperature);
 		await _context.SaveChangesAsync();
@@ -45,30 +29,34 @@ public class TemperatureEfcDao : ITemperatureDao
 		};
 		return dto;
 	}
-	
-	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto dto)
+
+	public async Task<IEnumerable<TemperatureDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
-		IQueryable<Temperature> tempQuery= _context.Temperatures.AsQueryable();
-		if (dto.Current)
+		DateTime startTime = searchMeasurement.StartTime ?? DateTime.MinValue; // Use DateTime.MinValue if StartTime is not provided
+		DateTime endTime = searchMeasurement.EndTime ?? DateTime.MaxValue; // Use DateTime.MaxValue if EndTime is not provided
+
+		var list = _context.Temperatures.AsQueryable();
+
+		// if current is requested, return just last
+		if (searchMeasurement.Current)
 		{
-			tempQuery = tempQuery.OrderByDescending(t => t.Date).Take(1).AsQueryable();
+			list = list
+				.OrderByDescending(h => h.Date)
+				.Take(1);
 		}
-		if (dto.EndTime !=null && dto.StartTime != null)
+		else
 		{
-			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime && t.Date <= dto.EndTime).AsQueryable() ;
+			list = _context.Temperatures.Where(c => c.Date >= startTime && c.Date <= endTime);
 		}
-		else if (dto.StartTime != null)
-		{
-			tempQuery = tempQuery.Where(t => t.Date >= dto.StartTime).AsQueryable();
-		}
-		else if (dto.EndTime != null)
-		{
-			tempQuery = tempQuery.Where(t => t.Date <= dto.EndTime).AsQueryable();
-		}
-		
-		IEnumerable<TemperatureDto> result = await tempQuery
-			.Select(t => new TemperatureDto(){Date = t.Date,TemperatureId = t.TemperatureId,value = t.Value})
-			.ToListAsync();
+
+		IEnumerable<TemperatureDto> result = await list.Select(c =>
+			new TemperatureDto()
+			{
+				Date = c.Date,
+				TemperatureId = c.TemperatureId,
+				value = c.Value
+			}).ToListAsync();
+
 		return result;
 	}
 

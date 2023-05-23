@@ -20,22 +20,22 @@ public class WateringSystemDao : IWateringSystemDao
         ValveState existingState = await _context.ValveState.FirstOrDefaultAsync();
         if (existingState != null)
         {
-            if (existingState.Toggle == valveState.Toggle)
-            {
-                throw new Exception($"The valve is already {valveState.Toggle}");
-            }
-            else
-            {
+            // if (existingState.State == valveState.State)
+            // {
+            //     throw new Exception($"The valve is already {valveState.State}");
+            // }
+            // else
+            // {
                 _context.ValveState.Remove(existingState); // remove the existing entity
                 await _context.SaveChangesAsync();
                 EntityEntry<ValveState> entity = await _context.ValveState.AddAsync(valveState); // add the new entity
                 await _context.SaveChangesAsync();
                 ValveStateDto dto = new ValveStateDto()
                 {
-                    Toggle = entity.Entity.Toggle
+                    State = entity.Entity.Toggle
                 };
                 return dto;
-            }
+            // }
         }
         else
         {
@@ -43,7 +43,7 @@ public class WateringSystemDao : IWateringSystemDao
             await _context.SaveChangesAsync();
             ValveStateDto dto = new ValveStateDto()
             {
-                Toggle = entity.Entity.Toggle
+                State = entity.Entity.Toggle
             };
             return dto;
         }
@@ -56,7 +56,7 @@ public class WateringSystemDao : IWateringSystemDao
     {
         IQueryable<ValveState> tempQuery = _context.ValveState.AsQueryable();
         ValveStateDto? resultDto = await tempQuery
-            .Select(v => new ValveStateDto() { Toggle = v.Toggle })
+            .Select(v => new ValveStateDto() { State = v.Toggle })
             .FirstOrDefaultAsync();
         return resultDto ?? new ValveStateDto(); // return a new instance of ValveStateDto if resultDto is null
     }
