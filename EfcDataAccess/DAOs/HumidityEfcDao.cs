@@ -26,12 +26,13 @@ public class HumidityEfcDao : IHumidityDao
 			Value = entity.Entity.Value
 		};
 	}
-	
+
 	public async Task<IEnumerable<HumidityDto>> GetAsync(SearchMeasurementDto searchMeasurement)
 	{
-		var list = _context.Humidities.AsQueryable();
-		long secondsPrecision = TimeSpan.TicksPerSecond;
+		DateTime startTime = searchMeasurement.StartTime ?? DateTime.MinValue; // Use DateTime.MinValue if StartTime is not provided
+		DateTime endTime = searchMeasurement.EndTime ?? DateTime.MaxValue; // Use DateTime.MaxValue if EndTime is not provided
 
+		var list = _context.Humidities.AsQueryable();
 
 		// if current is requested, return just last
 		if (searchMeasurement.Current)
@@ -40,19 +41,9 @@ public class HumidityEfcDao : IHumidityDao
 				.OrderByDescending(h => h.Date)
 				.Take(1);
 		}
-		// return humidities in interval
-		else if (searchMeasurement.StartTime != null && searchMeasurement.EndTime != null)
+		else
 		{
-			list = list.Where(h => h.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1 && h.Date.Ticks/secondsPrecision <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision);
-		}
-		else if (searchMeasurement.StartTime != null)
-		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision >= searchMeasurement.StartTime.Value.Ticks/secondsPrecision-1).AsQueryable();
-			
-		}
-		else if (searchMeasurement.EndTime != null)
-		{
-			list = list.Where(c => c.Date.Ticks/secondsPrecision <= searchMeasurement.EndTime.Value.Ticks/secondsPrecision-1).AsQueryable();
+			list = _context.Humidities.Where(c => c.Date >= startTime && c.Date <= endTime);
 		}
 
 		IEnumerable<HumidityDto> result = await list.Select(h =>
@@ -65,5 +56,5 @@ public class HumidityEfcDao : IHumidityDao
 
 		return result;
 	}
-	
+
 }

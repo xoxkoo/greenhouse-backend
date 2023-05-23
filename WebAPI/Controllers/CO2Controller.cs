@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/co2")]
 public class CO2Controller:ControllerBase
 {
     private readonly ICO2Logic Logic;

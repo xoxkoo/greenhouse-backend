@@ -3,8 +3,10 @@ using Application.DaoInterfaces;
 using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.Entities;
+using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SocketServer;
@@ -27,21 +29,17 @@ public class ConvertFromHexTest : DbTestBase
     [TestInitialize]
     public void TestInitialize()
     {
-        ITemperatureDao temperatureDao = new TemperatureEfcDao(DbContext);
-        ICO2Dao co2Dao = new CO2EfcDao(DbContext);
-        IHumidityDao humidityDao = new HumidityEfcDao(DbContext);
-        IWateringSystemDao wateringSystemDao = new WateringSystemDao(DbContext);
-        IEmailDao emailDao = new EmailEfcDao(DbContext);
-        IPresetDao presetDao = new PresetEfcDao(DbContext);
-        _emailLogic = new EmailLogic(emailDao, presetDao);
+	    var services = new ServiceCollection();
+	    // Register DbContext and other dependencies
+	    services.AddScoped<Context>(provider => DbContext);
 
-        _temperatureLogic = new TemperatureLogic(temperatureDao);
-        _co2Logic = new CO2Logic(co2Dao);
-        _humidityLogic = new HumidityLogic(humidityDao);
-        _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _emailLogic);
-        socket = new Mock<IWebSocketServer>();
-        _waterLogic = new WateringSystemLogic(wateringSystemDao,_converter,socket.Object);
-        
+	    // Register services from the Startup class
+	    var startup = new Startup();
+	    startup.ConfigureServices(services);
+
+	    // Resolve PresetController using dependency injection
+	    _converter = services.BuildServiceProvider().GetService<IConverter>();
+
     }
 
 
@@ -87,7 +85,7 @@ public class ConvertFromHexTest : DbTestBase
 	    await DbContext.Mails.AddAsync(email);
 	    await DbContext.Presets.AddAsync(preset);
 	    await DbContext.SaveChangesAsync();
-	    string result = await _converter.ConvertFromHex("07817b1f4ff0");
+	    string result = await _converter.ConvertFromHex("07817b0707f0");
 
 	    // Check if records were created in the database
 	    var temperatureRecord = await DbContext.Temperatures.FirstOrDefaultAsync();
@@ -97,7 +95,7 @@ public class ConvertFromHexTest : DbTestBase
 	    Assert.IsNotNull(temperatureRecord);
 	    Assert.IsNotNull(co2Record);
 	    Assert.IsNotNull(humidityRecord);
-	    Assert.AreEqual("25.8, 31, 1279", result);
+	    Assert.AreEqual("25.8, 56, 2032", result);
     }
 
     [TestMethod]

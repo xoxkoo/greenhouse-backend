@@ -1,8 +1,5 @@
-﻿using System.Diagnostics;
-using Application.LogicInterfaces;
+﻿using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.CreationDTOs;
-using Domain.DTOs.ScheduleDTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -39,36 +36,43 @@ public class ScheduleControllerTests
 		    }
 	    };
 
-	    var createdDto = new ScheduleDto
+
+	    logic.Setup(x => x.CreateAsync(It.IsAny<IEnumerable<IntervalDto>>()))
+		    .ReturnsAsync(intervals);
+
+	    List<IntervalToSendDto> dtos = new List<IntervalToSendDto>();
+	    foreach (var i in intervals)
 	    {
-		    Id = 1,
-		    Intervals = intervals
-	    };
-
-	    logic.Setup(x => x.CreateAsync(It.IsAny<ScheduleCreationDto>()))
-		    .ReturnsAsync(createdDto);
-
+		    var newInterval = new IntervalToSendDto()
+		    {
+			    DayOfWeek = i.DayOfWeek,
+			    EndTime = i.EndTime,
+			    StartTime = i.StartTime
+		    };
+		    dtos.Add(newInterval);
+	    }
+		
 	    // Act
-	    var result = await _controller.CreateAsync(intervals);
+	    var result = await _controller.CreateAsync(dtos);
 
 
 
         // Assert
         Assert.IsInstanceOfType(result.Result, typeof(CreatedResult));
         CreatedResult createdResult = (CreatedResult)result.Result;
-        Assert.AreEqual("/schedule/" + createdDto.Id, createdResult.Location);
-        Assert.AreEqual(createdDto, createdResult.Value);
+        Assert.AreEqual(intervals, createdResult.Value);
     }
 
     [TestMethod]
     public async Task CreateAsync_ExceptionThrown_ReturnsInternalServerError()
     {
         // Arrange
-        ScheduleCreationDto dto = new ScheduleCreationDto(); // Set up a valid DTO.
+        IEnumerable<IntervalDto> dto = new List<IntervalDto>(); // Set up a valid DTO.
         logic.Setup(x => x.CreateAsync(dto)).ThrowsAsync(new Exception("An error occurred."));
 
+        IEnumerable<IntervalToSendDto> intervals = new List<IntervalToSendDto>();
         // Act
-        ActionResult<ScheduleDto> result = await _controller.CreateAsync(new List<IntervalDto>());
+        var result = await _controller.CreateAsync(intervals);
 
         // Assert
         Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
@@ -98,13 +102,7 @@ public class ScheduleControllerTests
 			    EndTime = new TimeSpan(10, 0, 0)
 		    },
 	    };
-	    var intervalDtoList = expected;
-	    var scheduleDto = new ScheduleDto
-	    {
-		    Intervals = intervalDtoList
-	    };
-	    var scheduleList = new List<ScheduleDto> { scheduleDto };
-	    logic.Setup(mock => mock.GetAsync()).ReturnsAsync(scheduleList);
+	    logic.Setup(mock => mock.GetAsync()).ReturnsAsync(expected);
 
 
 	    // Act
@@ -115,7 +113,7 @@ public class ScheduleControllerTests
 	    Assert.IsInstanceOfType<OkObjectResult>(response.Result);
 
 	    var okResult = response.Result as OkObjectResult;
-	    Assert.AreEqual(intervalDtoList, okResult.Value);
+	    Assert.AreEqual(expected, okResult.Value);
 
 	    var actualIntervals = okResult.Value as IEnumerable<IntervalDto>;
 	    Assert.IsNotNull(actualIntervals);

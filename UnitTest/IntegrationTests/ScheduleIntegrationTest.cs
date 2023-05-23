@@ -29,9 +29,7 @@ public class ScheduleIntegrationTest : DbTestBase
     public async Task CreateSchedule_Overlapping_Test()
     {
         // Arrange
-        var dto = new ScheduleCreationDto
-        {
-            Intervals = new List<IntervalDto>
+        IEnumerable<IntervalDto> intervals = new List<IntervalDto>
             {
                 new IntervalDto
                 {
@@ -45,20 +43,19 @@ public class ScheduleIntegrationTest : DbTestBase
                 StartTime = new TimeSpan(18, 0, 0),
                 EndTime = new TimeSpan(21, 0, 0)
             }
-            }
         };
 
 
         // Act
-        var result = await logic.CreateAsync(dto);
+        var result = await logic.CreateAsync(intervals);
 
         //Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(1, result.Id);
-        Assert.AreEqual(2, result.Intervals.Count());
+        Assert.AreEqual(1, result.FirstOrDefault().Id);
+        Assert.AreEqual(2, result.Count());
 
-        var intervalDto = result.Intervals.First();
-        var interval = dto.Intervals.First();
+        var intervalDto = result.First();
+        var interval = intervals.First();
 
         Assert.AreEqual(interval.DayOfWeek, intervalDto.DayOfWeek);
         Assert.AreEqual(interval.StartTime, intervalDto.StartTime);

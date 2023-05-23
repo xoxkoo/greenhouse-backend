@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/email")]
 public class EmailController : ControllerBase
 {
     private readonly IEmailLogic _logic;
@@ -25,7 +25,7 @@ public class EmailController : ControllerBase
         try
         {
             EmailDto created = await _logic.CreateAsync(dto);
-            return Ok(created);
+            return Created("/email", created);
         }
         catch (Exception e)
         {

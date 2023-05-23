@@ -2,14 +2,12 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 
 namespace EfcDataAccess;
 
 class DatabaseInsertion
 {
     private static Context _context;
-    private static IConverter _converter;
     public static async Task InsertMyEntitiesAsync(int length)
     {
         for (int i = 1; i <= length; i++)
@@ -33,9 +31,6 @@ class DatabaseInsertion
         intervals.Add(intervalFriday);
         await _context.Intervals.AddRangeAsync(intervals);
         
-        //Schedule
-        Schedule schedule = new Schedule() { Id = 1, Intervals = intervals };
-        await _context.Schedules.AddAsync(schedule);
         
         //Thresholds
         Threshold threshold1 = new Threshold() { Id = 1, Type = "temperature", MinValue = 20, MaxValue = 40 };
@@ -46,15 +41,15 @@ class DatabaseInsertion
         thresholds.Add(threshold2);
         thresholds.Add(threshold3);
         await _context.Thresholds.AddRangeAsync(thresholds);
-        
+
         //Preset
         Preset preset = new Preset() { Id = 1, Thresholds = thresholds, IsCurrent = true, Name = "Preset 1"};
         await _context.Presets.AddAsync(preset);
-        
+
         //Email
         Email email = new Email() { EmailAddress = "greenhousesep4@gmail.com" };
         await _context.Mails.AddAsync(email);
-        
+
         //ValveState
         ValveState valveState = new ValveState() { Toggle = false };
         await _context.ValveState.AddAsync(valveState);
@@ -68,14 +63,13 @@ class DatabaseInsertion
         _context.CO2s.RemoveRange(_context.CO2s);
         _context.Temperatures.RemoveRange(_context.Temperatures);
         _context.Intervals.RemoveRange(_context.Intervals);
-        _context.Schedules.RemoveRange(_context.Schedules);
         _context.Thresholds.RemoveRange(_context.Thresholds);
         _context.Presets.RemoveRange(_context.Presets);
         _context.Mails.RemoveRange(_context.Mails);
         _context.ValveState.RemoveRange(_context.ValveState);
         // Call the InsertMyEntitiesAsync method
         await InsertMyEntitiesAsync(10);
-        
+
         // Save changes to the database
         await _context.SaveChangesAsync();
     }

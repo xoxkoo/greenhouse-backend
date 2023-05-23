@@ -1,13 +1,11 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
-using Domain.DTOs.CreationDTOs;
-using Domain.DTOs.ScheduleDTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/schedule")]
 public class ScheduleController : ControllerBase
 {
     private readonly IScheduleLogic Logic;
@@ -18,18 +16,23 @@ public class ScheduleController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ScheduleDto>> CreateAsync([FromBody] IEnumerable<IntervalDto> intervals)
+    public async Task<ActionResult<IEnumerable<IntervalDto>>> CreateAsync([FromBody] IEnumerable<IntervalToSendDto> intervals)
     {
-	    Console.WriteLine(intervals.Count());
-	    var dto = new ScheduleCreationDto()
-	    {
-		    Intervals = intervals
-	    };
-
         try
         {
-            ScheduleDto created = await Logic.CreateAsync(dto);
-            return Created($"/schedule/{created.Id}", created);
+            List<IntervalDto> intervalDtosToLogic = new List<IntervalDto>();
+            foreach (var i in intervals)
+            {
+                var newInterval = new IntervalDto()
+                {
+                    DayOfWeek = i.DayOfWeek,
+                    EndTime = i.EndTime,
+                    StartTime = i.StartTime
+                };
+                intervalDtosToLogic.Add(newInterval);
+            }
+            IEnumerable<IntervalDto> intervalDtos = await Logic.CreateAsync(intervalDtosToLogic);
+            return Created($"/intervals/{intervalDtos}", intervalDtos);
         }
         catch (Exception e)
         {
@@ -43,15 +46,43 @@ public class ScheduleController : ControllerBase
     {
         try
         {
-            var schedules = await Logic.GetAsync();
-            Console.WriteLine(schedules.FirstOrDefault().Intervals.Count());
-            return Ok(schedules.FirstOrDefault().Intervals);
+            var intervals = await Logic.GetAsync();
+            return Ok(intervals);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            return StatusCode(500, e.Message);
         }
     }
 
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> PutAsync([FromRoute] int id, [FromBody] IntervalDto intervalDto)
+    {
+        try
+        {
+            await Logic.PutAsync(intervalDto);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteAsync([FromRoute] int id)
+    {
+        try
+        {
+            await Logic.DeleteAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }

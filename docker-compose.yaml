@@ -1,23 +1,18 @@
 ﻿version: '3'
 services:
   webapi:
-    image: 'webapi:latest'
     build:
-      context: ./
+      context: .
+      dockerfile: DockerfileWeb
     ports:
       - 7070:7071
-    depends_on:
-      - db
-    environment:
-      - SQLITE_DB=Greenhouse
-  
-  db:
-    container_name: "doc-sqlite-container"
-    image: 'esolang/sqlite3'
-    volumes:
-      - db:/EfcDataAccess
-    environment:
-      - SQLITE_DB=Greenhouse
-volumes:
-  db:
+  socket:
+    build:
+      context: .
+      dockerfile: DockerfileSocket
+  timer:
+    build:
+      context: .
+      dockerfile: DockerfileTimer
+
     

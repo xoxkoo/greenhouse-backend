@@ -15,10 +15,10 @@ public class PresetController : ControllerBase
     {
         _logic = logic;
     }
-    
+
     [Route("preset")]
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<PresetDto>>> GetAsync()
+    public async Task<ActionResult<IEnumerable<PresetEfcDto>>> GetAsync()
     {
         try
         {
@@ -32,10 +32,10 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [Route("current-preset")]
     [HttpGet]
-    public async Task<ActionResult<PresetDto>> GetCurrentAsync()
+    public async Task<ActionResult<PresetEfcDto>> GetCurrentAsync()
     {
         try
         {
@@ -50,16 +50,16 @@ public class PresetController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
     [Route("preset")]
     [HttpPost]
     public async Task<ActionResult<PresetEfcDto>> CreateAsync([FromBody] PresetCreationDto dto)
     {
         try
         {
-            Console.WriteLine(dto);
-            PresetEfcDto created = await _logic.CreateAsync(dto);
-            
-            return Ok(created);
+	        PresetEfcDto created = await _logic.CreateAsync(dto);
+
+            return Created($"/preset/{created.Id}", created);
         }
         catch (Exception e)
         {
@@ -68,20 +68,25 @@ public class PresetController : ControllerBase
         }
     }
 
-    [HttpPatch]
-    [Route("preset/{id:int}")]
-    public async Task<ActionResult> UpdateAsync([FromBody] PresetDto dto, [FromRoute] int id)
+    [HttpPut("preset/{id:int}")]
+    public async Task<ActionResult<PresetEfcDto>> UpdateAsync(int id, [FromBody] PresetEfcDto dto)
     {
-        try
-        {
-            await _logic.UpdateAsync(dto);
-            return Ok();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+	    try
+	    {
+		    if (id != dto.Id)
+		    {
+			    throw new Exception("Id does not match object!");
+		    }
+
+		    PresetEfcDto updated = await _logic.UpdateAsync(dto);
+
+		    return Ok(updated);
+	    }
+	    catch (Exception e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(500, e.Message);
+	    }
     }
 
     [HttpPost]
@@ -96,7 +101,38 @@ public class PresetController : ControllerBase
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [Route("preset/{id:int}")]
+    [HttpGet]
+    public async Task<ActionResult<PresetEfcDto>> GetByIdAsync([FromRoute] int id)
+    {
+        try
+        {
+            var preset = await _logic.GetByIdAsync(id);
+            return Ok(preset);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    [Route("preset/{id:int}")]
+    [HttpDelete]
+    public async Task<ActionResult> DeleteAsync(int id)
+    {
+        try
+        {
+            await _logic.DeleteAsync(id);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
         }
     }
 }

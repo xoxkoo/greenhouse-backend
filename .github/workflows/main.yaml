@@ -3,41 +3,11 @@ name: main
 on:
   push:
     branches:
-    - socketInternalTimer-waterSystem_communication
-
+    - dev-docker_image
 jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
-  build:
-    name: Building image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
 
-      - name: Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
-      - name: Install EF Core tools
-        run: dotnet tool install --global dotnet-ef 
-      - name: EF Core Migrations
-        run: |
-          cd EfcDataAccess
-          dotnet ef database update 
-      - name: DockerHub login
-        uses: docker/login-action@v1
-        with:
-          username:  babicajakub
-          password:  ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: babicajakub/greenhouse:latest  
-  publish:
-    name: Publishing to the cloud
-    uses: ./.github/workflows/publish.yaml
+  
 

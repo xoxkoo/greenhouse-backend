@@ -28,28 +28,26 @@ public class PresetControllerTests
     public async Task GetAsync_ReturnsOkResult()
     {
         // Arrange
-        var presetDtos = new List<PresetDto>
+        var presetDtos = new List<PresetEfcDto>
         {
-            new PresetDto
+            new PresetEfcDto
             {
                 Id = 1,
                 Name = "Tomato",
-                IsCurrent = false,
-                Thresholds = new List<Threshold>
+                Thresholds = new List<ThresholdDto>
                 {
-                    new Threshold { Id = 1, Type = "temperature", MaxValue = 100, MinValue = 0 },
-                    new Threshold { Id = 2, Type = "humidity", MaxValue = 50, MinValue = 0 },
+                    new ThresholdDto() { Type = "temperature", Max = 100, Min = 0 },
+                    new ThresholdDto() {Type = "humidity", Max = 50, Min = 0 },
                 }
             },
-            new PresetDto
+            new PresetEfcDto()
             {
                 Id = 2,
                 Name = "Sunny Day",
-                IsCurrent = true,
-                Thresholds = new List<Threshold>
+                Thresholds = new List<ThresholdDto>
                 {
-                    new Threshold { Id = 3, Type = "temperature", MaxValue = 200, MinValue = 0 },
-                    new Threshold { Id = 4, Type = "humidity", MaxValue = 100, MinValue = 0 },
+                    new ThresholdDto() { Type = "temperature", Max = 200, Min = 0 },
+                    new ThresholdDto(){ Type = "humidity", Max = 100, Min = 0 },
                 }
             },
         };
@@ -62,7 +60,7 @@ public class PresetControllerTests
         Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
         var okObjectResult = result.Result as OkObjectResult;
         Assert.IsNotNull(okObjectResult);
-        var presets = okObjectResult.Value as IEnumerable<PresetDto>;
+        var presets = okObjectResult.Value as IEnumerable<PresetEfcDto>;
         Assert.IsNotNull(presets);
         Assert.AreEqual(presetDtos.Count, presets.Count()); 
     }
@@ -87,17 +85,16 @@ public class PresetControllerTests
     public async Task GetCurrentAsync_ReturnsOkResult()
     {
         // Arrange
-        var presetDtos = new List<PresetDto>
+        var presetDtos = new List<PresetEfcDto>
         {
-            new PresetDto
+            new PresetEfcDto()
             {
                 Id = 2,
-                Name = "Tomato",
-                IsCurrent = true,
-                Thresholds = new List<Threshold>
+                Name = "Sunny Day",
+                Thresholds = new List<ThresholdDto>
                 {
-                    new Threshold { Id = 3, Type = "temperature", MaxValue = 200, MinValue = 0 },
-                    new Threshold { Id = 4, Type = "humidity", MaxValue = 100, MinValue = 0 },
+                    new ThresholdDto() { Type = "temperature", Max = 200, Min = 0 },
+                    new ThresholdDto(){ Type = "humidity", Max = 100, Min = 0 },
                 }
             },
         };
@@ -109,10 +106,11 @@ public class PresetControllerTests
         // Assert
         Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
         var okResult = result.Result as OkObjectResult;
-        Assert.AreEqual(presetDtos.FirstOrDefault(), okResult.Value);
         Assert.IsNotNull(okResult);
-        var preset = okResult.Value as PresetDto;
+        var preset = okResult.Value as PresetEfcDto;
         Assert.IsNotNull(preset);
+        Assert.AreEqual(presetDtos.FirstOrDefault().Id, preset.Id);
+        Assert.AreEqual(presetDtos.FirstOrDefault().Name, preset.Name);
     }
     
     [TestMethod]
@@ -130,62 +128,62 @@ public class PresetControllerTests
         Assert.IsNotNull(statusCodeResult);
         Assert.AreEqual(500, statusCodeResult.StatusCode);
     }
+
     [TestMethod]
-public async Task CreateAsync_ReturnsOkResult()
-{
-    // Arrange
-    var presetCreationDto = new PresetCreationDto
+    public async Task CreateAsync_ReturnsOkResult()
     {
-        Name = "Test Preset",
-        Thresholds = new List<ThresholdDto>
+        // Arrange
+        var presetCreationDto = new PresetCreationDto()
         {
-            new ThresholdDto {  Type = "temperature", Max = 100, Min = 0 },
-            new ThresholdDto {Type = "humidity", Max = 50, Min = 0 }
-        }
-    };
-    var presetEfcDto = new PresetEfcDto
+            Name = "Test Preset",
+            Thresholds = new List<ThresholdDto>
+            {
+                new ThresholdDto {  Type = "temperature", Max = 100, Min = 0 },
+                new ThresholdDto {Type = "humidity", Max = 50, Min = 0 }
+            }
+        };
+        var presetEfcDto = new PresetEfcDto
+        {
+            Id = 1,
+            Name = "Test Preset",
+            Thresholds = new List<ThresholdDto>
+            {
+                new ThresholdDto { Type = "temperature", Max = 100, Min = 0 },
+                new ThresholdDto { Type = "humidity", Max = 50, Min = 0 }
+            }
+        };
+        _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ReturnsAsync(presetEfcDto);
+
+        // Act
+        var result = await _presetController.CreateAsync(presetCreationDto);
+
+        // Assert
+        var okObjectResult = result.Result as CreatedResult;
+        Assert.IsNotNull(okObjectResult);
+        var createdPreset = okObjectResult.Value as PresetEfcDto;
+        Assert.IsNotNull(createdPreset);
+        Assert.AreEqual(presetEfcDto.Id, createdPreset.Id);
+        Assert.AreEqual(presetEfcDto.Name, createdPreset.Name);
+        // Assert other properties and thresholds as needed
+    }
+
+    [TestMethod]
+    public async Task CreateAsync_ReturnsInternalServerError_OnException()
     {
-        Id = 1,
-        Name = "Test Preset",
-        Thresholds = new List<ThresholdDto>
+        // Arrange
+        var presetCreationDto = new PresetCreationDto()
         {
-            new ThresholdDto { Type = "temperature", Max = 100, Min = 0 },
-            new ThresholdDto { Type = "humidity", Max = 50, Min = 0 }
-        }
-    };
-    _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ReturnsAsync(presetEfcDto);
+            Name = "Test Preset",
+            Thresholds = new List<ThresholdDto>
+            {
+                new ThresholdDto { Type = "temperature", Max = 100, Min = 0 },
+                new ThresholdDto {Type = "humidity", Max = 50, Min = 0 }
+            }
+        };
+        _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ThrowsAsync(new Exception("Something went wrong"));
 
-    // Act
-    var result = await _presetController.CreateAsync(presetCreationDto);
-
-    // Assert
-    Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
-    var okObjectResult = result.Result as OkObjectResult;
-    Assert.IsNotNull(okObjectResult);
-    var createdPreset = okObjectResult.Value as PresetEfcDto;
-    Assert.IsNotNull(createdPreset);
-    Assert.AreEqual(presetEfcDto.Id, createdPreset.Id);
-    Assert.AreEqual(presetEfcDto.Name, createdPreset.Name);
-    // Assert other properties and thresholds as needed
-}
-
-[TestMethod]
-public async Task CreateAsync_ReturnsInternalServerError_OnException()
-{
-    // Arrange
-    var presetCreationDto = new PresetCreationDto
-    {
-        Name = "Test Preset",
-        Thresholds = new List<ThresholdDto>
-        {
-            new ThresholdDto { Type = "temperature", Max = 100, Min = 0 },
-            new ThresholdDto {Type = "humidity", Max = 50, Min = 0 }
-        }
-    };
-    _mockPresetLogic.Setup(p => p.CreateAsync(presetCreationDto)).ThrowsAsync(new Exception("Something went wrong"));
-
-    // Act
-    var result = await _presetController.CreateAsync(presetCreationDto);
+        // Act
+        var result = await _presetController.CreateAsync(presetCreationDto);
 
     // Assert
     Assert.IsInstanceOfType(result.Result, typeof(ObjectResult));
