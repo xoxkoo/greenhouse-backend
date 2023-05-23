@@ -8,8 +8,11 @@ jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
-  deploy_to_cluster:
-    name: deploy to cluster
-    uses: ./.github/workflows/deploy_to_cluster.yaml
+  #deploy_to_cluster:
+  #  name: deploy to cluster
+  #  uses: ./.github/workflows/deploy_to_cluster.yaml
+  deploy_to_ghcr:
+    name: deploy_to_ghcr
+    uses: ./.github/workflows/deploy_to_ghcr.yaml
   
 
