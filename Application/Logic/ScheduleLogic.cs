@@ -109,10 +109,6 @@ public class ScheduleLogic : IScheduleLogic
 		    // exclude checking for interval that is updated
 		    if (i.Id != newInterval.Id || newInterval.Id == 0)
 		    {
-
-			    Console.WriteLine(newInterval.EndTime + " " + newInterval.StartTime);
-			    Console.WriteLine(i.EndTime + " " + i.StartTime);
-			    Console.WriteLine();
 			    if (i.DayOfWeek == newInterval.DayOfWeek &&
 			        newInterval.StartTime < i.EndTime &&
 			        newInterval.StartTime > i.StartTime)

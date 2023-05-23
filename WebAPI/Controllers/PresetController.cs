@@ -25,6 +25,11 @@ public class PresetController : ControllerBase
             var presets = await _logic.GetAsync(parametersDto);
             return Ok(presets);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -43,6 +48,11 @@ public class PresetController : ControllerBase
             var preset = presets.FirstOrDefault();
             return Ok(preset);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -59,6 +69,11 @@ public class PresetController : ControllerBase
 	        PresetEfcDto created = await _logic.CreateAsync(dto);
 
             return Created($"/preset/{created.Id}", created);
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {
@@ -81,6 +96,11 @@ public class PresetController : ControllerBase
 
 		    return Ok(updated);
 	    }
+	    catch (ArgumentException e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(400, e.Message);
+	    }
 	    catch (Exception e)
 	    {
 		    Console.WriteLine(e);
@@ -96,6 +116,11 @@ public class PresetController : ControllerBase
         {
             await _logic.ApplyAsync(id);
             return Ok();
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {
@@ -113,6 +138,11 @@ public class PresetController : ControllerBase
             var preset = await _logic.GetByIdAsync(id);
             return Ok(preset);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -127,6 +157,11 @@ public class PresetController : ControllerBase
         {
             await _logic.DeleteAsync(id);
             return Ok();
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {
