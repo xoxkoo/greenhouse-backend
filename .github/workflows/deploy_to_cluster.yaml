@@ -12,7 +12,7 @@ jobs:
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
           service_account_email: greenhouse@noted-palisade-385613.iam.gserviceaccount.com
       - name:  active account
-        run: gcloud auth activate-service-account greenhouse@noted-palisade-385613.iam.gserviceaccount.com
+        run: gcloud auth activate-service-account greenhouse@noted-palisade-385613.iam.gserviceaccount.com --key-file=${{ secrets.SERVICE_ACCOUNT_KEY }}
       - name: Configure kubectl
         run: gcloud container clusters get-credentials autopilot-cluster-1 --zone europe-north1 --project noted-palisade-385613
       - name: Apply deployment
