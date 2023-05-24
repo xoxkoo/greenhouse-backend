@@ -18,7 +18,8 @@ jobs:
 
       - name: Configure Docker
         run: |
-          gcloud auth activate-service-account noted-palisade-385613 --key-file=${{ secrets.SERVICE_ACCOUNT_KEY }}
+          echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > key.json
+          gcloud auth activate-service-account --key-file=key.json
           gcloud auth configure-docker
 
       - name: Build and Push Docker Images
