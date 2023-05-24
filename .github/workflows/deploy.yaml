@@ -13,13 +13,12 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.5.0
         with:
-          project_id: noted-palisade-385613
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+            project_id: noted-palisade-385613
+            service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
       - name: Configure Docker
         run: |
-          echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | docker login -u _json_key --password-stdin https://eu.gcr.io
-          #gcloud auth configure-docker --quiet
+         gcloud auth configure-docker --quiet
 
       - name: Build and Push Docker Images
         run: |
