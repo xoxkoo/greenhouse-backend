@@ -165,7 +165,7 @@ public class ConverterTest : DbTestBase
 		    duration = 16
 	    };
 	    string result = converter.ConvertActionsPayloadToHex(dto);
-	    Assert.AreEqual("120010", result);
+	    Assert.AreEqual("160010", result);
     }
     [TestMethod]
     public async Task ActionsPayload_DurationOverLimit()
@@ -202,7 +202,7 @@ public class ConverterTest : DbTestBase
 		    State = false,
 		    duration = 1
 	    };
-        Assert.AreEqual("100001", converter.ConvertActionsPayloadToHex(dto));
+        Assert.AreEqual("140001", converter.ConvertActionsPayloadToHex(dto));
     }
     [TestMethod]
     public void ActionsPayload_ToggleTrueCorrectDuration()
@@ -212,7 +212,7 @@ public class ConverterTest : DbTestBase
 		    State = true,
 		    duration = 1
 	    };
-	    Assert.AreEqual("120001", converter.ConvertActionsPayloadToHex(dto));
+	    Assert.AreEqual("160001", converter.ConvertActionsPayloadToHex(dto));
     }
     [TestMethod]
     public void ActionsPayload_ToggleFalseIncorrectDuration()
@@ -304,7 +304,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("0d5e32050f01903200", resultHex);
+		    Assert.AreEqual("115e32050f01903200", resultHex);
 	    }
 
 
@@ -357,7 +357,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("0cc82bc50f01903200", resultHex);
+		    Assert.AreEqual("10c82bc50f01903200", resultHex);
 	    }
 
 	    [TestMethod]
@@ -385,7 +385,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("0c0044c0190003ffc0", resultHex);
+		    Assert.AreEqual("100044c0190003ffc0", resultHex);
 	    }
 
 

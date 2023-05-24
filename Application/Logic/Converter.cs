@@ -227,8 +227,6 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 12));
 	    }
 
-	    Console.WriteLine(result.ToString());
-	    Console.WriteLine(BinaryStringToHex(result.ToString()).ToLower());
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }
 
