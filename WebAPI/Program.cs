@@ -28,7 +28,7 @@ builder.Services.AddScoped<IWateringSystemLogic, WateringSystemLogic>();
 builder.Services.AddScoped<IScheduleLogic, ScheduleLogic>();
 builder.Services.AddScoped<IEmailLogic, EmailLogic>();
 builder.Services.AddScoped<IPresetLogic, PresetLogic>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthLogic, AuthLogic>();
 
 builder.Services.AddScoped<ITemperatureDao, TemperatureEfcDao>();
 builder.Services.AddScoped<IHumidityDao, HumidityEfcDao>();

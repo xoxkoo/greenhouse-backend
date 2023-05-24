@@ -4,8 +4,8 @@ using Application.LogicInterfaces;
 using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using Microsoft.Extensions.DependencyInjection;
-
 namespace SocketClient;
+
 
 static class RunWebSocket
 {

@@ -1,10 +1,9 @@
-﻿using Application.Logic;
-using Application.LogicInterfaces;
-using Domain.DTOs;
-using Domain.Entities;
+﻿using Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EfcDataAccess;
 
+[ExcludeFromCodeCoverage]
 class DatabaseInsertion
 {
     private static Context _context;
