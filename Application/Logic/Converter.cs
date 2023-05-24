@@ -62,7 +62,7 @@ public class Converter : IConverter
      *
      * @param actionsPayload
      */
-    public string ConvertActionsPayloadToHex(ValveStateDto dto, int duration)
+    public string ConvertActionsPayloadToHex(ValveStateCreationDto dto)
     {
         //  ID 6 bits
         //  Actions 8bits - 7th bit water toggle
@@ -88,12 +88,12 @@ public class Converter : IConverter
         result.Append(IntToBinaryRight(toggleBit, 8));
 
         // Validation for duration
-        if (duration < 0 || duration > 1023)
+        if (dto.duration < 0 || dto.duration > 1023)
         {
             throw new Exception("Duration must be an integer between 0 and 1023.");
         }
         // Interval in minutes, total size of 10 bits
-        result.Append(IntToBinaryLeft(duration, 10));
+        result.Append(IntToBinaryLeft(dto.duration, 10));
 
         // Return a hex representation of provided binary payload
         return BinaryStringToHex(result.ToString()).ToLower();
