@@ -26,35 +26,37 @@ public class WateringSystemLogic : IWateringSystemLogic
 
     public async Task<ValveStateDto> CreateAsync(ValveStateCreationDto dto)
     {
-        if (dto.duration.Equals(null))
-        {
-            throw new Exception("duration has to be set");
-        }
-        if (dto.State.Equals(null))
-        {
-            throw new Exception("State has to be set");
-        }
-        if (dto.State.Equals(true)&&(dto.duration<=0))
-        {
-            throw new Exception("Duration cannot be 0 or less");
-        }
-        var entity = new ValveState()
-        {
-            Toggle = dto.State
-        };
+       Validate(dto);
 
-        var toggleDto = new ValveStateDto()
-        {
-	        State = dto.State
-        };
+       var entity = new ValveState()
+       {
+	       Toggle = dto.State
+       };
 
-        string payload = _converter.ConvertActionsPayloadToHex(toggleDto, dto.duration);
+       string payload = _converter.ConvertActionsPayloadToHex(dto);
 
         await _socketServer.Connect();
         await _socketServer.Send(payload);
         await _socketServer.Disconnect();
 
         return await _wateringSystemDao.CreateAsync(entity);
+    }
+
+    private void Validate(ValveStateCreationDto dto)
+    {
+	    if (dto.duration.Equals(null))
+	    {
+		    throw new Exception("duration has to be set");
+	    }
+	    if (dto.State.Equals(null))
+	    {
+		    throw new Exception("State has to be set");
+	    }
+	    if (dto.State.Equals(true)&&(dto.duration<=0))
+	    {
+		    throw new Exception("Duration cannot be 0 or less");
+	    }
+
     }
 
     public async Task<ValveStateDto> GetAsync()

@@ -20,7 +20,13 @@ public class HumidityController:ControllerBase
     {
 	    try
 	    {
-		    var parameters = current != null ? new SearchMeasurementDto(true) : new SearchMeasurementDto(false, startTime, endTime);
+		    if (current == null)
+		    {
+			    current = Request.Query.ContainsKey("current");
+		    }
+
+
+		    var parameters = new SearchMeasurementDto((bool)current, startTime, endTime);
 		    var humidities = await _logic.GetAsync(parameters);
 
 		    return Ok(humidities);

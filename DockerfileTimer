@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
 WORKDIR /app
 
-ENV DB_CONNECTION="Host=mouse.db.elephantsql.com; Database=jqemjlmp; Username=jqemjlmp; Password=rI4AvZl09COcyjAfPF-ap0vYtn_Qktji"
+ENV DB_CONNECTION="Host=mouse.db.elephantsql.com; Database=jqemjlmp; Username=jqemjlmp; Password=rI4AvZl09COcyjAfPF-ap0vYtn_Qktji; MaxPoolSize=1"
 
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser

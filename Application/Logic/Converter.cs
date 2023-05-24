@@ -58,19 +58,19 @@ public class Converter : IConverter
         return response;
     }
     /**
-     * Convert actions payload into hexidecimal payload
+     * Convert actions payload into hexadecimal payload
      *
      * @param actionsPayload
      */
-    public string ConvertActionsPayloadToHex(ValveStateDto dto, int duration)
+    public string ConvertActionsPayloadToHex(ValveStateCreationDto dto)
     {
         //  ID 6 bits
         //  Actions 8bits - 7th bit water toggle
         // Interval 10bits - 1023 minutes
         StringBuilder result = new StringBuilder();
 
-        //ID for this payload is 4
-        result.Append("000100");
+        //ID for this payload is 5
+        result.Append("000101");
 
         int toggleBit = 0;
         // bit is 1 if toggle is true, 0 if false
@@ -88,12 +88,12 @@ public class Converter : IConverter
         result.Append(IntToBinaryRight(toggleBit, 8));
 
         // Validation for duration
-        if (duration < 0 || duration > 1023)
+        if (dto.duration < 0 || dto.duration > 1023)
         {
             throw new Exception("Duration must be an integer between 0 and 1023.");
         }
         // Interval in minutes, total size of 10 bits
-        result.Append(IntToBinaryLeft(duration, 10));
+        result.Append(IntToBinaryLeft(dto.duration, 10));
 
         // Return a hex representation of provided binary payload
         return BinaryStringToHex(result.ToString()).ToLower();
@@ -153,8 +153,8 @@ public class Converter : IConverter
 	    StringBuilder result = new StringBuilder();
 
 	    //ID - 6 bits
-	    //ID for this payload is 3
-	    result.Append("000011");
+	    //ID for this payload is 4
+	    result.Append("000100");
 	    List<ThresholdDto> thresholds = dto.Thresholds.ToList();
 	    if (thresholds == null)
 	    {
@@ -227,8 +227,6 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 12));
 	    }
 
-	    Console.WriteLine(result.ToString());
-	    Console.WriteLine(BinaryStringToHex(result.ToString()).ToLower());
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }
 
