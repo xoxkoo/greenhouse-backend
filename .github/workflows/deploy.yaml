@@ -19,7 +19,7 @@ jobs:
       - name: Configure Docker
         run: |
           gcloud iam service-accounts keys create keyfile.json --iam-account greenhouse@noted-palisade-385613.iam.gserviceaccount.com
-          gcloud auth activate-service-account --key-file=key.json
+          gcloud auth activate-service-account --key-file=keyfile.json
           gcloud auth configure-docker
           
       - name: Build and Push Docker Images
