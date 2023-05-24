@@ -13,23 +13,16 @@ jobs:
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.5.0
         with:
-            project_id: noted-palisade-385613
-            service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+          project_id: noted-palisade-385613
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
       - name: Configure Docker
         run: |
-          $env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\babic\RiderProjects\greenhouse-backend\.github\workflows\key.json"
-          gcloud auth login --cred-file=$env:GOOGLE_APPLICATION_CREDENTIALS
-          gcloud auth list
-          #gcloud iam service-accounts keys create keyfile.json --iam-account greenhouse@noted-palisade-385613.iam.gserviceaccount.com
-          gcloud auth activate-service-account --key-file=keyfile.json
-          gcloud auth configure-docker
-          
+          gcloud auth configure-docker --quiet
       - name: Build and Push Docker Images
         run: |
           docker-compose -f docker-compose.yaml build
           docker-compose -f docker-compose.yaml push
-
       - name: Update image tags
         run: |
           docker tag greenhouse-backend_webapi:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
@@ -45,4 +38,3 @@ jobs:
           docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:${IMAGE_TAG}
         env:
           IMAGE_TAG: v2
-            
