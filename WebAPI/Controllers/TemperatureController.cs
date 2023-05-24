@@ -20,6 +20,10 @@ public class TemperatureController:ControllerBase
     {
 	    try
 	    {
+
+		    if (Request.Query.ContainsKey("current"))
+			    current = true;
+
 		    var parameters = current != null ? new SearchMeasurementDto(true) : new SearchMeasurementDto(false, startTime, endTime);
 		    var temperatures = await Logic.GetAsync(parameters);
 		    return Ok(temperatures);

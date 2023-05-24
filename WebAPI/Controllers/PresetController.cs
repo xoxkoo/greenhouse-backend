@@ -108,6 +108,8 @@ public class PresetController : ControllerBase
 	    }
     }
 
+
+    //todo should be object wit id
     [HttpPost]
     [Route("current-preset")]
     public async Task<ActionResult> ApplyAsync([FromBody] int id)
