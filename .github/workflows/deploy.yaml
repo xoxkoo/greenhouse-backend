@@ -19,9 +19,10 @@ jobs:
       - name: Configure Docker
         run: |
           echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" > key.json
+          cat key.json # For debugging purposes
           gcloud auth activate-service-account --key-file=key.json
           gcloud auth configure-docker
-
+          rm key.json
       - name: Build and Push Docker Images
         run: |
           docker-compose -f docker-compose.yaml build
