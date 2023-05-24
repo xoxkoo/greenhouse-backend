@@ -18,7 +18,7 @@ jobs:
 
       - name: Configure Docker
         run: |
-          gcloud auth activate-service-account --key-file=key.json
+          gcloud auth activate-service-account --key-file=C:/Users/babic/OneDrive/Počítač/key.json/key.json
           gcloud auth configure-docker
           rm key.json
       - name: Build and Push Docker Images
