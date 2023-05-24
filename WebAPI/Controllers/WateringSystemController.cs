@@ -24,6 +24,11 @@ public class WateringSystemController:ControllerBase
             await Logic.CreateAsync(dto);
             return Ok();
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -38,6 +43,11 @@ public class WateringSystemController:ControllerBase
         {
             ValveStateDto state = await Logic.GetAsync();
             return Ok(state);
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {

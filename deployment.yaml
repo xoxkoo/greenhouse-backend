@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: webapi
-          image: gcr.io/my-project/webapi:v1
+          image: eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:v2
           ports:
             - containerPort: 7071
         - name: socket
-          image: gcr.io/my-project/socket:v1
+          image: eu.gcr.io/noted-palisade-385613/greenhouse-backend_socket:v2
         - name: timer
-          image: gcr.io/my-project/timer:v1
+          image: eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:v2
