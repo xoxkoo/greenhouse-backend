@@ -17,8 +17,10 @@ jobs:
             service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
       - name: Configure Docker
-        run: Get-Content ${{ secrets.SERVICE_ACCOUNT_KEY }} |
-             docker login -u _json_key --password-stdin https://eu.gcr.io
+        run: |
+          sudo -s
+          gcloud auth login
+          gcloud auth configure-docker
 
       - name: Build and Push Docker Images
         run: |
