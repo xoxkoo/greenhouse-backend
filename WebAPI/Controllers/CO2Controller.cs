@@ -19,11 +19,21 @@ public class CO2Controller:ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync([FromQuery] bool? current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
+    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync(
+	    [FromQuery] bool? current,
+	    [FromQuery] DateTime? startTime = null,
+	    [FromQuery] DateTime? endTime = null)
     {
 	    try
 	    {
-		    var parameters = current != null ? new SearchMeasurementDto(true) : new SearchMeasurementDto(false, startTime, endTime);
+
+		    if (current == null)
+		    {
+			    current = Request.Query.ContainsKey("current");
+		    }
+
+		    var parameters = new SearchMeasurementDto((bool)current, startTime, endTime);
+
 		    var co2s = await Logic.GetAsync(parameters);
 		    return Ok(co2s);
 	    }
