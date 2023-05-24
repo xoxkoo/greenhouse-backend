@@ -1,5 +1,5 @@
-﻿name: deploy
-
+﻿
+name: deploy
 on:
   workflow_call:
 jobs:
@@ -19,13 +19,12 @@ jobs:
       - name: Configure Docker
         run: |
           gcloud auth configure-docker --quiet
-          gcloud iam service-accounts keys create keyfile.json --iam-account greenhouse@noted-palisade-385613.iam.gserviceaccount.com
-          Get-Content keyfile.json |
-          docker login -u _json_key --password-stdin https://eu.gcr.io
+
       - name: Build and Push Docker Images
         run: |
           docker-compose -f docker-compose.yaml build
           docker-compose -f docker-compose.yaml push
+
       - name: Update image tags
         run: |
           docker tag greenhouse-backend_webapi:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
