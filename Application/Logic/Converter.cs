@@ -58,7 +58,7 @@ public class Converter : IConverter
         return response;
     }
     /**
-     * Convert actions payload into hexidecimal payload
+     * Convert actions payload into hexadecimal payload
      *
      * @param actionsPayload
      */
@@ -69,8 +69,8 @@ public class Converter : IConverter
         // Interval 10bits - 1023 minutes
         StringBuilder result = new StringBuilder();
 
-        //ID for this payload is 4
-        result.Append("000100");
+        //ID for this payload is 5
+        result.Append("000101");
 
         int toggleBit = 0;
         // bit is 1 if toggle is true, 0 if false
@@ -153,8 +153,8 @@ public class Converter : IConverter
 	    StringBuilder result = new StringBuilder();
 
 	    //ID - 6 bits
-	    //ID for this payload is 3
-	    result.Append("000011");
+	    //ID for this payload is 4
+	    result.Append("000100");
 	    List<ThresholdDto> thresholds = dto.Thresholds.ToList();
 	    if (thresholds == null)
 	    {
