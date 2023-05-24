@@ -18,7 +18,9 @@ jobs:
 
       - name: Configure Docker
         run: |
-          gcloud iam service-accounts keys create keyfile.json --iam-account greenhouse@noted-palisade-385613.iam.gserviceaccount.com
+          gcloud auth login --cred-file=C:\Users\babic\RiderProjects\greenhouse-backend\.github\workflows\key.json
+          gcloud auth list
+          #gcloud iam service-accounts keys create keyfile.json --iam-account greenhouse@noted-palisade-385613.iam.gserviceaccount.com
           gcloud auth activate-service-account --key-file=keyfile.json
           gcloud auth configure-docker
           
