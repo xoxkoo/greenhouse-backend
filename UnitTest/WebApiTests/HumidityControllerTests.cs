@@ -56,7 +56,7 @@ public class HumidityControllerTests
 	[TestMethod]
 	public async Task GetAsync_Date()
 	{
-		long time = 978303600;
+		long time = ((DateTimeOffset)new DateTime(2001,1,1)).ToUnixTimeSeconds();
 		HumidityDto dto = new HumidityDto(){Date = time,HumidityId = 1,Value = 50};
 		IEnumerable<HumidityDto> list = new[] { dto };
 		// Arrange

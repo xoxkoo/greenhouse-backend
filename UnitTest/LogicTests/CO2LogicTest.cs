@@ -28,7 +28,7 @@ public class CO2LogicTest : DbTestBase
     public async Task CO2CreateAsyncTest()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<CO2>()))
-            .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = 1681926600, Value = 100 });
+            .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = ((DateTimeOffset)new DateTime(2023, 4, 19, 19, 50, 0)).ToUnixTimeSeconds(), Value = 100 });
         CO2CreateDto dto = new CO2CreateDto
         {
             Date = new DateTime(2023, 4, 19, 19, 50, 0),

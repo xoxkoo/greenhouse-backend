@@ -122,8 +122,5 @@ public class EmailLogicTest
 
         // Act
         await _emailLogic.CheckIfInRange(temperature, humidity, co2);
-
-        // Assert
-        //Checking if the email was send to the email
     }
 }
