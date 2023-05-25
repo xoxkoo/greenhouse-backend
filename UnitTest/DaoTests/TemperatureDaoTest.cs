@@ -18,7 +18,7 @@ public class TemperatureDaoTest : DbTestBase
     {
         dao = new TemperatureEfcDao(DbContext);
     }
-    
+
     //CreateAsync() test
     //Z - Zero
     [TestMethod]
@@ -26,7 +26,7 @@ public class TemperatureDaoTest : DbTestBase
     {
         //Arrange
         Temperature temperature = null;
-        
+
         //Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => dao.CreateAsync(temperature));
     }
@@ -42,11 +42,11 @@ public class TemperatureDaoTest : DbTestBase
         };
 
         var createdTemperature = await dao.CreateAsync(temperature);
-        
+
         Assert.IsNotNull(createdTemperature);
         Assert.AreEqual(1, createdTemperature.TemperatureId);
-        Assert.AreEqual(temperature.Value, createdTemperature.value);
-        Assert.AreEqual(temperature.Date, createdTemperature.Date);
+        Assert.AreEqual(temperature.Value, createdTemperature.Value);
+        Assert.AreEqual(((DateTimeOffset)temperature.Date).ToUnixTimeSeconds(), createdTemperature.Date);
     }
 
     //M - Many
@@ -72,7 +72,7 @@ public class TemperatureDaoTest : DbTestBase
                 Value = 17
             }
         };
-        
+
         //Act
         var results = new List<TemperatureDto>();
         foreach (var temp in temperatures)
@@ -80,18 +80,18 @@ public class TemperatureDaoTest : DbTestBase
             var result = await dao.CreateAsync(temp);
             results.Add(result);
         }
-        
+
         //Assert
         Assert.IsNotNull(results);
         Assert.AreEqual(3, results.Count);
-        Assert.AreEqual(temperatures[0].Date, results[0].Date);
-        Assert.AreEqual(temperatures[0].Value, results[0].value);
-        Assert.AreEqual(temperatures[1].Date, results[1].Date);
-        Assert.AreEqual(temperatures[1].Value, results[1].value);
-        Assert.AreEqual(temperatures[2].Date, results[2].Date);
-        Assert.AreEqual(temperatures[2].Value, results[2].value);
+        Assert.AreEqual(((DateTimeOffset)temperatures[0].Date).ToUnixTimeSeconds(), results[0].Date);
+        Assert.AreEqual(temperatures[0].Value, results[0].Value);
+        Assert.AreEqual(((DateTimeOffset)temperatures[1].Date).ToUnixTimeSeconds(), results[1].Date);
+        Assert.AreEqual(temperatures[1].Value, results[1].Value);
+        Assert.AreEqual(((DateTimeOffset)temperatures[2].Date).ToUnixTimeSeconds(), results[2].Date);
+        Assert.AreEqual(temperatures[2].Value, results[2].Value);
     }
-    
+
     //B - Boundary
     [TestMethod]
     public async Task CreateTemperature_MinimumBoundary_Test()
@@ -103,12 +103,12 @@ public class TemperatureDaoTest : DbTestBase
         };
 
         var createdTemperature = await dao.CreateAsync(temperature);
-        
+
         Assert.IsNotNull(createdTemperature);
-        Assert.AreEqual(temperature.Value, createdTemperature.value);
-        Assert.AreEqual(temperature.Date, createdTemperature.Date);
+        Assert.AreEqual(temperature.Value, createdTemperature.Value);
+        Assert.AreEqual(((DateTimeOffset)temperature.Date).ToUnixTimeSeconds(), createdTemperature.Date);
     }
-    
+
     [TestMethod]
     public async Task CreateTemperature_MaximumBoundary_Test()
     {
@@ -119,13 +119,13 @@ public class TemperatureDaoTest : DbTestBase
         };
 
         var createdTemperature = await dao.CreateAsync(temperature);
-        
+
         Assert.IsNotNull(createdTemperature);
-        Assert.AreEqual(temperature.Value, createdTemperature.value);
-        Assert.AreEqual(temperature.Date, createdTemperature.Date);
+        Assert.AreEqual(temperature.Value, createdTemperature.Value);
+        Assert.AreEqual(((DateTimeOffset)temperature.Date).ToUnixTimeSeconds(), createdTemperature.Date);
     }
-    
-    
+
+
 
     //GetAsync() test
     //Z - Zero
@@ -134,16 +134,16 @@ public class TemperatureDaoTest : DbTestBase
     {
         //Arrange
         var search = new SearchMeasurementDto(false, null, null);
-        
+
         //Act
         var result = await dao.GetAsync(search);
-        
+
         //Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(0, result.Count());
         Assert.IsFalse(result.Any());
     }
-    
+
     //O - one
     [TestMethod]
     public async Task GetAsync_One_Test()
@@ -157,18 +157,18 @@ public class TemperatureDaoTest : DbTestBase
         };
         await DbContext.Temperatures.AddAsync(temperature);
         await DbContext.SaveChangesAsync();
-        
+
         //Assert
         var temperatureFromDb = await dao.GetAsync(parameters);
-        
+
         //Act
         Assert.IsNotNull(temperatureFromDb);
         Assert.AreEqual(1, temperatureFromDb.First().TemperatureId);
-        Assert.AreEqual(temperature.Value, temperatureFromDb.First().value);
-        Assert.AreEqual(temperature.Date, temperatureFromDb.First().Date);
+        Assert.AreEqual(temperature.Value, temperatureFromDb.First().Value);
+        Assert.AreEqual(((DateTimeOffset)temperature.Date).ToUnixTimeSeconds(), temperatureFromDb.First().Date);
     }
-    
-    
+
+
     //M - Many
     [TestMethod]
     public async Task GetAsync_ManyInDb_Test()
@@ -181,19 +181,19 @@ public class TemperatureDaoTest : DbTestBase
         await DbContext.SaveChangesAsync();
 
         var dto = new SearchMeasurementDto (false);
-        
+
         // Act
         var result = await dao.GetAsync(dto);
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
-        Assert.AreEqual(temp1.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.value);
-        Assert.AreEqual(temp2.Date, result.Last().Date);
-        Assert.AreEqual(temp2.Value, result.Last().value);
+        Assert.AreEqual(((DateTimeOffset)temp1.Date).ToUnixTimeSeconds(), result.FirstOrDefault()?.Date);
+        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.Value);
+        Assert.AreEqual(((DateTimeOffset)temp2.Date).ToUnixTimeSeconds(), result.Last().Date);
+        Assert.AreEqual(temp2.Value, result.Last().Value);
     }
-    
+
     [TestMethod]
     public async Task GetAsync_ManyInDb_FilteredByDateRange_Test()
     {
@@ -205,18 +205,18 @@ public class TemperatureDaoTest : DbTestBase
         await DbContext.SaveChangesAsync();
 
         var dto = new SearchMeasurementDto (false, new DateTime(2023, 01, 01), new DateTime(2023, 02, 01));
-        
+
         // Act
         var result = await dao.GetAsync(dto);
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.AreEqual(temp1.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.value);
+        Assert.AreEqual(((DateTimeOffset)temp1.Date).ToUnixTimeSeconds(), result.FirstOrDefault()?.Date);
+        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.Value);
     }
-    
-    
+
+
     [TestMethod]
     public async Task GetAsync_ManyInDb_FilteredByStartDate_Test()
     {
@@ -228,17 +228,17 @@ public class TemperatureDaoTest : DbTestBase
         await DbContext.SaveChangesAsync();
 
         var dto = new SearchMeasurementDto (false, new DateTime(2023, 03, 01));
-        
+
         // Act
         var result = await dao.GetAsync(dto);
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.AreEqual(temp2.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp2.Value, result.FirstOrDefault()?.value);
+        Assert.AreEqual(((DateTimeOffset)temp2.Date).ToUnixTimeSeconds(), result.FirstOrDefault()?.Date);
+        Assert.AreEqual(temp2.Value, result.FirstOrDefault()?.Value);
     }
-    
+
     [TestMethod]
     public async Task GetAsync_ManyInDb_FilteredByEndDate_Test()
     {
@@ -251,20 +251,20 @@ public class TemperatureDaoTest : DbTestBase
         await DbContext.SaveChangesAsync();
 
         var dto = new SearchMeasurementDto (false, null, new DateTime(2023, 02, 03));
-        
+
         // Act
         var result = await dao.GetAsync(dto);
 
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
-        Assert.AreEqual(temp1.Date, result.FirstOrDefault()?.Date);
-        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.value);
-        Assert.AreEqual(temp2.Date, result.Last().Date);
-        Assert.AreEqual(temp2.Value, result.LastOrDefault().value);
+        Assert.AreEqual(((DateTimeOffset)temp1.Date).ToUnixTimeSeconds(), result.FirstOrDefault()?.Date);
+        Assert.AreEqual(temp1.Value, result.FirstOrDefault()?.Value);
+        Assert.AreEqual(((DateTimeOffset)temp2.Date).ToUnixTimeSeconds(), result.Last().Date);
+        Assert.AreEqual(temp2.Value, result.LastOrDefault().Value);
     }
-    
-    
-    
-    
+
+
+
+
 }

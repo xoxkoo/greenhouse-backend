@@ -28,14 +28,14 @@ public class CO2LogicTest : DbTestBase
     public async Task CO2CreateAsyncTest()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<CO2>()))
-            .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100 });
+            .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = 1681926600, Value = 100 });
         CO2CreateDto dto = new CO2CreateDto
         {
             Date = new DateTime(2023, 4, 19, 19, 50, 0),
             Value = 100
         };
         CO2Dto created = await logic.CreateAsync(dto);
-        Assert.AreEqual(dto.Date, created.Date);
+        Assert.AreEqual(((DateTimeOffset)dto.Date).ToUnixTimeSeconds(), created.Date);
         Assert.AreEqual(dto.Value, created.Value);
     }
 
@@ -43,7 +43,7 @@ public class CO2LogicTest : DbTestBase
     public async Task CO2CreateAsyncIncorrectTest()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<CO2>()))
-            .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100 });
+            .ReturnsAsync(new CO2Dto { CO2Id = 1, Date = 100, Value = 100 });
         CO2CreateDto dto = new CO2CreateDto
         {
             Date = new DateTime(2023, 4, 19, 19, 50, 0),
@@ -62,7 +62,7 @@ public class CO2LogicTest : DbTestBase
     [TestMethod]
     public async Task CO2GetAsyncCurrentTrueCorrectTest()
     {
-        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100};
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = 1681926600, Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<CO2Dto>{tempDto});
         SearchMeasurementDto search = new SearchMeasurementDto(true);
@@ -74,7 +74,7 @@ public class CO2LogicTest : DbTestBase
     [TestMethod]
     public async Task CO2GetAsyncCurrentTrueIncorrectDateTest()
     {
-        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100};
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = 1681926600, Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<CO2Dto>{tempDto});
         SearchMeasurementDto search = new SearchMeasurementDto(true, new DateTime(2024,04,5), new DateTime(2022,04,05));
@@ -100,8 +100,8 @@ public class CO2LogicTest : DbTestBase
     [TestMethod]
     public async Task CO2GetAsyncCurrentFalseCorrectDateTest()
     {
-        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100};
-        CO2Dto tempDto1 = new CO2Dto { CO2Id = 2, Date = new DateTime(2023, 4, 20, 19, 50, 0), Value = 80};
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = 1681926600, Value = 100};
+        CO2Dto tempDto1 = new CO2Dto { CO2Id = 2, Date = 1681926600, Value = 80};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<CO2Dto>{tempDto, tempDto1});
         SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2022,04,05),new DateTime(2024,04,5));
@@ -111,7 +111,7 @@ public class CO2LogicTest : DbTestBase
     [TestMethod]
     public async Task CO2GetAsyncCurrentFalseCorrectDateTest2()
     {
-        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), Value = 100};
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = 100, Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<CO2Dto>{tempDto});
         SearchMeasurementDto search = new SearchMeasurementDto(false, null,new DateTime(2024,04,5));
@@ -122,7 +122,7 @@ public class CO2LogicTest : DbTestBase
     [TestMethod]
     public async Task CO2GetAsyncCurrentFalseCorrectDateTest3()
     {
-        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), Value = 100};
+        CO2Dto tempDto = new CO2Dto { CO2Id = 1, Date = 1681926600, Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<CO2Dto>{tempDto});
         SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2023, 04, 5), null);

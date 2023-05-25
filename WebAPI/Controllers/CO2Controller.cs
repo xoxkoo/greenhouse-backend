@@ -24,6 +24,7 @@ public class CO2Controller:ControllerBase
 	    [FromQuery] DateTime? startTime = null,
 	    [FromQuery] DateTime? endTime = null)
     {
+
 	    try
 	    {
 
