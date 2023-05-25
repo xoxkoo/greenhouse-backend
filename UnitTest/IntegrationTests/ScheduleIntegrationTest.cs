@@ -3,7 +3,9 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using EfcDataAccess;
 using EfcDataAccess.DAOs;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Testing.Utils;
@@ -15,14 +17,23 @@ public class ScheduleIntegrationTest : DbTestBase
 {
     private IScheduleDao dao;
     private IScheduleLogic logic;
-    private Mock<IConverter> converterMock;
+    private IConverter converter;
 
     [TestInitialize]
     public void TestInitialize()
     {
-        converterMock = new Mock<IConverter>();
+
+	    var services = new ServiceCollection();
+	    // Register DbContext and other dependencies
+	    services.AddScoped<Context>(provider => DbContext);
+
+	    // Register services from the Startup class
+	    var startup = new Startup();
+	    startup.ConfigureServices(services);
+        converter = services.BuildServiceProvider().GetService<IConverter>();
+
         dao = new ScheduleEfcDao(DbContext);
-        logic = new ScheduleLogic(dao, converterMock.Object);
+        logic = new ScheduleLogic(dao, converter);
     }
 
     [TestMethod]
