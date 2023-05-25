@@ -3,6 +3,9 @@ on:
   workflow_call:
 jobs:
   tests:
+    env:
+      EMAIL_USERNAME: ${{ secrets.EMAIL }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
