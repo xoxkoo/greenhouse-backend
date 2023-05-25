@@ -9,6 +9,10 @@ jobs:
     name: Unit tests
     runs-on: ubuntu-latest
     steps:
+      - name: Debug Environment Variables
+        run: |
+          echo "EMAIL_USERNAME: $EMAIL"
+          echo "EMAIL_PASSWORD: $EMAIL_PASSWORD"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Tests
