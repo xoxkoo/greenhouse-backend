@@ -17,11 +17,10 @@ public class EmailLogic : IEmailLogic
         _emailDao = emailDao;
         _presetDao = presetDao;
         DotNetEnv.Env.TraversePath().Load();
-        Console.WriteLine(Environment.GetEnvironmentVariable("EMAIL_USERNAME"));
         smtpClient = new SmtpClient("smtp.gmail.com")
         {
 	        Port = 587,
-	        Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("EMAIL_USERNAME"), Environment.GetEnvironmentVariable("EMAIL_PASSWORD")),
+	        Credentials = new NetworkCredential(DotNetEnv.Env.GetString("EMAIL_USERNAME"), DotNetEnv.Env.GetString("EMAIL_PASSWORD")),
 	        EnableSsl = true,
         };
     }

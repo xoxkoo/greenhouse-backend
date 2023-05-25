@@ -6,5 +6,8 @@ on:
       - "!main"
 jobs:
   unit_test:
+    env:
+      EMAIL_USERNAME: ${{ secrets.EMAIL }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
