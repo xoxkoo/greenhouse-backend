@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Debug Environment Variables
         run: |
-          echo "EMAIL_USERNAME: $EMAIL"
+          echo "EMAIL_USERNAME: $EMAIL_USERNAME"
           echo "EMAIL_PASSWORD: $EMAIL_PASSWORD"
       - name: Checkout
         uses: actions/checkout@v2
