@@ -20,7 +20,7 @@ public class EmailLogic : IEmailLogic
         smtpClient = new SmtpClient("smtp.gmail.com")
         {
 	        Port = 587,
-	        Credentials = new NetworkCredential(DotNetEnv.Env.GetString("EMAIL_USERNAME"), DotNetEnv.Env.GetString("EMAIL_PASSWORD")),
+	        Credentials = new NetworkCredential("greenhousesep4@gmail.com", "zievqkygqhfrwioe"),
 	        EnableSsl = true,
         };
     }
