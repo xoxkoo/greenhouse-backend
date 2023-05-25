@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("/temperature")]
+[Route("measurements/temperature")]
 public class TemperatureController:ControllerBase
 {
     private readonly ITemperatureLogic Logic;
