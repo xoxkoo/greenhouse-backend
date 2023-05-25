@@ -10,11 +10,19 @@ public class EmailLogic : IEmailLogic
 {
     private readonly IEmailDao _emailDao;
     private readonly IPresetDao _presetDao;
+    private SmtpClient smtpClient;
 
     public EmailLogic(IEmailDao emailDao, IPresetDao presetDao)
     {
         _emailDao = emailDao;
         _presetDao = presetDao;
+        DotNetEnv.Env.TraversePath().Load();
+        smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+	        Port = 587,
+	        Credentials = new NetworkCredential(DotNetEnv.Env.GetString("EMAIL_USERNAME"), DotNetEnv.Env.GetString("EMAIL_PASSWORD")),
+	        EnableSsl = true,
+        };
     }
 
     public async Task<EmailDto> CreateAsync(EmailDto dto)
@@ -45,12 +53,6 @@ public class EmailLogic : IEmailLogic
         return await _emailDao.GetAsync();
     }
 
-    private SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
-    {
-        Port = 587,
-        Credentials = new NetworkCredential("greenhousesep4@gmail.com", "zievqkygqhfrwioe"),
-        EnableSsl = true,
-    };
 
 
     private void sendMail(string warning)
