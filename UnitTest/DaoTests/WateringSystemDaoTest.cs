@@ -18,35 +18,24 @@ public class WateringSystemDaoTest : DbTestBase
         dao = new WateringSystemDao(DbContext);
     }
 
+    [TestMethod]
+    public async Task CreateAsync_ToTrue()
+    {
+	    const bool newState = true;
+	    var r = await dao.CreateAsync(new ValveState(){Toggle = newState});
 
-    //TODO this should be handled differently
-    // [TestMethod]
-    // public async Task ValveIsAlreadyOpen()
-    // {
-    //     //Arrange
-    //     ValveState valve = new ValveState { Toggle = true };
-    //     await DbContext.ValveState.AddAsync(valve);
-    //     await DbContext.SaveChangesAsync();
-    //     var expectedErrorMessage = "The valve is already True";
-    //
-    //     //Act and Assert
-    //     var exception = await Assert.ThrowsExceptionAsync<Exception>(async () => await dao.CreateAsync(valve));
-    //     Assert.AreEqual(expectedErrorMessage, exception.Message);
-    // }
+	    Assert.AreEqual(r.State, newState);
+    }
 
-    //TODO this should be handled differently
-    // [TestMethod]
-    // public async Task ValveIsAlreadyClosed()
-    // {
-    //     //Arrange
-    //     ValveState valve = new ValveState { Toggle = false };
-    //     await DbContext.ValveState.AddAsync(valve);
-    //     await DbContext.SaveChangesAsync();
-    //     var expectedErrorMessage = "The valve is already False";
-    //
-    //     //Act and Assert
-    //     var exception = await Assert.ThrowsExceptionAsync<Exception>(async () => await dao.CreateAsync(valve));
-    //     Assert.AreEqual(expectedErrorMessage, exception.Message);
-    // }
+    [TestMethod]
+    public async Task CreateAsync_ToTrue_ToFalse()
+    {
+	    const bool newState = false;
+
+	    await dao.CreateAsync(new ValveState(){Toggle = true});
+	    var r = await dao.CreateAsync(new ValveState(){Toggle = newState});
+
+	    Assert.AreEqual(r.State, newState);
+    }
 
 }

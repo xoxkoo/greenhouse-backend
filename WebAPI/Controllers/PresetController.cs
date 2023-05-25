@@ -1,9 +1,7 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
 using Microsoft.AspNetCore.Mvc;
-
 namespace WebAPI.Controllers;
-
 
 [ApiController]
 public class PresetController : ControllerBase
@@ -108,15 +106,13 @@ public class PresetController : ControllerBase
 	    }
     }
 
-
-    //todo should be object wit id
     [HttpPost]
     [Route("current-preset")]
-    public async Task<ActionResult> ApplyAsync([FromBody] int id)
+    public async Task<ActionResult> ApplyAsync([FromBody] PresetApplyDto dto)
     {
         try
         {
-            await _logic.ApplyAsync(id);
+            await _logic.ApplyAsync(dto.Id);
             return Ok();
         }
         catch (ArgumentException e)

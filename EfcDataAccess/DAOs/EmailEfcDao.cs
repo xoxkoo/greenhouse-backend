@@ -36,7 +36,7 @@ public class EmailEfcDao : IEmailDao
     
         return new EmailDto()
         {
-            EmailAdress = entity.Entity.EmailAddress
+            Email = entity.Entity.EmailAddress
         };
     }
 
@@ -49,7 +49,7 @@ public class EmailEfcDao : IEmailDao
         }
         return new EmailDto()
         {
-            EmailAdress = email.EmailAddress
+            Email = email.EmailAddress
         };
     }
 }

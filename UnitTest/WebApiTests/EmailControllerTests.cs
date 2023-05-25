@@ -41,8 +41,8 @@ public class EmailControllerTests
     public async Task CreateAsync_ValidInput_ReturnsOk()
     {
         // Arrange
-        var emailDto = new EmailDto { EmailAdress = "example@gmail.com" };
-        var createdDto = new EmailDto { EmailAdress = "example@gmail.com" };
+        var emailDto = new EmailDto { Email = "example@gmail.com" };
+        var createdDto = new EmailDto { Email = "example@gmail.com" };
         _mockEmailLogic.Setup(x => x.CreateAsync(It.IsAny<EmailDto>()))
             .ReturnsAsync(createdDto);
 
@@ -60,7 +60,7 @@ public class EmailControllerTests
     public async Task CreateAsync_InvalidInput_ReturnsBadRequest()
     {
         // Arrange
-        var emailDto = new EmailDto { EmailAdress = "example@example.com" };
+        var emailDto = new EmailDto { Email = "example@example.com" };
         _mockEmailLogic.Setup(x => x.CreateAsync(It.IsAny<EmailDto>()))
             .ThrowsAsync(new ArgumentException("Email address must end with @gmail.com"));
         
@@ -95,7 +95,7 @@ public class EmailControllerTests
     public async Task GetAsync_ReturnsOKResult()
     {
         //Arrange
-        var email1 = new EmailDto { EmailAdress = "example@gmail.com" };
+        var email1 = new EmailDto { Email = "example@gmail.com" };
         _mockEmailLogic.Setup(x => x.GetAsync())
             .ReturnsAsync(email1);
         
@@ -107,6 +107,6 @@ public class EmailControllerTests
         var okResult = (OkObjectResult)result.Result;
         Assert.IsInstanceOfType(okResult.Value, typeof(EmailDto));
         var emailResult = (EmailDto)okResult.Value;
-        Assert.AreEqual(email1.EmailAdress, emailResult.EmailAdress);
+        Assert.AreEqual(email1.Email, emailResult.Email);
     }
 }

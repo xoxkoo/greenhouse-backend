@@ -39,12 +39,12 @@ public class TemperatureIntegrationTest : DbTestBase
 
 		var response = await _logic.CreateAsync(dto);
 
-		Assert.AreEqual(response.value, dto.Value);
+		Assert.AreEqual(response.Value, dto.Value);
 
 		var tmpDto = await _logic.GetAsync(new SearchMeasurementDto(true));
 
 		Assert.AreEqual(tmpDto.FirstOrDefault().TemperatureId, response.TemperatureId);
-		Assert.AreEqual(response.value, tmpDto.FirstOrDefault().value);
+		Assert.AreEqual(response.Value, tmpDto.FirstOrDefault().Value);
 
 	}
 
@@ -68,7 +68,7 @@ public class TemperatureIntegrationTest : DbTestBase
 		Assert.IsNotNull(list);
 
 		Assert.AreEqual(list.FirstOrDefault().TemperatureId, 1);
-		Assert.AreEqual((float)25.9, list.FirstOrDefault().value);
+		Assert.AreEqual((float)25.9, list.FirstOrDefault().Value);
 
 	}
 
