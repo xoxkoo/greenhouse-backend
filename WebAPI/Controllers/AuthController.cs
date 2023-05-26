@@ -22,23 +22,28 @@ public class AuthController : ControllerBase
         this.config = config;
         _authLogic = authLogic;
     }
-    
+
     [HttpPost, Route("login")]
     public async Task<ActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
-        try
-        {
-            User user = await _authLogic.ValidateUser(userLoginDto.Email, userLoginDto.Password);
-            string token = GenerateJwt(user);
-    
-            return Ok(token);
-        }
+	    try
+	    {
+		    User user = await _authLogic.ValidateUser(userLoginDto.Email, userLoginDto.Password);
+		    string token = GenerateJwt(user);
+
+		    return Ok(token);
+	    }
+	    catch (ArgumentException e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(400, e.Message);
+	    }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
     }
-    
+
     private List<Claim> GenerateClaims(User user)
     {
         var claims = new[]
@@ -50,25 +55,25 @@ public class AuthController : ControllerBase
         };
         return claims.ToList();
     }
-    
+
     private string GenerateJwt(User user)
     {
         List<Claim> claims = GenerateClaims(user);
-    
+
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
         SigningCredentials signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-    
+
         JwtHeader header = new JwtHeader(signIn);
-    
+
         JwtPayload payload = new JwtPayload(
             config["Jwt:Issuer"],
             config["Jwt:Audience"],
-            claims, 
+            claims,
             null,
             DateTime.UtcNow.AddMinutes(60));
-    
+
         JwtSecurityToken token = new JwtSecurityToken(header, payload);
-    
+
         string serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
         return serializedToken;
     }
