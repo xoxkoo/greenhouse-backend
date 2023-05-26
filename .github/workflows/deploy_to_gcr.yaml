@@ -2,9 +2,7 @@
 
 on:
   workflow_call:
-    secrets:
-      SERVICE_ACCOUNT_KEY:
-        required: true
+
 jobs:
   push-images:
     runs-on: ubuntu-latest
@@ -12,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout
 
       - name: Print
         run: |
