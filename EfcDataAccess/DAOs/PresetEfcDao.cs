@@ -37,7 +37,7 @@ public class PresetEfcDao : IPresetDao
             listPreset = listPreset.Where(s => s.Id == parametersDto.Id);
         }
 
-        IEnumerable<PresetDto> result = await listPreset.Select(p => 
+        IEnumerable<PresetDto> result = await listPreset.Select(p =>
             new PresetDto
             {
                 Id = p.Id,
@@ -85,7 +85,7 @@ public class PresetEfcDao : IPresetDao
 
     public async Task DeleteAsync(Preset preset)
     {
-        
+
             var thresholds = _context.Thresholds.Where(t => t.PresetId == preset.Id);
             _context.Thresholds.RemoveRange(thresholds);
             _context.Presets.Remove(preset);
@@ -107,8 +107,7 @@ public class PresetEfcDao : IPresetDao
             list = list.Include(p => p.Thresholds);
             Preset? preset = await list.Where(p => p.Id == id).FirstOrDefaultAsync();
 
-            Console.WriteLine(preset.Id);
-            
+
             if (preset == null)
             {
                 return null;
@@ -122,8 +121,8 @@ public class PresetEfcDao : IPresetDao
             throw;
         }
     }
-    
-    
+
+
 
     // public async Task UpdateAsync(Preset preset)
     // {
