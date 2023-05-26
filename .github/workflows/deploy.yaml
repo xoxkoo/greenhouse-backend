@@ -1,7 +1,10 @@
 ﻿
 name: deploy
 on:
-  workflow_call:
+  push:
+    branches:
+      - "*"
+      - "!main"
 jobs:
   push-images:
     runs-on: ubuntu-latest
