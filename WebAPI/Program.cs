@@ -39,8 +39,6 @@ builder.Services.AddScoped<IEmailDao, EmailEfcDao>();
 builder.Services.AddScoped<IPresetDao, PresetEfcDao>();
 builder.Services.AddScoped<IUserDao, UserEfcDao>();
 
-DotNetEnv.Env.TraversePath().Load();
-
 // Add the database context
 builder.Services.AddDbContext<Context>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
