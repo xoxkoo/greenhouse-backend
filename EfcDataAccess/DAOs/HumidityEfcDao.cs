@@ -21,7 +21,7 @@ public class HumidityEfcDao : IHumidityDao
 		await _context.SaveChangesAsync();
 		return new HumidityDto
 		{
-			Date = entity.Entity.Date,
+			Date = ((DateTimeOffset)entity.Entity.Date).ToUnixTimeSeconds(),
 			HumidityId = entity.Entity.HumidityId,
 			Value = entity.Entity.Value
 		};
@@ -49,7 +49,7 @@ public class HumidityEfcDao : IHumidityDao
 		IEnumerable<HumidityDto> result = await list.Select(h =>
 			new HumidityDto
 			{
-				Date = h.Date,
+				Date = ((DateTimeOffset)h.Date).ToUnixTimeSeconds(),
 				Value = h.Value,
 				HumidityId = h.HumidityId
 			}).ToListAsync();

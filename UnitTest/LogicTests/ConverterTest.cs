@@ -53,6 +53,27 @@ public class ConverterTest : DbTestBase
     }
 
     [TestMethod]
+    public async Task THCPayload_IncorrectMeasurementSensor()
+    {
+	    await converter.ConvertFromHex("04017b0707f0");
+
+        // Assert
+        // values shouldn't be saved
+        tempLogic.Verify(x => x.CreateAsync(It.Is<TemperatureCreateDto>(dto =>
+	        // tolerance because of rounding problems
+	        Math.Abs(dto.Value - 25.8) < 0.1
+        )), Times.Never);
+
+        co2logic.Verify(x => x.CreateAsync(It.Is<CO2CreateDto>(dto =>
+	        dto.Value == 2032
+        )), Times.Never);
+
+        humidityLogic.Verify(x => x.CreateAsync(It.Is<HumidityCreationDto>(dto =>
+	        dto.Value == 56
+        )), Times.Never);
+    }
+
+    [TestMethod]
     public async Task THCPayload_ResponseStringIsCorrect()
     {
 	    string result = await converter.ConvertFromHex("07817b0707f0");
@@ -138,91 +159,90 @@ public class ConverterTest : DbTestBase
     [TestMethod]
     public async Task ActionsPayload_CorrectStringResponse()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	    ValveStateCreationDto dto = new()
 	    {
-		    State = true
+		    State = true,
+		    duration = 16
 	    };
-	    string result = converter.ConvertActionsPayloadToHex(dto, 16);
-	    Assert.AreEqual("120010", result);
+	    string result = converter.ConvertActionsPayloadToHex(dto);
+	    Assert.AreEqual("160010", result);
     }
     [TestMethod]
     public async Task ActionsPayload_DurationOverLimit()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	    ValveStateCreationDto dto = new()
 	    {
-		    State = true
+		    State = true,
+		    duration = 1024
 	    };
-	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1024));
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto));
 
     }
     [TestMethod]
     public async Task ActionsPayload_DurationTooLow()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	    ValveStateCreationDto dto = new()
 	    {
-		    State = true
+		    State = true,
+		    duration = -1
 	    };
-	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, -1));
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto));
     }
     [TestMethod]
     public void ActionsPayload_NullDto()
     {
-        Assert.ThrowsException<NullReferenceException>(() => converter.ConvertActionsPayloadToHex(null, 1));
-    }
-    [TestMethod]
-    public void ActionsPayload_ZeroDuration()
-    {
-	    ValveStateDto dto = new ValveStateDto()
-	    {
-		    State = true
-	    };
-        Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1025));
+        Assert.ThrowsException<NullReferenceException>(() => converter.ConvertActionsPayloadToHex(null));
     }
 
     [TestMethod]
     public void ActionsPayload_ToggleFalseCorrectDuration()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	    ValveStateCreationDto dto = new()
 	    {
-		    State = false
+		    State = false,
+		    duration = 1
 	    };
-        Assert.AreEqual("100001", converter.ConvertActionsPayloadToHex(dto, 1));
+        Assert.AreEqual("140001", converter.ConvertActionsPayloadToHex(dto));
     }
     [TestMethod]
     public void ActionsPayload_ToggleTrueCorrectDuration()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	    ValveStateCreationDto dto = new()
 	    {
-		    State = true
+		    State = true,
+		    duration = 1
 	    };
-	    Assert.AreEqual("120001", converter.ConvertActionsPayloadToHex(dto, 1));
+	    Assert.AreEqual("160001", converter.ConvertActionsPayloadToHex(dto));
     }
     [TestMethod]
     public void ActionsPayload_ToggleFalseIncorrectDuration()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	    ValveStateCreationDto dto = new()
 	    {
-		    State = false
+		    State = false,
+		    duration = 1024
 	    };
-	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 1024));
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto));
     }
     [TestMethod]
     public void ActionsPayload_ToggleTrueIncorrectDuration()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	    ValveStateCreationDto dto = new()
 	    {
-		    State = true
+		    State = true,
+		    duration = 100000
 	    };
-	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, 100000));
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto));
     }
     [TestMethod]
     public void ActionsPayload_ToggleTrueIncorrectNegativeDuration()
     {
-	    ValveStateDto dto = new ValveStateDto()
+	   ValveStateCreationDto dto = new()
 	    {
-		    State = true
+		    State = true,
+		    duration = -1
 	    };
-	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto, -1));
+	    Assert.ThrowsException<Exception>(() => converter.ConvertActionsPayloadToHex(dto));
     }
 
 		[TestMethod]
@@ -284,7 +304,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("0d5e32050f01903200", resultHex);
+		    Assert.AreEqual("115e32050f01903200", resultHex);
 	    }
 
 
@@ -337,7 +357,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("0cc82bc50f01903200", resultHex);
+		    Assert.AreEqual("10c82bc50f01903200", resultHex);
 	    }
 
 	    [TestMethod]
@@ -365,7 +385,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("0c0044c0190003ffc0", resultHex);
+		    Assert.AreEqual("100044c0190003ffc0", resultHex);
 	    }
 
 

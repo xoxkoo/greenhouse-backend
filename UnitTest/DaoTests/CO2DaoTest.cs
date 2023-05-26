@@ -43,7 +43,7 @@ public class CO2DaoTest : DbTestBase
         Assert.IsNotNull(savedCO2);
         Assert.AreEqual(1, savedCO2.CO2Id);
         Assert.AreEqual(co2.Value, savedCO2.Value);
-        Assert.AreEqual(co2.Date, savedCO2.Date);
+        Assert.AreEqual(((DateTimeOffset)co2.Date).ToUnixTimeSeconds(), savedCO2.Date);
     }
 
     //M - Many
@@ -81,11 +81,11 @@ public class CO2DaoTest : DbTestBase
         //Assert
         Assert.IsNotNull(results);
         Assert.AreEqual(3, results.Count);
-        Assert.AreEqual(co2s[0].Date, results[0].Date);
+        Assert.AreEqual(((DateTimeOffset)co2s[0].Date).ToUnixTimeSeconds(), results[0].Date);
         Assert.AreEqual(co2s[0].Value, results[0].Value);
-        Assert.AreEqual(co2s[1].Date, results[1].Date);
+        Assert.AreEqual(((DateTimeOffset)co2s[1].Date).ToUnixTimeSeconds(), results[1].Date);
         Assert.AreEqual(co2s[1].Value, results[1].Value);
-        Assert.AreEqual(co2s[2].Date, results[2].Date);
+        Assert.AreEqual(((DateTimeOffset)co2s[2].Date).ToUnixTimeSeconds(), results[2].Date);
         Assert.AreEqual(co2s[2].Value, results[2].Value);
     }
 
@@ -103,7 +103,7 @@ public class CO2DaoTest : DbTestBase
 
         Assert.IsNotNull(savedCO2);
         Assert.AreEqual(co2.Value, savedCO2.Value);
-        Assert.AreEqual(co2.Date, savedCO2.Date);
+        Assert.AreEqual(((DateTimeOffset)co2.Date).ToUnixTimeSeconds(), savedCO2.Date);
     }
 
     [TestMethod]
@@ -119,7 +119,7 @@ public class CO2DaoTest : DbTestBase
 
         Assert.IsNotNull(savedCO2);
         Assert.AreEqual(co2.Value, savedCO2.Value);
-        Assert.AreEqual(co2.Date, savedCO2.Date);
+        Assert.AreEqual(((DateTimeOffset)co2.Date).ToUnixTimeSeconds(), savedCO2.Date);
     }
 
 
@@ -163,7 +163,7 @@ public class CO2DaoTest : DbTestBase
         Console.WriteLine(co2Dtos.First().CO2Id);
         Assert.AreEqual(1, co2Dtos.First().CO2Id);
         Assert.AreEqual(co2.Value, co2Dtos.First().Value);
-        Assert.AreEqual(co2.Date, co2Dtos.First().Date);
+        Assert.AreEqual(((DateTimeOffset)co2.Date).ToUnixTimeSeconds(), co2Dtos.First().Date);
     }
 
 
@@ -184,8 +184,8 @@ public class CO2DaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
-        Assert.IsTrue(result.Any(c => c.CO2Id == co21.CO2Id && c.Value == co21.Value && c.Date == co21.Date));
-        Assert.IsTrue(result.Any(c => c.CO2Id == co22.CO2Id && c.Value == co22.Value && c.Date == co22.Date));
+        Assert.IsTrue(result.Any(c => c.CO2Id == co21.CO2Id && c.Value == co21.Value && c.Date == ((DateTimeOffset)co21.Date).ToUnixTimeSeconds()));
+        Assert.IsTrue(result.Any(c => c.CO2Id == co22.CO2Id && c.Value == co22.Value && c.Date == ((DateTimeOffset)co22.Date).ToUnixTimeSeconds()));
     }
 
     [TestMethod]
@@ -205,7 +205,7 @@ public class CO2DaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.IsTrue(result.Any(c => c.CO2Id == co22.CO2Id && c.Value == co22.Value && c.Date == co22.Date));
+        Assert.IsTrue(result.Any(c => c.CO2Id == co22.CO2Id && c.Value == co22.Value && c.Date == ((DateTimeOffset)co22.Date).ToUnixTimeSeconds()));
     }
 
     [TestMethod]
@@ -225,7 +225,7 @@ public class CO2DaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.IsTrue(result.Any(c => c.CO2Id == co21.CO2Id && c.Value == co21.Value && c.Date == co21.Date));
+        Assert.IsTrue(result.Any(c => c.CO2Id == co21.CO2Id && c.Value == co21.Value && c.Date == ((DateTimeOffset)co21.Date).ToUnixTimeSeconds()));
     }
 
 }

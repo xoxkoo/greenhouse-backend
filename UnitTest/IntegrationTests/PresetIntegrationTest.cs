@@ -3,11 +3,12 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.Entities;
+using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SocketServer;
-using Sprache;
 using Testing.Utils;
 using WebAPI.Controllers;
 
@@ -16,38 +17,21 @@ namespace Testing.IntegrationTests;
 [TestClass]
 public class PresetIntegrationTest : DbTestBase
 {
-    private IPresetDao _presetDao;
-    private IWebSocketServer _socketServer;
-    private IHumidityDao _humidityDao;
-    private ICO2Dao _co2Dao;
-    private ITemperatureDao _temperatureDao;
-    private IEmailDao _emailDao;
-    
-    private IHumidityLogic _humidityLogic;
-    private ITemperatureLogic _temperatureLogic;
-    private ICO2Logic _co2Logic;
-    private IEmailLogic _emailLogic;
-    private IConverter _converter;
-    private IPresetLogic _presetLogic;
-    
-    private PresetController _controller;
-    
+	private PresetController _controller;
+
     [TestInitialize]
     public void SetUp()
     {
-        _presetDao = new PresetEfcDao(DbContext);
-        _humidityDao = new HumidityEfcDao(DbContext);
-        _temperatureDao = new TemperatureEfcDao(DbContext);
-        _co2Dao = new CO2EfcDao(DbContext);
-        _emailDao = new EmailEfcDao(DbContext);
-        _socketServer = new WebSocketServer();
-        _humidityLogic = new HumidityLogic(_humidityDao);
-        _temperatureLogic = new TemperatureLogic(_temperatureDao);
-        _co2Logic = new CO2Logic(_co2Dao);
-        _emailLogic = new EmailLogic(_emailDao, _presetDao);
-        _converter = new Converter(_temperatureLogic, _co2Logic, _humidityLogic, _emailLogic);
-        _presetLogic = new PresetLogic(_presetDao, _socketServer, _converter);
-        _controller = new PresetController(_presetLogic);
+	    var services = new ServiceCollection();
+	    // Register DbContext and other dependencies
+	    services.AddScoped<Context>(provider => DbContext);
+
+	    // Register services from the Startup class
+	    var startup = new Startup();
+	    startup.ConfigureServices(services);
+
+	    // Resolve PresetController using dependency injection
+	    _controller = services.BuildServiceProvider().GetService<PresetController>();
     }
 
     //GetAsync() tests
@@ -102,10 +86,10 @@ public class PresetIntegrationTest : DbTestBase
         var result = (IEnumerable<PresetEfcDto>)okResult.Value;
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        
+
     }
-    
-    
+
+
     //M - Many
     [TestMethod]
     public async Task GetAsync_ReturnsPresetList_Test()
@@ -153,9 +137,9 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(presets.Count, result.Count());
     }
-    
+
     //GetCurrentAsync()
-    
+
     //Z - Zero
     [TestMethod]
     public async Task GetCurrentAsync_ReturnsNoCurrentPreset()
@@ -237,7 +221,7 @@ public class PresetIntegrationTest : DbTestBase
         Assert.AreEqual(preset.Name, result.Name);
         Assert.AreEqual(preset.Thresholds.Count(), result.Thresholds.Count());
     }
-    
+
     //CreateAsync()
     //O - One
     [TestMethod]
@@ -283,9 +267,9 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response.Result, typeof(ObjectResult));
         var badRequestResult = (ObjectResult)response.Result;
-        Assert.AreEqual(500, badRequestResult.StatusCode);
+        Assert.AreEqual(400, badRequestResult.StatusCode);
     }
-    
+
     [TestMethod]
     public async Task CreateAsync_ReturnsCreatedPresetWithZeroThresholds()
     {
@@ -303,10 +287,10 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response.Result, typeof(ObjectResult));
         var okResult = (ObjectResult)response.Result;
-        Assert.AreEqual(500, okResult.StatusCode);
+        Assert.AreEqual(400, okResult.StatusCode);
     }
-    
-    
+
+
     //ApplyAsync() tests
     [TestMethod]
     public async Task ApplyAsync_ReturnsOkResult()
@@ -329,28 +313,28 @@ public class PresetIntegrationTest : DbTestBase
         await DbContext.SaveChangesAsync();
 
         // Act
-        var response = await _controller.ApplyAsync(presetId);
+        var response = await _controller.ApplyAsync(new PresetApplyDto(){Id = presetId});
 
         // Assert
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response, typeof(OkResult));
     }
-    
-    
+
+
     //E - Exception
     [TestMethod]
     public async Task ApplyAsync_NoIdInDatabase()
     {
         // Arrange
         int presetId = 1; // ID of the preset to apply
-        var response = await _controller.ApplyAsync(presetId);
+        var response = await _controller.ApplyAsync(new PresetApplyDto(){Id = presetId});
         Assert.IsNotNull(response);
         Assert.IsInstanceOfType(response, typeof(ObjectResult));
         var statusCode = (ObjectResult)response;
         Assert.AreEqual(500, statusCode.StatusCode);
     }
-    
-    
+
+
     //GetByIdAsync()
     [TestMethod]
     public async Task GetByIdAsync_ReturnsPresetWithMatchingId()
@@ -371,7 +355,7 @@ public class PresetIntegrationTest : DbTestBase
         };
         DbContext.Presets.Add(preset);
         await DbContext.SaveChangesAsync();
-        
+
         // Act
         var response = await _controller.GetByIdAsync(presetId);
 
@@ -384,7 +368,7 @@ public class PresetIntegrationTest : DbTestBase
         Assert.IsNotNull(result);
         Assert.AreEqual(presetId, result.Id);
     }
-    
+
     [TestMethod]
     public async Task GetByIdAsync_NoIdInDatabase()
     {
@@ -400,5 +384,5 @@ public class PresetIntegrationTest : DbTestBase
         var notFoundResult = (ObjectResult)response.Result;
         Assert.AreEqual(500, notFoundResult.StatusCode);
     }
-    
+
 }

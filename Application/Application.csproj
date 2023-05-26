@@ -11,4 +11,8 @@
       <ProjectReference Include="..\SocketServer\SocketServer.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="DotNetEnv" Version="2.5.0" />
+    </ItemGroup>
+
 </Project>

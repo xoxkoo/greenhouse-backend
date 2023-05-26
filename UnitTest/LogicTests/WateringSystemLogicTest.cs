@@ -47,7 +47,7 @@ public class WateringSystemLogicTest : DbTestBase
             Assert.AreEqual(expectedValues, e.Message);
         }
     }
-    //TODO fix
+
     [TestMethod]
     public async Task WateringSystemDurationNullTest()
     {

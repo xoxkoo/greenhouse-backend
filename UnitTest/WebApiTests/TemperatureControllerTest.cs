@@ -36,36 +36,37 @@ public class TemperatureControllerTest
     [TestMethod]
     public async Task GetAsync_checkValue()
     {
-        DateTime time = DateTime.Now;
-        TemperatureDto dto = new TemperatureDto(){Date = time,TemperatureId = 1,value = 50};
+        long time = ((DateTimeOffset) DateTime.Now).ToUnixTimeSeconds();
+        TemperatureDto dto = new TemperatureDto(){Date = time,TemperatureId = 1,Value = 50};
         IEnumerable<TemperatureDto> list = new[] { dto };
         // Arrange
         var logicMock = new Mock<ITemperatureLogic>();
         logicMock
             .Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>())).ReturnsAsync(list);
-        
+
         var controller = new TemperatureController(logicMock.Object);
         // Act
         await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
         // Check
-        Assert.AreEqual(50,dto.value);
+        Assert.AreEqual(50,dto.Value);
 
     }
     [TestMethod]
     public async Task GetAsync_checkDate()
     {
-        DateTime time = new DateTime(2001,1,1);
-        TemperatureDto dto = new TemperatureDto(){Date = time,TemperatureId = 1,value = 50};
+
+        long time = ((DateTimeOffset)new DateTime(2001,1,1)).ToUnixTimeSeconds();
+        TemperatureDto dto = new TemperatureDto(){Date = time,TemperatureId = 1,Value = 50};
         IEnumerable<TemperatureDto> list = new[] { dto };
         // Arrange
         var logicMock = new Mock<ITemperatureLogic>();
         logicMock
             .Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>())).ReturnsAsync(list);
-        
+
         var controller = new TemperatureController(logicMock.Object);
         // Act
         await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
         // Check
-        Assert.AreEqual(new DateTime(2001,1,1),dto.Date);
+        Assert.AreEqual(time,dto.Date);
     }
 }

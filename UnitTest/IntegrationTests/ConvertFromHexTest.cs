@@ -37,7 +37,7 @@ public class ConvertFromHexTest : DbTestBase
 	    var startup = new Startup();
 	    startup.ConfigureServices(services);
 
-	    // Resolve PresetController using dependency injection
+	    // Resolve Converter using dependency injection
 	    _converter = services.BuildServiceProvider().GetService<IConverter>();
 
     }

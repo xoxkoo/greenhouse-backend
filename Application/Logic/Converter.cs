@@ -58,19 +58,19 @@ public class Converter : IConverter
         return response;
     }
     /**
-     * Convert actions payload into hexidecimal payload
+     * Convert actions payload into hexadecimal payload
      *
      * @param actionsPayload
      */
-    public string ConvertActionsPayloadToHex(ValveStateDto dto, int duration)
+    public string ConvertActionsPayloadToHex(ValveStateCreationDto dto)
     {
         //  ID 6 bits
         //  Actions 8bits - 7th bit water toggle
         // Interval 10bits - 1023 minutes
         StringBuilder result = new StringBuilder();
 
-        //ID for this payload is 4
-        result.Append("000100");
+        //ID for this payload is 5
+        result.Append("000101");
 
         int toggleBit = 0;
         // bit is 1 if toggle is true, 0 if false
@@ -88,12 +88,12 @@ public class Converter : IConverter
         result.Append(IntToBinaryRight(toggleBit, 8));
 
         // Validation for duration
-        if (duration < 0 || duration > 1023)
+        if (dto.duration < 0 || dto.duration > 1023)
         {
             throw new Exception("Duration must be an integer between 0 and 1023.");
         }
         // Interval in minutes, total size of 10 bits
-        result.Append(IntToBinaryLeft(duration, 10));
+        result.Append(IntToBinaryLeft(dto.duration, 10));
 
         // Return a hex representation of provided binary payload
         return BinaryStringToHex(result.ToString()).ToLower();
@@ -153,8 +153,8 @@ public class Converter : IConverter
 	    StringBuilder result = new StringBuilder();
 
 	    //ID - 6 bits
-	    //ID for this payload is 3
-	    result.Append("000011");
+	    //ID for this payload is 4
+	    result.Append("000100");
 	    List<ThresholdDto> thresholds = dto.Thresholds.ToList();
 	    if (thresholds == null)
 	    {
@@ -165,7 +165,7 @@ public class Converter : IConverter
 	    {
 		    throw new Exception("In the preset there have to be three thresholds");
 	    }
-	    
+
 	    foreach (var t in thresholds)
 	    {
 		    if (t.Type.ToLower() != "temperature" && t.Type.ToLower() != "co2" && t.Type.ToLower() != "humidity")		    {
@@ -190,7 +190,7 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
 	    }
 
-	    
+
 	    //Humidity range - 14 bits
 	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
 	    if (humidityThreshold == null)
@@ -227,16 +227,13 @@ public class Converter : IConverter
 		    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 12));
 	    }
 
-	    Console.WriteLine(result.ToString());
-	    Console.WriteLine(BinaryStringToHex(result.ToString()).ToLower());
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }
 
 
     private async Task<string> ReadTHCPayload(string data)
     {
-        //TODO handle flags
-        string flags = data.Substring(0, 8);
+	    string flags = data.Substring(0, 8);
         string temperature = data.Substring(8, 11);
         string humidity = data.Substring(19, 10);
         string co2 = data.Substring(29, 13);
@@ -259,11 +256,20 @@ public class Converter : IConverter
             Date = DateTime.Now,
             Value = Convert.ToInt32(humidity, 2)
         };
-        await co2Logic.CreateAsync(co2Dto);
-        await humidityLogic.CreateAsync(humidityDto);
-        await temperatureLogic.CreateAsync(tempDto);
+
+
+        // check if sensors measurements are valid
+        if (Int32.Parse(flags.Substring(0,1)) == 1)
+	        await temperatureLogic.CreateAsync(tempDto);
+
+        if (Int32.Parse(flags.Substring(1,1)) == 1)
+			await humidityLogic.CreateAsync(humidityDto);
+
+        if (Int32.Parse(flags.Substring(2,1)) == 1)
+			await co2Logic.CreateAsync(co2Dto);
 
         await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
+
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 

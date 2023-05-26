@@ -3,6 +3,7 @@ using Domain.DTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using DateTimeOffset = System.DateTimeOffset;
 
 namespace EfcDataAccess.DAOs;
 
@@ -23,9 +24,9 @@ public class TemperatureEfcDao : ITemperatureDao
 
 		TemperatureDto dto = new TemperatureDto
 		{
-			Date = entity.Entity.Date,
+			Date = ((DateTimeOffset)entity.Entity.Date).ToUnixTimeSeconds(),
 			TemperatureId = entity.Entity.TemperatureId,
-			value = entity.Entity.Value
+			Value = entity.Entity.Value
 		};
 		return dto;
 	}
@@ -52,9 +53,9 @@ public class TemperatureEfcDao : ITemperatureDao
 		IEnumerable<TemperatureDto> result = await list.Select(c =>
 			new TemperatureDto()
 			{
-				Date = c.Date,
+				Date = ((DateTimeOffset)c.Date).ToUnixTimeSeconds(),
 				TemperatureId = c.TemperatureId,
-				value = c.Value
+				Value = c.Value
 			}).ToListAsync();
 
 		return result;

@@ -45,7 +45,6 @@ DotNetEnv.Env.TraversePath().Load();
 builder.Services.AddDbContext<Context>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
 	options.RequireHttpsMetadata = false;
@@ -85,4 +84,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

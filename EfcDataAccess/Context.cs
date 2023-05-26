@@ -28,7 +28,6 @@ public class Context : DbContext
 		DotNetEnv.Env.TraversePath().Load();
 		// optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
 	    optionsBuilder.UseNpgsql($"{DotNetEnv.Env.GetString("DB_CONNECTION")}");
-
 	}
 
 }
