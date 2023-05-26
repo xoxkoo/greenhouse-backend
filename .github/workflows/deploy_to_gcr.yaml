@@ -1,7 +1,9 @@
 ﻿name: deploy
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - dev-create_automated_deployment
 jobs:
   push-images:
     runs-on: ubuntu-latest
