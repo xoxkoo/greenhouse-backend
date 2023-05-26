@@ -31,14 +31,14 @@ public class EmailLogic : IEmailLogic
         {
             throw new ArgumentNullException(nameof(dto), "Email data cannot be null");
         }
-        if (string.IsNullOrWhiteSpace(dto.EmailAdress))
+        if (string.IsNullOrWhiteSpace(dto.Email))
         {
             throw new ArgumentException("Email address cannot be empty or whitespace.", nameof(dto));
         }
 
         var entity = new NotificationEmail()
         {
-            Email = dto.EmailAdress
+            Email = dto.Email
         };
 
         return await _emailDao.CreateAsync(entity);
@@ -82,7 +82,7 @@ public class EmailLogic : IEmailLogic
             IsBodyHtml = true
         };
 
-        message.To.Add(_emailDao.GetAsync().Result.EmailAdress);
+        message.To.Add(_emailDao.GetAsync().Result.Email);
         smtpClient.Send(message);
     }
 
