@@ -8,6 +8,10 @@ jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
+
+  ppp:
+    name: Print
+    run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
     #will throw error because of incorrect routing
   build_and_deploy:
     name: Build and Deploy
