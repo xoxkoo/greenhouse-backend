@@ -6,8 +6,22 @@
         <Nullable>enable</Nullable>
         <RootNamespace>UnitTest</RootNamespace>
     </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <CollectCoverage>true</CollectCoverage>
+        <CoverletOutputFormat>json</CoverletOutputFormat>
+        <CoverletOutput>../TestResults/</CoverletOutput>
+    </PropertyGroup>
+
+
 
     <ItemGroup>
+      <PackageReference Include="coverlet.collector" Version="6.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.5" />
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0-preview-20230223-05" />
       <PackageReference Include="Moq" Version="4.18.4" />
       <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
@@ -18,6 +32,10 @@
       <ProjectReference Include="..\Application\Application.csproj" />
       <ProjectReference Include="..\SocketClient\SocketClient.csproj" />
       <ProjectReference Include="..\WebAPI\WebAPI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="TestResults" />
     </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 
 namespace Application.Services;
 
-public interface IAuthService
+public interface IAuthLogic
 {
     Task<User> ValidateUser(string email, string password);
 }

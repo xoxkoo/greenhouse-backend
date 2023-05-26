@@ -35,14 +35,10 @@ public class EmailLogic : IEmailLogic
         {
             throw new ArgumentException("Email address cannot be empty or whitespace.", nameof(dto));
         }
-        if (!dto.Email.EndsWith("@gmail.com"))
-        {
-            throw new ArgumentException("Email address must end with @gmail.com");
-        }
 
-        var entity = new Email()
+        var entity = new NotificationEmail()
         {
-            EmailAddress = dto.Email
+            Email = dto.Email
         };
 
         return await _emailDao.CreateAsync(entity);

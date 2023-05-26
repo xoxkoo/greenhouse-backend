@@ -15,12 +15,12 @@ namespace WebAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
-    private readonly IAuthService _authService;
+    private readonly IAuthLogic _authLogic;
 
-    public AuthController(IConfiguration config, IAuthService authService)
+    public AuthController(IConfiguration config, IAuthLogic authLogic)
     {
         this.config = config;
-        _authService = authService;
+        _authLogic = authLogic;
     }
     
     [HttpPost, Route("login")]
@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            User user = await _authService.ValidateUser(userLoginDto.Email, userLoginDto.Password);
+            User user = await _authLogic.ValidateUser(userLoginDto.Email, userLoginDto.Password);
             string token = GenerateJwt(user);
     
             return Ok(token);

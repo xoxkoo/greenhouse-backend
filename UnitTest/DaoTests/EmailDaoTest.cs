@@ -33,7 +33,7 @@ public class EmailDaoTest : DbTestBase
     public async Task CreateAsync_WithValidData_Test()
     {
         // Arrange
-        var email = new Email() { EmailAddress = "test@gmail.com" };
+        var email = new NotificationEmail() { Email = "test@gmail.com" };
 
         // Act
         var result = await _emailDao.CreateAsync(email);
@@ -41,7 +41,7 @@ public class EmailDaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(EmailDto));
-        Assert.AreEqual(email.EmailAddress, result.Email);
+        Assert.AreEqual(email.Email, result.Email);
     }
 
     //M - Many
@@ -49,8 +49,8 @@ public class EmailDaoTest : DbTestBase
     public async Task CreateAsync_WithExistingEmailAddress_Test()
     {
         // Arrange
-        var email1 = new Email() { EmailAddress = "test@gmail.com" };
-        var email2 = new Email() { EmailAddress = "test2@gmail.com" };
+        var email1 = new NotificationEmail() { Email = "test@gmail.com" };
+        var email2 = new NotificationEmail() { Email = "test2@gmail.com" };
         await _emailDao.CreateAsync(email1);
 
         // Act
@@ -60,7 +60,7 @@ public class EmailDaoTest : DbTestBase
         var result = DbContext.Mails.AsEnumerable();
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.AreEqual(email2.EmailAddress, result.FirstOrDefault().EmailAddress);
+        Assert.AreEqual(email2.Email, result.FirstOrDefault().Email);
     }
 
     
@@ -80,7 +80,7 @@ public class EmailDaoTest : DbTestBase
     public async Task GetAsync_WithExistingEmail_Test()
     {
         // Arrange
-        var email = new Email() { EmailAddress = "test@gmail.com" };
+        var email = new NotificationEmail() { Email = "test@gmail.com" };
         await DbContext.AddAsync(email);
         await DbContext.SaveChangesAsync();
         
@@ -90,6 +90,6 @@ public class EmailDaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(EmailDto));
-        Assert.AreEqual(email.EmailAddress, result.Email);
+        Assert.AreEqual(email.Email, result.Email);
     }
 }
