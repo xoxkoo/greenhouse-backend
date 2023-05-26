@@ -15,28 +15,28 @@ public class EmailEfcDao : IEmailDao
         _context = context;
     }
 
-    public async Task<EmailDto> CreateAsync(Email email)
+    public async Task<EmailDto> CreateAsync(NotificationEmail notificationEmail)
     {
-        if (email == null)
+        if (notificationEmail == null)
         {
-            throw new ArgumentNullException(nameof(email), "Mail data cannot be null.");
+            throw new ArgumentNullException(nameof(notificationEmail), "Mail data cannot be null.");
         }
     
         // Check if an email with the same email address already exists
-        Email existingEmail = await _context.Mails.FirstOrDefaultAsync();
-        if (existingEmail != null)
+        NotificationEmail existingNotificationEmail = await _context.Mails.FirstOrDefaultAsync();
+        if (existingNotificationEmail != null)
         {
             // Delete the existing email
-            _context.Mails.Remove(existingEmail);
+            _context.Mails.Remove(existingNotificationEmail);
         }
     
         // Add the new email to the database
-        EntityEntry<Email> entity = await _context.Mails.AddAsync(email);
+        EntityEntry<NotificationEmail> entity = await _context.Mails.AddAsync(notificationEmail);
         await _context.SaveChangesAsync();
     
         return new EmailDto()
         {
-            Email = entity.Entity.EmailAddress
+            Email = entity.Entity.Email
         };
     }
 
@@ -49,7 +49,7 @@ public class EmailEfcDao : IEmailDao
         }
         return new EmailDto()
         {
-            Email = email.EmailAddress
+            Email = email.Email
         };
     }
 }

@@ -4,11 +4,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Application.Services;
 
-public class AuthService : IAuthService
+public class AuthLogic : IAuthLogic
 {
     private IUserDao _userDao;
 
-    public AuthService(IUserDao userDao)
+    public AuthLogic(IUserDao userDao)
     {
         _userDao = userDao;
     }

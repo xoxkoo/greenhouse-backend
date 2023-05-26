@@ -1,10 +1,9 @@
-﻿using Application.Logic;
-using Application.LogicInterfaces;
-using Domain.DTOs;
-using Domain.Entities;
+﻿using Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace EfcDataAccess;
 
+[ExcludeFromCodeCoverage]
 class DatabaseInsertion
 {
     private static Context _context;
@@ -47,8 +46,8 @@ class DatabaseInsertion
         await _context.Presets.AddAsync(preset);
 
         //Email
-        Email email = new Email() { EmailAddress = "greenhousesep4@gmail.com" };
-        await _context.Mails.AddAsync(email);
+        NotificationEmail notificationEmail = new NotificationEmail() { Email = "greenhousesep4@gmail.com" };
+        await _context.Mails.AddAsync(notificationEmail);
 
         //ValveState
         ValveState valveState = new ValveState() { Toggle = false };
