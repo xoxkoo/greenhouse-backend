@@ -10,11 +10,19 @@ public class EmailLogic : IEmailLogic
 {
     private readonly IEmailDao _emailDao;
     private readonly IPresetDao _presetDao;
+    private SmtpClient smtpClient;
 
     public EmailLogic(IEmailDao emailDao, IPresetDao presetDao)
     {
         _emailDao = emailDao;
         _presetDao = presetDao;
+        DotNetEnv.Env.TraversePath().Load();
+        smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+	        Port = 587,
+	        Credentials = new NetworkCredential("greenhousesep4@gmail.com", "zievqkygqhfrwioe"),
+	        EnableSsl = true,
+        };
     }
 
     public async Task<EmailDto> CreateAsync(EmailDto dto)
@@ -23,18 +31,18 @@ public class EmailLogic : IEmailLogic
         {
             throw new ArgumentNullException(nameof(dto), "Email data cannot be null");
         }
-        if (string.IsNullOrWhiteSpace(dto.EmailAdress))
+        if (string.IsNullOrWhiteSpace(dto.Email))
         {
             throw new ArgumentException("Email address cannot be empty or whitespace.", nameof(dto));
         }
-        if (!dto.EmailAdress.EndsWith("@gmail.com"))
+        if (!dto.Email.EndsWith("@gmail.com"))
         {
             throw new ArgumentException("Email address must end with @gmail.com");
         }
 
         var entity = new Email()
         {
-            EmailAddress = dto.EmailAdress
+            EmailAddress = dto.Email
         };
 
         return await _emailDao.CreateAsync(entity);
@@ -45,12 +53,6 @@ public class EmailLogic : IEmailLogic
         return await _emailDao.GetAsync();
     }
 
-    private SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
-    {
-        Port = 587,
-        Credentials = new NetworkCredential("greenhousesep4@gmail.com", "zievqkygqhfrwioe"),
-        EnableSsl = true,
-    };
 
 
     private void sendMail(string warning)
@@ -84,7 +86,7 @@ public class EmailLogic : IEmailLogic
             IsBodyHtml = true
         };
 
-        message.To.Add(_emailDao.GetAsync().Result.EmailAdress);
+        message.To.Add(_emailDao.GetAsync().Result.Email);
         smtpClient.Send(message);
     }
 

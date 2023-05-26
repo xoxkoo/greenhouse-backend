@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
 [ApiController]
-[Route("/co2")]
+[Route("measurements/co2")]
 public class CO2Controller:ControllerBase
 {
     private readonly ICO2Logic Logic;
@@ -24,6 +24,7 @@ public class CO2Controller:ControllerBase
 	    [FromQuery] DateTime? startTime = null,
 	    [FromQuery] DateTime? endTime = null)
     {
+
 	    try
 	    {
 

@@ -79,7 +79,7 @@ public class HumidityIntegrationTest : DbTestBase
         var result =(IEnumerable<HumidityDto>?) createdResult.Value;
         Assert.AreEqual(1, result.FirstOrDefault().HumidityId);
         Assert.AreEqual(humidity.Value, result.FirstOrDefault().Value);
-        Assert.AreEqual(humidity.Date, result.FirstOrDefault().Date);
+        Assert.AreEqual(((DateTimeOffset)humidity.Date).ToUnixTimeSeconds(), result.FirstOrDefault().Date);
     }
 
     //M - Many
@@ -182,7 +182,7 @@ public class HumidityIntegrationTest : DbTestBase
         var result =(IEnumerable<HumidityDto>?) createdResult.Value;
         Assert.AreEqual(1, result.FirstOrDefault().HumidityId);
         Assert.AreEqual(humidity.Value, result.FirstOrDefault().Value);
-        Assert.AreEqual(humidity.Date, result.FirstOrDefault().Date);
+        Assert.AreEqual(((DateTimeOffset)humidity.Date).ToUnixTimeSeconds(), result.FirstOrDefault().Date);
     }
 
     //E - Exception

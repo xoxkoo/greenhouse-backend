@@ -71,7 +71,7 @@ public class CO2IntegrationTest : DbTestBase
 
         var checkResult = (CO2Dto?)createdResult.Value;
         Assert.AreEqual(1, checkResult.CO2Id);
-        Assert.AreEqual(co2CreateDto.Date, checkResult.Date);
+        Assert.AreEqual(((DateTimeOffset)co2CreateDto.Date).ToUnixTimeSeconds(), checkResult.Date);
         Assert.AreEqual(co2CreateDto.Value, checkResult.Value);
     }
 
@@ -124,7 +124,7 @@ public class CO2IntegrationTest : DbTestBase
         var result =(IEnumerable<CO2Dto>?) createdResult.Value;
         Assert.AreEqual(1, result.FirstOrDefault().CO2Id);
         Assert.AreEqual(co2.Value, result.FirstOrDefault().Value);
-        Assert.AreEqual(co2.Date, result.FirstOrDefault().Date);
+        Assert.AreEqual(((DateTimeOffset)co2.Date).ToUnixTimeSeconds(), result.FirstOrDefault().Date);
     }
 
     //M - Many

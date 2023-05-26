@@ -46,7 +46,7 @@ public class HumidityDaoTest : DbTestBase
         Assert.IsNotNull(createdHumidity);
         Assert.AreEqual(1, createdHumidity.HumidityId);
         Assert.AreEqual(humidity.Value, createdHumidity.Value);
-        Assert.AreEqual(humidity.Date, createdHumidity.Date);
+        Assert.AreEqual(((DateTimeOffset)humidity.Date).ToUnixTimeSeconds(), createdHumidity.Date);
     }
 
     //M - Many
@@ -84,11 +84,11 @@ public class HumidityDaoTest : DbTestBase
         //Assert
         Assert.IsNotNull(results);
         Assert.AreEqual(3, results.Count);
-        Assert.AreEqual(humidities[0].Date, results[0].Date);
+        Assert.AreEqual(((DateTimeOffset)humidities[0].Date).ToUnixTimeSeconds(), results[0].Date);
         Assert.AreEqual(humidities[0].Value, results[0].Value);
-        Assert.AreEqual(humidities[1].Date, results[1].Date);
+        Assert.AreEqual(((DateTimeOffset)humidities[1].Date).ToUnixTimeSeconds(), results[1].Date);
         Assert.AreEqual(humidities[1].Value, results[1].Value);
-        Assert.AreEqual(humidities[2].Date, results[2].Date);
+        Assert.AreEqual(((DateTimeOffset)humidities[2].Date).ToUnixTimeSeconds(), results[2].Date);
         Assert.AreEqual(humidities[2].Value, results[2].Value);
     }
 
@@ -135,7 +135,7 @@ public class HumidityDaoTest : DbTestBase
         Assert.AreEqual(1, result.Count());
         Assert.AreEqual(humidity.HumidityId, result.First().HumidityId);
         Assert.AreEqual(humidity.Value, result.First().Value);
-        Assert.AreEqual(humidity.Date, result.First().Date);
+        Assert.AreEqual(((DateTimeOffset)humidity.Date).ToUnixTimeSeconds(), result.First().Date);
     }
 
 
@@ -158,9 +158,9 @@ public class HumidityDaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(2, result.Count());
-        Assert.AreEqual(humidity1.Date, result.FirstOrDefault()?.Date);
+        Assert.AreEqual(((DateTimeOffset)humidity1.Date).ToUnixTimeSeconds(), result.FirstOrDefault()?.Date);
         Assert.AreEqual(humidity1.Value, result.FirstOrDefault()?.Value);
-        Assert.AreEqual(humidity2.Date, result.Last().Date);
+        Assert.AreEqual(((DateTimeOffset)humidity2.Date).ToUnixTimeSeconds(), result.Last().Date);
         Assert.AreEqual(humidity2.Value, result.Last().Value);
     }
 
@@ -182,7 +182,7 @@ public class HumidityDaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.AreEqual(humidity2.Date, result.FirstOrDefault()?.Date);
+        Assert.AreEqual(((DateTimeOffset)humidity2.Date).ToUnixTimeSeconds(), result.FirstOrDefault()?.Date);
         Assert.AreEqual(humidity2.Value, result.FirstOrDefault()?.Value);
     }
 
@@ -204,7 +204,7 @@ public class HumidityDaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
-        Assert.AreEqual(humidity1.Date, result.FirstOrDefault()?.Date);
+        Assert.AreEqual(((DateTimeOffset)humidity1.Date).ToUnixTimeSeconds(), result.FirstOrDefault()?.Date);
         Assert.AreEqual(humidity1.Value, result.FirstOrDefault()?.Value);
     }
 }

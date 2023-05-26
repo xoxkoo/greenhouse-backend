@@ -4,7 +4,7 @@ public class HumidityDto
 {
 	public int HumidityId;
 
-	public DateTime Date { get; set; }
+	public long Date { get; set; }
 	public int Value { get; set; }
 
 }

@@ -27,7 +27,7 @@ public class CO2EfcDao : ICO2Dao
 
 		return new CO2Dto()
 		{
-			Date = entity.Entity.Date,
+			Date = ((DateTimeOffset)entity.Entity.Date).ToUnixTimeSeconds(),
 			CO2Id = entity.Entity.CO2Id,
 			Value = entity.Entity.Value
 		};
@@ -55,7 +55,7 @@ public class CO2EfcDao : ICO2Dao
 		IEnumerable<CO2Dto> result = await list.Select(c =>
 			new CO2Dto
 			{
-				Date = c.Date,
+				Date = ((DateTimeOffset)c.Date).ToUnixTimeSeconds(),
 				Value = c.Value,
 				CO2Id = c.CO2Id
 			}).ToListAsync();

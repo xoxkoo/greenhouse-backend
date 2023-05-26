@@ -35,14 +35,14 @@ public class CO2ControllerTests
     [TestMethod]
     public async Task GetAsync_checkValue()
     {
-        DateTime time = DateTime.Now;
+        long time = (DateTimeOffset.Now).ToUnixTimeSeconds();
         CO2Dto dto = new CO2Dto(){Date = time,CO2Id = 1,Value = 50};
         IEnumerable<CO2Dto> list = new[] { dto };
         // Arrange
         var logicMock = new Mock<ICO2Logic>();
         logicMock
             .Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>())).ReturnsAsync(list);
-        
+
         var controller = new CO2Controller(logicMock.Object);
         // Act
         await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
@@ -53,14 +53,14 @@ public class CO2ControllerTests
     [TestMethod]
     public async Task GetAsync_CheckId()
     {
-        DateTime time = new DateTime(2001,1,1);
+        long time = 100;
         CO2Dto dto = new CO2Dto(){Date = time,CO2Id = 1,Value = 50};
         IEnumerable<CO2Dto> list = new[] { dto };
         // Arrange
         var logicMock = new Mock<ICO2Logic>();
         logicMock
             .Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>())).ReturnsAsync(list);
-        
+
         var controller = new CO2Controller(logicMock.Object);
         // Act
         await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
@@ -70,18 +70,18 @@ public class CO2ControllerTests
     [TestMethod]
     public async Task GetAsync_checkDate()
     {
-        DateTime time = new DateTime(2001,1,1);
+        long time = 100;
         CO2Dto dto = new CO2Dto(){Date = time,CO2Id = 1,Value = 50};
         IEnumerable<CO2Dto> list = new[] { dto };
         // Arrange
         var logicMock = new Mock<ICO2Logic>();
         logicMock
             .Setup(x => x.GetAsync(It.IsAny<SearchMeasurementDto>())).ReturnsAsync(list);
-        
+
         var controller = new CO2Controller(logicMock.Object);
         // Act
         await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
         // Check
-        Assert.AreEqual(new DateTime(2001,1,1),dto.Date);
+        Assert.AreEqual(100,dto.Date);
     }
 }

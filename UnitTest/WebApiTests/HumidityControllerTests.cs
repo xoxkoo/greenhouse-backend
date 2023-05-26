@@ -38,7 +38,7 @@ public class HumidityControllerTests
 	[TestMethod]
 	public async Task GetAsync_checkValue()
 	{
-		DateTime time = DateTime.Now;
+		long time = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
 		HumidityDto dto = new HumidityDto(){Date = time,HumidityId = 1,Value = 50};
 		IEnumerable<HumidityDto> list = new[] { dto };
 		// Arrange
@@ -56,7 +56,7 @@ public class HumidityControllerTests
 	[TestMethod]
 	public async Task GetAsync_Date()
 	{
-		DateTime time = new DateTime(2001,1,1);
+		long time = ((DateTimeOffset)new DateTime(2001,1,1)).ToUnixTimeSeconds();
 		HumidityDto dto = new HumidityDto(){Date = time,HumidityId = 1,Value = 50};
 		IEnumerable<HumidityDto> list = new[] { dto };
 		// Arrange
@@ -68,6 +68,6 @@ public class HumidityControllerTests
 		// Act
 		await controller.GetAsync(current: true, startTime: DateTime.Now, endTime: DateTime.Now.AddDays(+1));
 		// Check
-		Assert.AreEqual(new DateTime(2001,1,1),dto.Date);
+		Assert.AreEqual(((DateTimeOffset)new DateTime(2001,1,1)).ToUnixTimeSeconds(),dto.Date);
 	}
 }

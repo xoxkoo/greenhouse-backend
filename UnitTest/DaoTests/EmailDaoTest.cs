@@ -41,7 +41,7 @@ public class EmailDaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(EmailDto));
-        Assert.AreEqual(email.EmailAddress, result.EmailAdress);
+        Assert.AreEqual(email.EmailAddress, result.Email);
     }
 
     //M - Many
@@ -90,6 +90,6 @@ public class EmailDaoTest : DbTestBase
         // Assert
         Assert.IsNotNull(result);
         Assert.IsInstanceOfType(result, typeof(EmailDto));
-        Assert.AreEqual(email.EmailAddress, result.EmailAdress);
+        Assert.AreEqual(email.EmailAddress, result.Email);
     }
 }
