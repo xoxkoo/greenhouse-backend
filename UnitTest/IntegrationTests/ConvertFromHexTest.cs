@@ -78,11 +78,11 @@ public class ConvertFromHexTest : DbTestBase
 		    Name = "Tomato",
 		    Thresholds = thresholds
 	    };
-	    Email email = new Email
+	    NotificationEmail notificationEmail = new NotificationEmail
 	    {
-		    EmailAddress = "greenhousesep4@gmail.com"
+		    Email = "greenhousesep4@gmail.com"
 	    };
-	    await DbContext.Mails.AddAsync(email);
+	    await DbContext.Mails.AddAsync(notificationEmail);
 	    await DbContext.Presets.AddAsync(preset);
 	    await DbContext.SaveChangesAsync();
 	    string result = await _converter.ConvertFromHex("07817b0707f0");

@@ -3,7 +3,7 @@
 on:
   push:
     branches:
-      - dev-TestCoverageWorkflow
+      - main
 
 jobs:
   deploy:

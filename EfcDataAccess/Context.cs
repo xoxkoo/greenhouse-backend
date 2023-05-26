@@ -11,7 +11,7 @@ public class Context : DbContext
 	public DbSet<CO2> CO2s { get; set; }
 	public DbSet<Interval> Intervals { get; set; }
 	public DbSet<ValveState> ValveState { get; set; }
-	public DbSet<Email> Mails { get; set; }
+	public DbSet<NotificationEmail> Mails { get; set; }
 	public DbSet<Preset> Presets { get; set; }
 	public DbSet<Threshold> Thresholds { get; set; }
 	public DbSet<User> Users { get; set; }

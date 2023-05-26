@@ -38,6 +38,5 @@ public class Startup
 
 			return new PresetController(presetLogic);
 		});
-
 	}
 }

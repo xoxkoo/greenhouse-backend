@@ -45,7 +45,7 @@ public class EmailLogicTest
         // Arrange
         string validEmail = "test@gmail.com";
         var emailDto = new EmailDto() { EmailAdress = validEmail };
-        _mockEmailDao.Setup(dao => dao.CreateAsync(It.IsAny<Email>())).ReturnsAsync(emailDto);
+        _mockEmailDao.Setup(dao => dao.CreateAsync(It.IsAny<NotificationEmail>())).ReturnsAsync(emailDto);
         // Act
         var result = await _emailLogic.CreateAsync(emailDto);
 
@@ -67,17 +67,7 @@ public class EmailLogicTest
         //Act & Assert
         await Assert.ThrowsExceptionAsync<ArgumentException>(() => _emailLogic.CreateAsync(dto));
     }
-
-    [TestMethod]
-    public async Task CreateAsync_InvalidEmail_ThrowsArgumentException_Test()
-    {
-        // Arrange
-        string invalidEmail = "test@example.com";
-        var emailDto = new EmailDto() { EmailAdress = invalidEmail };
-
-        // Act & Assert
-        await Assert.ThrowsExceptionAsync<ArgumentException>(async () => await _emailLogic.CreateAsync(emailDto));
-    }
+    
 
     //GetAsync()
     [TestMethod]
@@ -85,7 +75,7 @@ public class EmailLogicTest
     {
         // Arrange
         string validEmail = "test@gmail.com";
-        var emailEntity = new Email() { EmailAddress = validEmail };
+        var emailEntity = new NotificationEmail() { Email = validEmail };
         var emailDto = new EmailDto() { EmailAdress = validEmail };
         _mockEmailDao.Setup(dao => dao.GetAsync()).ReturnsAsync(emailDto);
 

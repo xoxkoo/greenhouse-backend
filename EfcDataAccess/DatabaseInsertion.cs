@@ -46,8 +46,8 @@ class DatabaseInsertion
         await _context.Presets.AddAsync(preset);
 
         //Email
-        Email email = new Email() { EmailAddress = "greenhousesep4@gmail.com" };
-        await _context.Mails.AddAsync(email);
+        NotificationEmail notificationEmail = new NotificationEmail() { Email = "greenhousesep4@gmail.com" };
+        await _context.Mails.AddAsync(notificationEmail);
 
         //ValveState
         ValveState valveState = new ValveState() { Toggle = false };
