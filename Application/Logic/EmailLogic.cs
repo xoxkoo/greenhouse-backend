@@ -21,6 +21,8 @@ public class EmailLogic : IEmailLogic
         string password;
 
         Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD") == null);
+        Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD"));
+        Console.WriteLine(Environment.GetEnvironmentVariable("EMAIL_USERNAME") + " " + Environment.GetEnvironmentVariable("EMAIL_PASSWORD"));
 
         if (DotNetEnv.Env.GetString("EMAIL_USERNAME") == "" || DotNetEnv.Env.GetString("EMAIL_PASSWORD") == "")
         {
