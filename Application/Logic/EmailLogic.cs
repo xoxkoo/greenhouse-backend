@@ -16,25 +16,8 @@ public class EmailLogic : IEmailLogic
     {
         _emailDao = emailDao;
         _presetDao = presetDao;
+
         DotNetEnv.Env.TraversePath().Load();
-        // string email;
-        // string password;
-
-        Console.WriteLine(Environment.GetEnvironmentVariable("EMAIL_USERNAME") == "greenhousesep4@gmail.com");
-        // Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD"));
-        // Console.WriteLine( + " " + );
-        //
-        // if (DotNetEnv.Env.GetString("EMAIL_USERNAME") == "" || DotNetEnv.Env.GetString("EMAIL_PASSWORD") == "")
-        // {
-	       //  email = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
-	       //  password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
-        // }
-        // else
-        // {
-	       //  email = DotNetEnv.Env.GetString("EMAIL_USERNAME");
-	       //  password = DotNetEnv.Env.GetString("EMAIL_PASSWORD");
-        // }
-
         smtpClient = new SmtpClient("smtp.gmail.com")
         {
 	        Port = 587,

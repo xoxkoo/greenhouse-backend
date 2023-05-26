@@ -26,7 +26,7 @@ public class Context : DbContext
 	{
 		// loads environment variables and sets the path
 		DotNetEnv.Env.TraversePath().Load();
-	    optionsBuilder.UseNpgsql($"{DotNetEnv.Env.GetString("DB_CONNECTION")}");
+		optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION"));
 	}
 
 }
