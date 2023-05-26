@@ -20,7 +20,7 @@ public class EmailLogic : IEmailLogic
         string email;
         string password;
 
-        Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD") == null);
+        Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_USERNAME") == "greenhousesep4@gmail.com");
         Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD"));
         Console.WriteLine(Environment.GetEnvironmentVariable("EMAIL_USERNAME") + " " + Environment.GetEnvironmentVariable("EMAIL_PASSWORD"));
 
