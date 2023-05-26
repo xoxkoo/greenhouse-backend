@@ -20,25 +20,25 @@ public class EmailLogic : IEmailLogic
         string email;
         string password;
 
-        Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_USERNAME") == "greenhousesep4@gmail.com");
-        Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD"));
-        Console.WriteLine(Environment.GetEnvironmentVariable("EMAIL_USERNAME") + " " + Environment.GetEnvironmentVariable("EMAIL_PASSWORD"));
-
-        if (DotNetEnv.Env.GetString("EMAIL_USERNAME") == "" || DotNetEnv.Env.GetString("EMAIL_PASSWORD") == "")
-        {
-	        email = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
-	        password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
-        }
-        else
-        {
-	        email = DotNetEnv.Env.GetString("EMAIL_USERNAME");
-	        password = DotNetEnv.Env.GetString("EMAIL_PASSWORD");
-        }
+        Console.WriteLine(Environment.GetEnvironmentVariable("EMAIL_USERNAME") == "greenhousesep4@gmail.com");
+        // Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD"));
+        // Console.WriteLine( + " " + );
+        //
+        // if (DotNetEnv.Env.GetString("EMAIL_USERNAME") == "" || DotNetEnv.Env.GetString("EMAIL_PASSWORD") == "")
+        // {
+	       //  email = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
+	       //  password = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+        // }
+        // else
+        // {
+	       //  email = DotNetEnv.Env.GetString("EMAIL_USERNAME");
+	       //  password = DotNetEnv.Env.GetString("EMAIL_PASSWORD");
+        // }
 
         smtpClient = new SmtpClient("smtp.gmail.com")
         {
 	        Port = 587,
-	        Credentials = new NetworkCredential(email, password),
+	        Credentials = new NetworkCredential(Environment.GetEnvironmentVariable("EMAIL_USERNAME"), Environment.GetEnvironmentVariable("EMAIL_PASSWORD")),
 	        EnableSsl = true,
         };
     }
