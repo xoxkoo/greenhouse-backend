@@ -57,7 +57,7 @@ public class EmailDaoTest : DbTestBase
         await _emailDao.CreateAsync(email2);
 
         // Assert
-        var result = DbContext.Mails.AsEnumerable();
+        var result = DbContext.NotificationEmails.AsEnumerable();
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
         Assert.AreEqual(email2.Email, result.FirstOrDefault().Email);

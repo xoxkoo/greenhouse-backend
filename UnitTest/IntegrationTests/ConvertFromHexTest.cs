@@ -82,7 +82,7 @@ public class ConvertFromHexTest : DbTestBase
 	    {
 		    Email = "greenhousesep4@gmail.com"
 	    };
-	    await DbContext.Mails.AddAsync(notificationEmail);
+	    await DbContext.NotificationEmails.AddAsync(notificationEmail);
 	    await DbContext.Presets.AddAsync(preset);
 	    await DbContext.SaveChangesAsync();
 	    string result = await _converter.ConvertFromHex("07817b0707f0");
