@@ -9,9 +9,6 @@ jobs:
     secrets: inherit
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout
-
       - name: Print
         run: |
           echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
