@@ -17,6 +17,7 @@ jobs:
           registry: ${{ env.REGISTRY }} 
           username: ${{ github.actor }} 
           password: ${{ secrets.GITHUB_TOKEN }}  
+          
       - name: Build Docker Image
         run: |
           docker-compose -f docker-compose.yaml build
@@ -30,10 +31,27 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} #create ghcr image format within as id called meta
-      - name: Build and push Docker image
+      - name: Build and push Docker image for web
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc #push docker image to ghcr
         with:
           context: .
+          dockerfile: DockerfileWeb
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker image for socket
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc #push docker image to ghcr
+        with:
+          context: .
+          dockerfile: DockerfileSocket
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker image for timer
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc #push docker image to ghcr
+        with:
+          context: .
+          dockerfile: DockerfileTimer
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}      
