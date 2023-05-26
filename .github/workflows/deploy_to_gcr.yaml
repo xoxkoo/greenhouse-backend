@@ -1,9 +1,7 @@
 ﻿name: deploy
 
 on:
-  push:
-    branches:
-      - dev-create_automated_deployment
+  workflow_call:
 jobs:
   push-images:
     runs-on: ubuntu-latest
@@ -12,14 +10,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Print
+        run: |
+          echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
+          echo "${{ service_account_key }}"
+
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.5.0
         with:
           project_id: noted-palisade-385613
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
-      - name: Print
-        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
 
 #      - name: Configure Docker
 #        run: |
