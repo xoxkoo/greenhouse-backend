@@ -4,10 +4,10 @@ using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace UnitTest.LogicTests;
+namespace Testing.LogicTests;
 
 [TestClass]
-public class AuthLogicTest 
+public class AuthLogicTest
 {
     private Mock<IUserDao> userDaoMock;
     private IAuthLogic _authLogic;
@@ -24,7 +24,7 @@ public class AuthLogicTest
         // Arrange
         string email = "test@example.com";
         string password = "password123";
-        
+
         User existingUser = new User
         {
             Email = email,
@@ -67,9 +67,9 @@ public class AuthLogicTest
             Email = email,
             Password = "password123"
         };
-        
+
         userDaoMock.Setup(u => u.GetByEmailAsync(email)).ReturnsAsync(existingUser);
-        
+
         // Act & Assert
         await Assert.ThrowsExceptionAsync<Exception>(() => _authLogic.ValidateUser(email, password));
 

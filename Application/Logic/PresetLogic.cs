@@ -138,6 +138,7 @@ public class PresetLogic : IPresetLogic
         {
             ThresholdDto thresholdDto = new ThresholdDto()
             {
+	            Type = t.Type,
                 Max = t.MaxValue,
                 Min = t.MinValue
             };
