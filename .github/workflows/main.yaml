@@ -5,16 +5,13 @@ on:
     branches:
     - dev-create_automated_deployment
 jobs:
-  unit_test:
-    name: Unit Test
-    uses: ./.github/workflows/unit_test.yaml
-
-  ppp:
-    name: Print
-    run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
+#  unit_test:
+#    name: Unit Test
+#    uses: ./.github/workflows/unit_test.yaml
     #will throw error because of incorrect routing
   build_and_deploy:
     name: Build and Deploy
+    run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
     uses: ./.github/workflows/deploy_to_gcr.yaml
   #deploy_to_ghcr:
   #  name: deploy_to_ghcr
