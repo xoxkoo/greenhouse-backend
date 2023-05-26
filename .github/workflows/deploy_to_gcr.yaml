@@ -15,8 +15,6 @@ jobs:
       - name: Print
         run: |
           echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
-          echo "${{ service_account_key }}"
-          echo "${{ inputs.service_account_key }}"
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.5.0
