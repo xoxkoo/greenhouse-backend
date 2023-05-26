@@ -2,16 +2,13 @@
 
 on:
   workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
     secrets:
-      service_account_key:
+      SERVICE_ACCOUNT_KEY:
         required: true
 jobs:
   push-images:
     runs-on: ubuntu-latest
+    secrets: inherit
 
     steps:
       - name: Checkout Repository
