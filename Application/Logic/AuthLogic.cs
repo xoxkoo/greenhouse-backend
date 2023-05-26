@@ -16,6 +16,7 @@ public class AuthLogic : IAuthLogic
 
     public async Task<User> ValidateUser(string email, string password)
     {
+
         User? existingUser = await _userDao.GetByEmailAsync(email);
 
         if (existingUser == null)
@@ -39,6 +40,7 @@ public class AuthLogic : IAuthLogic
 	    byte[] hashBytes = Convert.FromBase64String(hashedPassword);
 
 	    byte[] salt = new byte[16];
+
 	    Buffer.BlockCopy(hashBytes, 20, salt, 0, 16);
 
 	    using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 10000))
