@@ -17,8 +17,8 @@ public class EmailLogic : IEmailLogic
         _emailDao = emailDao;
         _presetDao = presetDao;
         DotNetEnv.Env.TraversePath().Load();
-        string email;
-        string password;
+        // string email;
+        // string password;
 
         Console.WriteLine(Environment.GetEnvironmentVariable("EMAIL_USERNAME") == "greenhousesep4@gmail.com");
         // Console.WriteLine(DotNetEnv.Env.GetString("EMAIL_PASSWORD"));
