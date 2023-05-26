@@ -11,7 +11,7 @@ public class Context : DbContext
 	public DbSet<CO2> CO2s { get; set; }
 	public DbSet<Interval> Intervals { get; set; }
 	public DbSet<ValveState> ValveState { get; set; }
-	public DbSet<NotificationEmail> Mails { get; set; }
+	public DbSet<NotificationEmail> NotificationEmails { get; set; }
 	public DbSet<Preset> Presets { get; set; }
 	public DbSet<Threshold> Thresholds { get; set; }
 	public DbSet<User> Users { get; set; }
@@ -26,7 +26,6 @@ public class Context : DbContext
 	{
 		// loads environment variables and sets the path
 		DotNetEnv.Env.TraversePath().Load();
-		// optionsBuilder.UseSqlite($"Data Source = {DotNetEnv.Env.GetString("DB_CONNECTION")};");
 	    optionsBuilder.UseNpgsql($"{DotNetEnv.Env.GetString("DB_CONNECTION")}");
 	}
 

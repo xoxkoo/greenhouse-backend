@@ -21,19 +21,19 @@ public class EmailEfcDao : IEmailDao
         {
             throw new ArgumentNullException(nameof(notificationEmail), "Mail data cannot be null.");
         }
-    
+
         // Check if an email with the same email address already exists
-        NotificationEmail existingNotificationEmail = await _context.Mails.FirstOrDefaultAsync();
+        NotificationEmail existingNotificationEmail = await _context.NotificationEmails.FirstOrDefaultAsync();
         if (existingNotificationEmail != null)
         {
             // Delete the existing email
-            _context.Mails.Remove(existingNotificationEmail);
+            _context.NotificationEmails.Remove(existingNotificationEmail);
         }
-    
+
         // Add the new email to the database
-        EntityEntry<NotificationEmail> entity = await _context.Mails.AddAsync(notificationEmail);
+        EntityEntry<NotificationEmail> entity = await _context.NotificationEmails.AddAsync(notificationEmail);
         await _context.SaveChangesAsync();
-    
+
         return new EmailDto()
         {
             Email = entity.Entity.Email
@@ -42,7 +42,7 @@ public class EmailEfcDao : IEmailDao
 
     public async Task<EmailDto> GetAsync()
     {
-        var email = await _context.Mails.FirstOrDefaultAsync();
+        var email = await _context.NotificationEmails.FirstOrDefaultAsync();
         if (email == null)
         {
             throw new Exception("No email found.");
