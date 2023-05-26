@@ -18,7 +18,6 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-
       - name: Determine version increment
         id: determine_version
         run: |
@@ -32,13 +31,11 @@ jobs:
           else
             echo "::set-output name=increment::minor"
           fi
-
       - name: Get last release tag
         id: get_last_tag
         run: |
           last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           echo "::set-output name=tag::${last_tag}"
-
       - name: Extract custom tag from commit message
         id: extract_custom_tag
         run: |
@@ -49,8 +46,7 @@ jobs:
             echo "::set-output name=custom_tag::${custom_tag}"
           else
             echo "::set-output name=custom_tag::"
-          fi
-            
+          fi   
       - name: Increment tag version
         id: increment_tag
         run: |
@@ -60,7 +56,6 @@ jobs:
           minor=${tag_parts[1]}
           patch=${tag_parts[2]}
           increment=${{ steps.determine_version.outputs.increment }}
-
           case $increment in
             major)
               new_major=$((major + 1))
@@ -75,18 +70,15 @@ jobs:
               new_tag="${major}.${minor}.${new_patch}"
               ;;
           esac
-
           while git rev-parse --verify --quiet "${new_tag}" >/dev/null; do
             new_minor=$((new_minor + 1))
             new_tag="${major}.${new_minor}.${patch}"
           done
-
           echo "::set-output name=tag::${new_tag}"
-
       - name: Generate release tag and push tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ steps.extract_custom_tag.outputs.custom_tag }}
           WITH_V: true
-          PRERELEASE: true
+          PRERELEASE: false
