@@ -16,27 +16,30 @@ jobs:
           project_id: noted-palisade-385613
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
-      - name: Configure Docker
-        run: |
-          gcloud auth configure-docker --quiet
+      - name: Print
+        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY }}"
 
-      - name: Build and Push Docker Images
-        run: |
-          docker-compose -f docker-compose.yaml build
-          docker-compose -f docker-compose.yaml push
-
-      - name: Update image tags
-        run: |
-          docker tag greenhouse-backend_webapi:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
-          docker tag greenhouse-backend_socket:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_socket:${IMAGE_TAG}
-          docker tag greenhouse-backend_timer:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:${IMAGE_TAG}
-        env:
-          IMAGE_TAG: v2
-
-      - name: Push updated image tags to Google Container Registry
-        run: |
-          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
-          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_socket:${IMAGE_TAG}
-          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:${IMAGE_TAG}
-        env:
-          IMAGE_TAG: v2
+#      - name: Configure Docker
+#        run: |
+#          gcloud auth configure-docker --quiet
+#
+#      - name: Build and Push Docker Images
+#        run: |
+#          docker-compose -f docker-compose.yaml build
+#          docker-compose -f docker-compose.yaml push
+#
+#      - name: Update image tags
+#        run: |
+#          docker tag greenhouse-backend_webapi:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
+#          docker tag greenhouse-backend_socket:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_socket:${IMAGE_TAG}
+#          docker tag greenhouse-backend_timer:latest eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:${IMAGE_TAG}
+#        env:
+#          IMAGE_TAG: v2
+#
+#      - name: Push updated image tags to Google Container Registry
+#        run: |
+#          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_webapi:${IMAGE_TAG}
+#          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_socket:${IMAGE_TAG}
+#          docker push eu.gcr.io/noted-palisade-385613/greenhouse-backend_timer:${IMAGE_TAG}
+#        env:
+#          IMAGE_TAG: v2
