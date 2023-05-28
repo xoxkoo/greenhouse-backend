@@ -11,5 +11,5 @@ jobs:
     secrets: inherit
   publish:
     name: Publish
-    uses: ./.github/workflows/deploy_to_grc.yaml
+    uses: ./.github/workflows/deploy_to_gcr.yaml
     secrets: inherit
