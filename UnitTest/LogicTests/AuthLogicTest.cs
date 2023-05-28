@@ -23,12 +23,12 @@ public class AuthLogicTest
     {
         // Arrange
         string email = "test@example.com";
-        string password = "password123";
-        
+        string password = "password";
+
         User existingUser = new User
         {
             Email = email,
-            Password = password
+            Password = "bg/AoErvDurwJu/cvCV0EIoEckM4as0O1y9rB00JKYHd+D0l"
         };
 
         userDaoMock.Setup(u => u.GetByEmailAsync(email)).ReturnsAsync(existingUser);
