@@ -1,10 +1,12 @@
 ﻿using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("watering-system/toggle")]
 public class WateringSystemController:ControllerBase
