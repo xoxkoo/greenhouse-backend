@@ -47,7 +47,7 @@ class DatabaseInsertion
 
         //Email
         NotificationEmail notificationEmail = new NotificationEmail() { Email = "greenhousesep4@gmail.com" };
-        await _context.Mails.AddAsync(notificationEmail);
+        await _context.NotificationEmails.AddAsync(notificationEmail);
 
         //ValveState
         ValveState valveState = new ValveState() { Toggle = false };
@@ -64,7 +64,7 @@ class DatabaseInsertion
         _context.Intervals.RemoveRange(_context.Intervals);
         _context.Thresholds.RemoveRange(_context.Thresholds);
         _context.Presets.RemoveRange(_context.Presets);
-        _context.Mails.RemoveRange(_context.Mails);
+        _context.NotificationEmails.RemoveRange(_context.NotificationEmails);
         _context.ValveState.RemoveRange(_context.ValveState);
         // Call the InsertMyEntitiesAsync method
         await InsertMyEntitiesAsync(10);

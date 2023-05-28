@@ -12,13 +12,13 @@ public class EmailDaoTest : DbTestBase
 {
 
     private IEmailDao _emailDao;
-    
+
     [TestInitialize]
     public void TestInitialize()
     {
         _emailDao = new EmailEfcDao(DbContext);
     }
-    
+
     //CreateAsync() tests
     //Z - Zero
     [TestMethod]
@@ -27,7 +27,7 @@ public class EmailDaoTest : DbTestBase
         // Act & Assert
         await Assert.ThrowsExceptionAsync<ArgumentNullException>(() => _emailDao.CreateAsync(null));
     }
-    
+
     //O - One
     [TestMethod]
     public async Task CreateAsync_WithValidData_Test()
@@ -57,14 +57,14 @@ public class EmailDaoTest : DbTestBase
         await _emailDao.CreateAsync(email2);
 
         // Assert
-        var result = DbContext.Mails.AsEnumerable();
+        var result = DbContext.NotificationEmails.AsEnumerable();
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.Count());
         Assert.AreEqual(email2.Email, result.FirstOrDefault().Email);
     }
 
-    
-    
+
+
     //GetAsync() tests
     //Z - Zero
     [TestMethod]
@@ -74,7 +74,7 @@ public class EmailDaoTest : DbTestBase
         await Assert.ThrowsExceptionAsync<Exception>(async () => await _emailDao.GetAsync(),
             "No email found.");
     }
-    
+
     //O - One
     [TestMethod]
     public async Task GetAsync_WithExistingEmail_Test()
@@ -83,7 +83,7 @@ public class EmailDaoTest : DbTestBase
         var email = new NotificationEmail() { Email = "test@gmail.com" };
         await DbContext.AddAsync(email);
         await DbContext.SaveChangesAsync();
-        
+
         // Act
         var result = await _emailDao.GetAsync();
 
