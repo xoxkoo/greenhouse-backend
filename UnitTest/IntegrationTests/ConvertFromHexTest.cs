@@ -43,6 +43,7 @@ public class ConvertFromHexTest : DbTestBase
     }
 
 
+
     [TestMethod]
     public async Task ConvertFromHex_WhenCalledWithValidPayload_Test()
     {
