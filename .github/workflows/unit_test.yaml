@@ -1,15 +1,19 @@
 ﻿name: Unit Test
 on:
   workflow_call:
+    secrets:
+      EMAIL:
+        required: true
+      EMAIL_PASSWORD:
+        required: true
 jobs:
   tests:
     name: Unit tests
     runs-on: ubuntu-latest
+    env:
+      EMAIL_USERNAME: ${{ secrets.EMAIL }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
     steps:
-      - name: Debug Environment Variables
-        run: |
-          echo "EMAIL_USERNAME: $EMAIL_USERNAME"
-          echo "EMAIL_PASSWORD: $EMAIL_PASSWORD"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Run Tests

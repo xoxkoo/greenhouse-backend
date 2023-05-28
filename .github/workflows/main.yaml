@@ -3,17 +3,11 @@ name: main
 on:
   push:
     branches:
-    - dev-create_automated_deployment
+    - main
 jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
-    #will throw error because of incorrect routing
-  build_and_deploy:
-    name: Build and Deploy
-    uses: ./.github/workflows/deploy.yaml
-  #deploy_to_ghcr:
-  #  name: deploy_to_ghcr
-  #  uses: ./.github/workflows/deploy_to_ghcr.yaml
-  
+
+
 
