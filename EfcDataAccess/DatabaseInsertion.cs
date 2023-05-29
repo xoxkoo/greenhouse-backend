@@ -29,8 +29,8 @@ class DatabaseInsertion
         intervals.Add(intervalWednesday);
         intervals.Add(intervalFriday);
         await _context.Intervals.AddRangeAsync(intervals);
-
-
+        
+        
         //Thresholds
         Threshold threshold1 = new Threshold() { Id = 1, Type = "temperature", MinValue = 20, MaxValue = 40 };
         Threshold threshold2 = new Threshold() { Id = 2, Type = "humidity", MinValue = 20, MaxValue = 100 };
