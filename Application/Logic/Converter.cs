@@ -262,8 +262,6 @@ public class Converter : IConverter
         if (Int32.Parse(flags.Substring(2,1)) == 1)
 			await co2Logic.CreateAsync(co2Dto);
 
-        Console.WriteLine(flags.Substring(7, 1));
-
         // check for valve state
         if (Int32.Parse(flags.Substring(7, 1)) == 1)
 	        await valveLogic.SetAsync(new ValveStateCreationDto(){State = true});
