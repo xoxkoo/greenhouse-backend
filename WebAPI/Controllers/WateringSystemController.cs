@@ -1,10 +1,12 @@
 ﻿using Application.DaoInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("watering-system/toggle")]
 public class WateringSystemController:ControllerBase
@@ -24,6 +26,11 @@ public class WateringSystemController:ControllerBase
             await Logic.CreateAsync(dto);
             return Ok();
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -38,6 +45,11 @@ public class WateringSystemController:ControllerBase
         {
             ValveStateDto state = await Logic.GetAsync();
             return Ok(state);
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {

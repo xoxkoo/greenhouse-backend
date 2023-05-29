@@ -33,11 +33,10 @@ public class Startup
 			var presetLogic = new PresetLogic(
 				provider.GetService<IPresetDao>(),
 				provider.GetService<IWebSocketServer>(),
-				provider.GetService<Converter>()
+				provider.GetService<IConverter>()
 			);
 
 			return new PresetController(presetLogic);
 		});
-
 	}
 }

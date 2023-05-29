@@ -58,13 +58,13 @@ static class RunInternalTimer
 			.Build();
 
 		// define a trigger that fires every day at specific time
-		string runAtHours = DateTime.Now.Hour.ToString();
-		string runAtMinutes = DateTime.Now.Minute.ToString();
-		string runAtSeconds = DateTime.Now.AddSeconds(5).Second.ToString();
+		// string runAtHours = DateTime.Now.Hour.ToString();
+		// string runAtMinutes = DateTime.Now.Minute.ToString();
+		// string runAtSeconds = DateTime.Now.AddSeconds(5).Second.ToString();
 
 		var trigger = TriggerBuilder.Create()
 			.WithIdentity("myTrigger")
-			.WithCronSchedule($@"{runAtSeconds} {runAtMinutes} {runAtHours} * * ?") // fire every day at specific time
+			.WithCronSchedule($@"{00} {55} {23} * * ?") // fire every day at 23:55:00
 			.Build();
 
 		// schedule the job with the trigger

@@ -79,7 +79,7 @@ public class HumidityIntegrationTest : DbTestBase
         var result =(IEnumerable<HumidityDto>?) createdResult.Value;
         Assert.AreEqual(1, result.FirstOrDefault().HumidityId);
         Assert.AreEqual(humidity.Value, result.FirstOrDefault().Value);
-        Assert.AreEqual(humidity.Date, result.FirstOrDefault().Date);
+        Assert.AreEqual(((DateTimeOffset)humidity.Date).ToUnixTimeSeconds(), result.FirstOrDefault().Date);
     }
 
     //M - Many
@@ -106,10 +106,9 @@ public class HumidityIntegrationTest : DbTestBase
 
         var startTime = new DateTime(2023, 1, 2, 10, 30, 0);
         var endTime = new DateTime(2023, 1, 2, 10, 35, 10);
-        var current = false;
 
         // Act
-        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(current, startTime, endTime);
+        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(false, startTime, endTime);
 
         // Assert
         Assert.IsNotNull(response);
@@ -133,22 +132,22 @@ public class HumidityIntegrationTest : DbTestBase
         var list = (IEnumerable<HumidityDto>?)createdResult.Value;
         Assert.IsNotNull(list);
         Assert.AreEqual(list.Count(), 3);
-        }
+    }
 
-        private async Task CreateHumidities(int num)
+    private async Task CreateHumidities(int num)
+    {
+        for (int i = 0; i < num; i++)
         {
-            for (int i = 0; i < num; i++)
+            HumidityCreationDto dto = new HumidityCreationDto()
             {
-                HumidityCreationDto dto = new HumidityCreationDto()
-                {
-                    Date = new DateTime(2023, 5, 7, 16, i, 0),
-                    Value = 1 + i*3
-                };
+                Date = new DateTime(2023, 5, 7, 16, i, 0),
+                Value = 1 + i*3
+            };
 
-                await _logic.CreateAsync(dto);
-                Console.WriteLine(DbContext.Humidities.FirstOrDefault().HumidityId);
-            }
+            await _logic.CreateAsync(dto);
+            Console.WriteLine(DbContext.Humidities.FirstOrDefault().HumidityId);
         }
+    }
 
 
     //B - Boundary
@@ -183,7 +182,7 @@ public class HumidityIntegrationTest : DbTestBase
         var result =(IEnumerable<HumidityDto>?) createdResult.Value;
         Assert.AreEqual(1, result.FirstOrDefault().HumidityId);
         Assert.AreEqual(humidity.Value, result.FirstOrDefault().Value);
-        Assert.AreEqual(humidity.Date, result.FirstOrDefault().Date);
+        Assert.AreEqual(((DateTimeOffset)humidity.Date).ToUnixTimeSeconds(), result.FirstOrDefault().Date);
     }
 
     //E - Exception
@@ -202,10 +201,9 @@ public class HumidityIntegrationTest : DbTestBase
 
         var startTime = new DateTime(2023, 1, 3);
         var endTime = new DateTime(2023, 1, 1);
-        var current = false;
 
         // Act
-        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(current, startTime, endTime);
+        ActionResult<IEnumerable<HumidityDto>> response = await _controller.GetAsync(null, startTime, endTime);
 
         // Assert
         Assert.IsNotNull(response);

@@ -1,9 +1,11 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/schedule")]
 public class ScheduleController : ControllerBase
@@ -34,6 +36,11 @@ public class ScheduleController : ControllerBase
             IEnumerable<IntervalDto> intervalDtos = await Logic.CreateAsync(intervalDtosToLogic);
             return Created($"/intervals/{intervalDtos}", intervalDtos);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -49,6 +56,11 @@ public class ScheduleController : ControllerBase
             var intervals = await Logic.GetAsync();
             return Ok(intervals);
         }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
+        }
         catch (Exception e)
         {
             Console.WriteLine(e);
@@ -61,8 +73,17 @@ public class ScheduleController : ControllerBase
     {
         try
         {
+	        if (id != intervalDto.Id)
+	        {
+		        return StatusCode(500, "Ids are not matching");
+	        }
             await Logic.PutAsync(intervalDto);
             return Ok();
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {
@@ -78,6 +99,11 @@ public class ScheduleController : ControllerBase
         {
             await Logic.DeleteAsync(id);
             return Ok();
+        }
+        catch (ArgumentException e)
+        {
+	        Console.WriteLine(e);
+	        return StatusCode(400, e.Message);
         }
         catch (Exception e)
         {

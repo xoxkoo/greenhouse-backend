@@ -3,11 +3,15 @@ name: main
 on:
   push:
     branches:
-    - dev-docker_image
+    - main
 jobs:
   unit_test:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
+    secrets: inherit
+  publish:
+    name: Publish
+    uses: ./.github/workflows/deploy_to_gcr.yaml
+    secrets: inherit
 
-  
 

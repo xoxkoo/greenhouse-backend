@@ -15,24 +15,29 @@ namespace WebAPI.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly IConfiguration config;
-    private readonly IAuthService _authService;
+    private readonly IAuthLogic _authLogic;
 
-    public AuthController(IConfiguration config, IAuthService authService)
+    public AuthController(IConfiguration config, IAuthLogic authLogic)
     {
         this.config = config;
-        _authService = authService;
+        _authLogic = authLogic;
     }
     
     [HttpPost, Route("login")]
     public async Task<ActionResult> Login([FromBody] UserLoginDto userLoginDto)
     {
-        try
-        {
-            User user = await _authService.ValidateUser(userLoginDto.Email, userLoginDto.Password);
-            string token = GenerateJwt(user);
-    
-            return Ok(token);
-        }
+	    try
+	    {
+		    User user = await _authLogic.ValidateUser(userLoginDto.Email, userLoginDto.Password);
+		    string token = GenerateJwt(user);
+
+		    return Ok(token);
+	    }
+	    catch (ArgumentException e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(400, e.Message);
+	    }
         catch (Exception e)
         {
             return BadRequest(e.Message);

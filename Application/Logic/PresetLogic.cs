@@ -57,7 +57,7 @@ public class PresetLogic : IPresetLogic
 
         return result;
     }
-    
+
     public async Task<PresetEfcDto> CreateAsync(PresetCreationDto dto)
     {
         ValidateInput(dto);
@@ -114,10 +114,19 @@ public class PresetLogic : IPresetLogic
         {
             throw new Exception($"Preset with id {id} not found");
         }
+
+        foreach (var VARIABLE in presetToSend.Thresholds)
+        {
+	        Console.WriteLine(VARIABLE.Type + " " + VARIABLE.Min + " " + VARIABLE.Max);
+        }
+
         //Change the value isCurrent to be true in database
         await _presetDao.ApplyAsync(id);
         string payload = _converter.ConvertPresetToHex(presetToSend);
+
+        await _socketServer.Connect();
         await _socketServer.Send(payload);
+        await _socketServer.Disconnect();
     }
 
     public async Task<PresetEfcDto> GetByIdAsync(int id)
@@ -136,6 +145,7 @@ public class PresetLogic : IPresetLogic
         {
             ThresholdDto thresholdDto = new ThresholdDto()
             {
+	            Type = t.Type,
                 Max = t.MaxValue,
                 Min = t.MinValue
             };

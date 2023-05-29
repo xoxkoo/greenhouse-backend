@@ -7,6 +7,7 @@ using EfcDataAccess;
 using EfcDataAccess.DAOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SocketServer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +29,7 @@ builder.Services.AddScoped<IWateringSystemLogic, WateringSystemLogic>();
 builder.Services.AddScoped<IScheduleLogic, ScheduleLogic>();
 builder.Services.AddScoped<IEmailLogic, EmailLogic>();
 builder.Services.AddScoped<IPresetLogic, PresetLogic>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthLogic, AuthLogic>();
 
 builder.Services.AddScoped<ITemperatureDao, TemperatureEfcDao>();
 builder.Services.AddScoped<IHumidityDao, HumidityEfcDao>();
@@ -39,12 +40,9 @@ builder.Services.AddScoped<IEmailDao, EmailEfcDao>();
 builder.Services.AddScoped<IPresetDao, PresetEfcDao>();
 builder.Services.AddScoped<IUserDao, UserEfcDao>();
 
-DotNetEnv.Env.TraversePath().Load();
-
 // Add the database context
 builder.Services.AddDbContext<Context>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
@@ -59,6 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
 	};
 });
+
 
 var app = builder.Build();
 
@@ -85,4 +84,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

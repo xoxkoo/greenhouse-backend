@@ -3,10 +3,9 @@ using System.Text;
 using Application.LogicInterfaces;
 using Newtonsoft.Json;
 
-
 namespace SocketClient
 {
-    public class WebSocketClient
+	public class WebSocketClient
     {
         private readonly ClientWebSocket _webSocket;
         private readonly IConverter _converter;
@@ -52,7 +51,6 @@ namespace SocketClient
 
             while (_webSocket.State == WebSocketState.Open)
             {
-
 	            WebSocketReceiveResult receiveResult = await _webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
 	            if (receiveResult.MessageType == WebSocketMessageType.Text)
 	            {

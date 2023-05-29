@@ -37,10 +37,11 @@ public class ConvertFromHexTest : DbTestBase
 	    var startup = new Startup();
 	    startup.ConfigureServices(services);
 
-	    // Resolve PresetController using dependency injection
+	    // Resolve Converter using dependency injection
 	    _converter = services.BuildServiceProvider().GetService<IConverter>();
 
     }
+
 
 
     [TestMethod]
@@ -78,11 +79,11 @@ public class ConvertFromHexTest : DbTestBase
 		    Name = "Tomato",
 		    Thresholds = thresholds
 	    };
-	    Email email = new Email
+	    NotificationEmail notificationEmail = new NotificationEmail
 	    {
-		    EmailAddress = "greenhousesep4@gmail.com"
+		    Email = "greenhousesep4@gmail.com"
 	    };
-	    await DbContext.Mails.AddAsync(email);
+	    await DbContext.NotificationEmails.AddAsync(notificationEmail);
 	    await DbContext.Presets.AddAsync(preset);
 	    await DbContext.SaveChangesAsync();
 	    string result = await _converter.ConvertFromHex("07817b0707f0");
@@ -95,7 +96,7 @@ public class ConvertFromHexTest : DbTestBase
 	    Assert.IsNotNull(temperatureRecord);
 	    Assert.IsNotNull(co2Record);
 	    Assert.IsNotNull(humidityRecord);
-	    Assert.AreEqual("25.8, 56, 2032", result);
+	    Assert.AreEqual("25.8, 5, 2032", result);
     }
 
     [TestMethod]

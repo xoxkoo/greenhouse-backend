@@ -58,19 +58,19 @@ public class Converter : IConverter
         return response;
     }
     /**
-     * Convert actions payload into hexidecimal payload
+     * Convert actions payload into hexadecimal payload
      *
      * @param actionsPayload
      */
-    public string ConvertActionsPayloadToHex(ValveStateDto dto, int duration)
+    public string ConvertActionsPayloadToHex(ValveStateCreationDto dto)
     {
         //  ID 6 bits
         //  Actions 8bits - 7th bit water toggle
         // Interval 10bits - 1023 minutes
         StringBuilder result = new StringBuilder();
 
-        //ID for this payload is 4
-        result.Append("000100");
+        //ID for this payload is 5
+        result.Append("000101");
 
         int toggleBit = 0;
         // bit is 1 if toggle is true, 0 if false
@@ -88,12 +88,12 @@ public class Converter : IConverter
         result.Append(IntToBinaryRight(toggleBit, 8));
 
         // Validation for duration
-        if (duration < 0 || duration > 1023)
+        if (dto.duration < 0 || dto.duration > 1023)
         {
             throw new Exception("Duration must be an integer between 0 and 1023.");
         }
         // Interval in minutes, total size of 10 bits
-        result.Append(IntToBinaryLeft(duration, 10));
+        result.Append(IntToBinaryLeft(dto.duration, 10));
 
         // Return a hex representation of provided binary payload
         return BinaryStringToHex(result.ToString()).ToLower();
@@ -153,8 +153,8 @@ public class Converter : IConverter
 	    StringBuilder result = new StringBuilder();
 
 	    //ID - 6 bits
-	    //ID for this payload is 3
-	    result.Append("000011");
+	    //ID for this payload is 4
+	    result.Append("000100");
 	    List<ThresholdDto> thresholds = dto.Thresholds.ToList();
 	    if (thresholds == null)
 	    {
@@ -165,7 +165,7 @@ public class Converter : IConverter
 	    {
 		    throw new Exception("In the preset there have to be three thresholds");
 	    }
-	    
+
 	    foreach (var t in thresholds)
 	    {
 		    if (t.Type.ToLower() != "temperature" && t.Type.ToLower() != "co2" && t.Type.ToLower() != "humidity")		    {
@@ -174,75 +174,62 @@ public class Converter : IConverter
 	    }
 
 	    //Temperature range - 22 bits
-	    ThresholdDto temperatureThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("temperature"));
+	    ThresholdDto temperatureThreshold = thresholds.FirstOrDefault(t => t.Type.ToLower().Equals("temperature"));
 	    if (temperatureThreshold == null)
 	    {
-		    result.Append("00000000000");
-		    result.Append("00000000000");
+		    throw new Exception($"Thresholds for temperature was not found for {dto.Id}");
 	    }
-	    else
+	    if (temperatureThreshold.Min < -50 || temperatureThreshold.Max > 60)
 	    {
-		    if (temperatureThreshold.Min < -50 || temperatureThreshold.Max > 60)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the temperature is out of range -50 to 60");
-		    }
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Min*10 + 500, 11));
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
+			    throw new ArgumentOutOfRangeException(temperatureThreshold.Type, "The value of the temperature is out of range -50 to 60");
 	    }
+	    result.Append(IntToBinaryLeft((int)temperatureThreshold.Min*10 + 500, 11));
+	    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
 
-	    
 	    //Humidity range - 14 bits
-	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
+	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.ToLower().Equals("humidity"));
 	    if (humidityThreshold == null)
 	    {
-		    result.Append("0000000");
-		    result.Append("0000000");
+		    throw new Exception($"Thresholds for humidity was not found for {dto.Id}");
 	    }
-	    else
+	    if (humidityThreshold.Min < 0 || humidityThreshold.Max > 100)
 	    {
-		    if (humidityThreshold.Min < 0 || humidityThreshold.Max > 100)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the humidity is out of range 0 to 100");
-
-		    }
-		    result.Append(IntToBinaryLeft((int)humidityThreshold.Min, 7));
-		    result.Append(IntToBinaryLeft((int)humidityThreshold.Max, 7));
+		    throw new ArgumentOutOfRangeException(humidityThreshold.Type, "The value of the humidity is out of range 0 to 100");
 	    }
+	    result.Append(IntToBinaryLeft((int)humidityThreshold.Min, 7));
+	    result.Append(IntToBinaryLeft((int)humidityThreshold.Max, 7));
+
 
 
 	    //CO2 range - 24 bits
-	    ThresholdDto co2Threshold = thresholds.FirstOrDefault(t => t.Type.Equals("co2"));
+	    ThresholdDto co2Threshold = thresholds.FirstOrDefault(t => t.Type.ToLower().Equals("co2"));
 	    if (co2Threshold == null)
 	    {
-		    result.Append("000000000000");
-		    result.Append("000000000000");
+		    throw new Exception($"Thresholds for co2 was not found for {dto.Id}");
 	    }
-	    else
+	    if (co2Threshold.Min < 0 || co2Threshold.Max > 4095)
 	    {
-		    if (co2Threshold.Min < 0 || co2Threshold.Max > 4095)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the co2 is out of range 0 to 4095");
-		    }
-		    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 12));
-		    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 12));
+		    throw new ArgumentOutOfRangeException( co2Threshold.Type,"The value of the co2 is out of range 0 to 4095");
 	    }
 
-	    Console.WriteLine(result.ToString());
-	    Console.WriteLine(BinaryStringToHex(result.ToString()).ToLower());
+	    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 13));
+	    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 13));
+
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }
 
 
     private async Task<string> ReadTHCPayload(string data)
     {
-        //TODO handle flags
-        string flags = data.Substring(0, 8);
+	    string flags = data.Substring(0, 8);
         string temperature = data.Substring(8, 11);
         string humidity = data.Substring(19, 10);
         string co2 = data.Substring(29, 13);
 
         float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
-
+        int humValue = (Convert.ToInt32(humidity, 2)) / 10;
+        int co2Value = Convert.ToInt32(co2, 2);
+        
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
             Date = DateTime.Now,
@@ -252,18 +239,27 @@ public class Converter : IConverter
         CO2CreateDto co2Dto = new CO2CreateDto
         {
             Date = DateTime.Now,
-            Value = Convert.ToInt32(co2, 2)
+            Value = co2Value
         };
         HumidityCreationDto humidityDto = new HumidityCreationDto
         {
             Date = DateTime.Now,
-            Value = Convert.ToInt32(humidity, 2)
+            Value = humValue
         };
-        await co2Logic.CreateAsync(co2Dto);
-        await humidityLogic.CreateAsync(humidityDto);
-        await temperatureLogic.CreateAsync(tempDto);
+
+
+        // check if sensors measurements are valid
+        if (Int32.Parse(flags.Substring(0,1)) == 1)
+	        await temperatureLogic.CreateAsync(tempDto);
+
+        if (Int32.Parse(flags.Substring(1,1)) == 1)
+			await humidityLogic.CreateAsync(humidityDto);
+
+        if (Int32.Parse(flags.Substring(2,1)) == 1)
+			await co2Logic.CreateAsync(co2Dto);
 
         await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
+
         return $"{tempDto.Value}, {humidityDto.Value}, {co2Dto.Value}";
     }
 

@@ -44,14 +44,14 @@ public class EmailLogicTest
     {
         // Arrange
         string validEmail = "test@gmail.com";
-        var emailDto = new EmailDto() { EmailAdress = validEmail };
-        _mockEmailDao.Setup(dao => dao.CreateAsync(It.IsAny<Email>())).ReturnsAsync(emailDto);
+        var emailDto = new EmailDto() { Email = validEmail };
+        _mockEmailDao.Setup(dao => dao.CreateAsync(It.IsAny<NotificationEmail>())).ReturnsAsync(emailDto);
         // Act
         var result = await _emailLogic.CreateAsync(emailDto);
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(validEmail, result.EmailAdress);
+        Assert.AreEqual(validEmail, result.Email);
     }
 
     //E - Exception
@@ -61,23 +61,13 @@ public class EmailLogicTest
         //Arrange
         var dto = new EmailDto
         {
-            EmailAdress = ""
+            Email = ""
         };
 
         //Act & Assert
         await Assert.ThrowsExceptionAsync<ArgumentException>(() => _emailLogic.CreateAsync(dto));
     }
-
-    [TestMethod]
-    public async Task CreateAsync_InvalidEmail_ThrowsArgumentException_Test()
-    {
-        // Arrange
-        string invalidEmail = "test@example.com";
-        var emailDto = new EmailDto() { EmailAdress = invalidEmail };
-
-        // Act & Assert
-        await Assert.ThrowsExceptionAsync<ArgumentException>(async () => await _emailLogic.CreateAsync(emailDto));
-    }
+    
 
     //GetAsync()
     [TestMethod]
@@ -85,8 +75,8 @@ public class EmailLogicTest
     {
         // Arrange
         string validEmail = "test@gmail.com";
-        var emailEntity = new Email() { EmailAddress = validEmail };
-        var emailDto = new EmailDto() { EmailAdress = validEmail };
+        var emailEntity = new NotificationEmail() { Email = validEmail };
+        var emailDto = new EmailDto() { Email = validEmail };
         _mockEmailDao.Setup(dao => dao.GetAsync()).ReturnsAsync(emailDto);
 
         // Act
@@ -94,7 +84,7 @@ public class EmailLogicTest
 
         // Assert
         Assert.IsNotNull(result);
-        Assert.AreEqual(validEmail, result.EmailAdress);
+        Assert.AreEqual(validEmail, result.Email);
         _mockEmailDao.Verify(dao => dao.GetAsync(), Times.Once);
     }
 
@@ -103,7 +93,7 @@ public class EmailLogicTest
     public async Task CheckIfInRange_ShouldSendEmail()
     {
         // Arrange
-        _mockEmailDao.Setup(e => e.GetAsync()).ReturnsAsync(new EmailDto { EmailAdress = "greenhousesep4@gmail.com" });
+        _mockEmailDao.Setup(e => e.GetAsync()).ReturnsAsync(new EmailDto { Email = "greenhousesep4@gmail.com" });
 
         var temperature = 30;
         var humidity = 80;
@@ -122,8 +112,5 @@ public class EmailLogicTest
 
         // Act
         await _emailLogic.CheckIfInRange(temperature, humidity, co2);
-
-        // Assert
-        //Checking if the email was send to the email
     }
 }

@@ -26,7 +26,7 @@ public class HumidityLogicTest : DbTestBase
     {
         //Arrange
         dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
-            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = DateTime.Now, Value = 10 });
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset) DateTime.Now).ToUnixTimeSeconds(), Value = 10 });
 
         var dto = new HumidityCreationDto()
         {
@@ -40,7 +40,7 @@ public class HumidityLogicTest : DbTestBase
         Assert.IsNotNull(createdHumidity);
         Assert.AreEqual(1, createdHumidity.HumidityId);
         Assert.AreEqual(dto.Value, createdHumidity.Value);
-        Assert.IsTrue(createdHumidity.Date > DateTime.Now.AddSeconds(-1));
+        Assert.IsTrue(createdHumidity.Date > ((DateTimeOffset) DateTime.Now.AddSeconds(-1)).ToUnixTimeSeconds());
     }
     [TestMethod]
     public async Task CreateAsync_ValidHumidity_ReturnsCreatedHumidity()
@@ -49,7 +49,7 @@ public class HumidityLogicTest : DbTestBase
         now = DateTime.Now.AddDays(-1);
         // Arrange
         dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
-            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = now, Value = 10 });
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset) DateTime.Now.AddDays(-1)).ToUnixTimeSeconds(), Value = 10 });
 
         var dto = new HumidityCreationDto()
         {
@@ -64,13 +64,13 @@ public class HumidityLogicTest : DbTestBase
         Assert.IsNotNull(createdHumidity);
         Assert.AreEqual(1, createdHumidity.HumidityId);
         Assert.AreEqual(dto.Value, createdHumidity.Value);
-        Assert.AreEqual(dto.Date, createdHumidity.Date);
+        Assert.AreEqual(((DateTimeOffset)dto.Date).ToUnixTimeSeconds(), createdHumidity.Date);
     }
     [TestMethod]
     public async Task CreateAsync_NegativeValue_ThrowsArgumentOutOfRangeException()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
-            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = DateTime.Now.AddDays(-1), Value = -10 });
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset) DateTime.Now.AddDays(-1)).ToUnixTimeSeconds(), Value = -10 });
 
         // Arrange
         var dto = new HumidityCreationDto()
@@ -86,7 +86,7 @@ public class HumidityLogicTest : DbTestBase
     public async Task CreateAsync_ValueGreaterThan100_ThrowsArgumentOutOfRangeException()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
-            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = DateTime.Now.AddDays(-1), Value = 110 });
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset) DateTime.Now.AddDays(-1)).ToUnixTimeSeconds(), Value = 110 });
         // Arrange
         var dto = new HumidityCreationDto()
         {
@@ -101,7 +101,7 @@ public class HumidityLogicTest : DbTestBase
     public async Task CreateAsync_DateInFuture_ThrowsArgumentOutOfRangeException()
     {
         dao.Setup(dao => dao.CreateAsync(It.IsAny<Humidity>()))
-            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = DateTime.Now.AddDays(1), Value = 50 });
+            .ReturnsAsync(new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset) DateTime.Now.AddDays(1)).ToUnixTimeSeconds(), Value = 50 });
         // Arrange
         var dto = new HumidityCreationDto()
         {
@@ -117,7 +117,7 @@ public class HumidityLogicTest : DbTestBase
     {
         //Arrange
         var searchMeasurementDto = new SearchMeasurementDto(true,  new DateTime(2023, 1, 1), new DateTime(2023, 4, 19));
-        var humDto = new HumidityDto() { Date = new DateTime(2001, 1, 10), Value = 10, HumidityId = 1 };
+        var humDto = new HumidityDto() { Date = 100, Value = 10, HumidityId = 1 };
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<HumidityDto>{humDto});
 
@@ -137,7 +137,7 @@ public class HumidityLogicTest : DbTestBase
     [TestMethod]
     public async Task HumidityGetAsyncCurrentTrueCorrectTest()
     {
-        HumidityDto tempDto = new HumidityDto { HumidityId = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100};
+        HumidityDto tempDto = new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset)new DateTime(2023, 4, 19, 19, 50, 0)).ToUnixTimeSeconds(), Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<HumidityDto>{tempDto});
         SearchMeasurementDto search = new SearchMeasurementDto(true);
@@ -149,7 +149,8 @@ public class HumidityLogicTest : DbTestBase
     [TestMethod]
     public async Task HumidityGetAsyncCurrentTrueIncorrectDateTest()
     {
-        HumidityDto tempDto = new HumidityDto { HumidityId = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100};
+
+        HumidityDto tempDto = new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset)new DateTime(2023, 4, 19, 19, 50, 0)).ToUnixTimeSeconds(), Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<HumidityDto>{tempDto});
         SearchMeasurementDto search = new SearchMeasurementDto(true, new DateTime(2024,04,5), new DateTime(2022,04,05));
@@ -175,8 +176,8 @@ public class HumidityLogicTest : DbTestBase
     [TestMethod]
     public async Task HumidityGetAsyncCurrentFalseCorrectDateTest()
     {
-        HumidityDto dto = new HumidityDto { HumidityId = 1, Date = new DateTime(2023, 4, 19, 19, 50, 0), Value = 100};
-        HumidityDto dto1 = new HumidityDto { HumidityId = 2, Date = new DateTime(2023, 4, 20, 19, 50, 0), Value = 80};
+        HumidityDto dto = new HumidityDto { HumidityId = 1, Date = ((DateTimeOffset)new DateTime(2022,04,07)).ToUnixTimeSeconds(), Value = 100};
+        HumidityDto dto1 = new HumidityDto { HumidityId = 2, Date = ((DateTimeOffset)new DateTime(2022,04,07)).ToUnixTimeSeconds(), Value = 80};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<HumidityDto>{dto, dto1});
         SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2022,04,05),new DateTime(2024,04,5));
@@ -186,7 +187,7 @@ public class HumidityLogicTest : DbTestBase
     [TestMethod]
     public async Task HumidityGetAsyncCurrentFalseCorrectDateTest2()
     {
-        HumidityDto dto = new HumidityDto { HumidityId = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), Value = 100};
+        HumidityDto dto = new HumidityDto { HumidityId = 1, Date = 978303600, Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<HumidityDto>{dto});
         SearchMeasurementDto search = new SearchMeasurementDto(false, null,new DateTime(2024,04,5));
@@ -197,7 +198,7 @@ public class HumidityLogicTest : DbTestBase
     [TestMethod]
     public async Task HumidityGetAsyncCurrentFalseCorrectDateTest3()
     {
-        HumidityDto dto = new HumidityDto { HumidityId = 1, Date = new DateTime(2022, 3, 18, 19, 50, 0), Value = 100};
+        HumidityDto dto = new HumidityDto { HumidityId = 1, Date = 100, Value = 100};
         dao.Setup(dao => dao.GetAsync(It.IsAny<SearchMeasurementDto>()))
             .ReturnsAsync(new List<HumidityDto>{dto});
         SearchMeasurementDto search = new SearchMeasurementDto(false, new DateTime(2023, 04, 5), null);

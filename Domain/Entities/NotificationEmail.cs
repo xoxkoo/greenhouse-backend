@@ -4,10 +4,10 @@ using System.Text.Json.Serialization;
 
 namespace Domain.Entities;
 
-public class Email
+public class NotificationEmail
 {
     [Key]
-    public string EmailAddress { get; set; }
+    public string Email { get; set; }
     [NotMapped]
     public string Title { get; set; }
     [NotMapped]

@@ -1,14 +1,14 @@
-
 using Application.LogicInterfaces;
 using Domain.DTOs;
 using Domain.DTOs.CreationDTOs;
-using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
+[Authorize]
 [ApiController]
-[Route("/co2")]
+[Route("measurements/co2")]
 public class CO2Controller:ControllerBase
 {
     private readonly ICO2Logic Logic;
@@ -19,20 +19,32 @@ public class CO2Controller:ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync([FromQuery] Boolean current, [FromQuery] DateTime? startTime = null,[FromQuery] DateTime? endTime = null)
+    public async Task<ActionResult<IEnumerable<CO2Dto>>> GetAsync(
+	    [FromQuery] bool? current,
+	    [FromQuery] DateTime? startTime = null,
+	    [FromQuery] DateTime? endTime = null)
     {
-        try
-        {
-	        SearchMeasurementDto parameters = new SearchMeasurementDto(current, startTime, endTime);
-            var co2s = await Logic.GetAsync(parameters);
-            return Ok(co2s);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
+
+	    try
+	    {
+
+		    if (current == null)
+		    {
+			    current = Request.Query.ContainsKey("current");
+		    }
+
+		    var parameters = new SearchMeasurementDto((bool)current, startTime, endTime);
+
+		    var co2s = await Logic.GetAsync(parameters);
+		    return Ok(co2s);
+	    }
+	    catch (Exception e)
+	    {
+		    Console.WriteLine(e);
+		    return StatusCode(500, e.Message);
+	    }
     }
+
     [HttpPost]
     public async Task<ActionResult<CO2Dto>> CreateAsync([FromBody]CO2CreateDto dto)
     {

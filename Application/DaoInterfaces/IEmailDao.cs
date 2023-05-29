@@ -5,6 +5,6 @@ namespace Application.DaoInterfaces;
 
 public interface IEmailDao
 {
-    Task<EmailDto> CreateAsync(Email email);
+    Task<EmailDto> CreateAsync(NotificationEmail notificationEmail);
     Task<EmailDto> GetAsync();
 }
