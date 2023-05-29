@@ -58,7 +58,7 @@ Then run this command:
 ```bash 
 dotnet build
 ```
-5. In the project directory create a file named ".nev" and paste there following code:
+5. In the project directory create a file named ".env" and paste there following code:
 ```bash 
 Up to discoussion
 ```
