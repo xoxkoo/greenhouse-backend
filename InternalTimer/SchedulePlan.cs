@@ -19,7 +19,7 @@ public class SchedulePlan : IJob
 		{
 			// number of intervals we want to send
 			int maxIntervals = 5;
-			var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
+			var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek + 1)!;
 			// Console.WriteLine(intervals.Count());
 
 			await socket?.Connect();
