@@ -1,11 +1,11 @@
 # Greenhouse Backend
 
-![Unit_Test_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/unit_test.yml/badge.svg)
-![Push_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/push.yml/badge.svg)
-![Main_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/main.yml/badge.svg)
-![Generate_Tag_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/generate-tag.yml/badge.svg)
-![Deploy_To_GCR_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/deploy_to_gcr.yml/badge.svg)
-![Publish_Coverage_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/publish-coverage.yml/badge.svg)
+![Unit_Test_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/unit_test.yaml/badge.svg)
+![Push_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/push.yaml/badge.svg)
+![Main_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/main.yaml/badge.svg)
+![Generate_Tag_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/generate-tag.yaml/badge.svg)
+![Deploy_To_GCR_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/deploy_to_gcr.yaml/badge.svg)
+![Publish_Coverage_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/publish-coverage.yaml/badge.svg)
 
 # Introduction
 
