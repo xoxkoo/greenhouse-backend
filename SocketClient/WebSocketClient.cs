@@ -51,6 +51,7 @@ namespace SocketClient
 
             while (_webSocket.State == WebSocketState.Open)
             {
+
 	            WebSocketReceiveResult receiveResult = await _webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
 	            if (receiveResult.MessageType == WebSocketMessageType.Text)
 	            {
