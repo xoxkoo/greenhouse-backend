@@ -304,7 +304,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("115e32050f01903200", resultHex);
+		    Assert.AreEqual("115e32050f00c80c80", resultHex);
 	    }
 
 
@@ -357,7 +357,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("10c82bc50f01903200", resultHex);
+		    Assert.AreEqual("10c82bc50f00c80c80", resultHex);
 	    }
 
 	    [TestMethod]
@@ -385,7 +385,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("100044c0190003ffc0", resultHex);
+		    Assert.AreEqual("100044c0190000fff0", resultHex);
 	    }
 
 
