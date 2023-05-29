@@ -48,7 +48,7 @@ public class ConverterTest : DbTestBase
         )), Times.Once);
 
         humidityLogic.Verify(x => x.CreateAsync(It.Is<HumidityCreationDto>(dto =>
-	        dto.Value == 56
+	        dto.Value == 5
         )), Times.Once);
     }
 
@@ -78,7 +78,7 @@ public class ConverterTest : DbTestBase
     {
 	    string result = await converter.ConvertFromHex("07817b0707f0");
 
-	    Assert.AreEqual("25.8, 56, 2032", result);
+	    Assert.AreEqual("25.8, 5, 2032", result);
     }
 
     [TestMethod]
