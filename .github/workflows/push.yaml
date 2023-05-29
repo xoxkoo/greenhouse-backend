@@ -13,6 +13,5 @@ jobs:
     name: Docker Compose
     uses: docker/compose-action@v1
     run: |
-      docker-compose build
-      docker-compose up
+      docker-compose -f docker-compose.yaml build
       
