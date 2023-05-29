@@ -215,6 +215,7 @@ public class Converter : IConverter
 	    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 13));
 	    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 13));
 
+	    BinaryStringToHex(result.ToString()).ToLower();
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }
 
@@ -229,7 +230,7 @@ public class Converter : IConverter
         float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
         int humValue = (Convert.ToInt32(humidity, 2)) / 10;
         int co2Value = Convert.ToInt32(co2, 2);
-        
+
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
             Date = DateTime.Now,
