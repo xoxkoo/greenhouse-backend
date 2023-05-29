@@ -221,15 +221,15 @@ var assemblies = [
   {
     "name": "Application",
     "classes": [
-      { "name": "Application.Logic.CO2Logic", "rp": "Application_CO2Logic.html", "cl": 41, "ucl": 2, "cal": 43, "tl": 69, "cb": 21, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.Converter", "rp": "Application_Converter.html", "cl": 181, "ucl": 27, "cal": 208, "tl": 358, "cb": 54, "tb": 70, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.EmailLogic", "rp": "Application_EmailLogic.html", "cl": 80, "ucl": 7, "cal": 87, "tl": 125, "cb": 11, "tb": 14, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.CO2Logic", "rp": "Application_CO2Logic.html", "cl": 39, "ucl": 4, "cal": 43, "tl": 69, "cb": 20, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.Converter", "rp": "Application_Converter.html", "cl": 178, "ucl": 21, "cal": 199, "tl": 354, "cb": 60, "tb": 76, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.EmailLogic", "rp": "Application_EmailLogic.html", "cl": 81, "ucl": 4, "cal": 85, "tl": 124, "cb": 10, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Application.Logic.HumidityLogic", "rp": "Application_HumidityLogic.html", "cl": 36, "ucl": 2, "cal": 38, "tl": 67, "cb": 15, "tb": 16, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.PresetLogic", "rp": "Application_PresetLogic.html", "cl": 148, "ucl": 22, "cal": 170, "tl": 256, "cb": 45, "tb": 62, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.ScheduleLogic", "rp": "Application_ScheduleLogic.html", "cl": 86, "ucl": 31, "cal": 117, "tl": 170, "cb": 36, "tb": 54, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.PresetLogic", "rp": "Application_PresetLogic.html", "cl": 158, "ucl": 19, "cal": 177, "tl": 266, "cb": 48, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.ScheduleLogic", "rp": "Application_ScheduleLogic.html", "cl": 70, "ucl": 38, "cal": 108, "tl": 177, "cb": 39, "tb": 66, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Application.Logic.TemperatureLogic", "rp": "Application_TemperatureLogic.html", "cl": 41, "ucl": 4, "cal": 45, "tl": 70, "cb": 20, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.WateringSystemLogic", "rp": "Application_WateringSystemLogic.html", "cl": 29, "ucl": 4, "cal": 33, "tl": 64, "cb": 6, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Services.AuthLogic", "rp": "Application_AuthLogic.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 32, "cb": 4, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.WateringSystemLogic", "rp": "Application_WateringSystemLogic.html", "cl": 28, "ucl": 4, "cal": 32, "tl": 66, "cb": 6, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Services.AuthLogic", "rp": "Application_AuthLogic.html", "cl": 31, "ucl": 19, "cal": 50, "tl": 92, "cb": 8, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "Domain",
@@ -243,7 +243,7 @@ var assemblies = [
       { "name": "Domain.DTOs.HumidityDto", "rp": "Domain_HumidityDto.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.DTOs.IntervalDto", "rp": "Domain_IntervalDto.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.DTOs.IntervalToSendDto", "rp": "Domain_IntervalToSendDto.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 9, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Domain.DTOs.PayloadDTOs.THCDto", "rp": "Domain_THCDto.html", "cl": 0, "ucl": 5, "cal": 5, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Domain.DTOs.PresetApplyDto", "rp": "Domain_PresetApplyDto.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 6, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.DTOs.PresetCreationDto", "rp": "Domain_PresetCreationDto.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.DTOs.PresetDto", "rp": "Domain_PresetDto.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.DTOs.PresetEfcDto", "rp": "Domain_PresetEfcDto.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 8, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -254,9 +254,9 @@ var assemblies = [
       { "name": "Domain.DTOs.UserLoginDto", "rp": "Domain_UserLoginDto.html", "cl": 0, "ucl": 2, "cal": 2, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.DTOs.ValveStateDto", "rp": "Domain_ValveStateDto.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 7, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.Entities.CO2", "rp": "Domain_CO2.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 11, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Domain.Entities.Email", "rp": "Domain_Email.html", "cl": 1, "ucl": 2, "cal": 3, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.Entities.Humidity", "rp": "Domain_Humidity.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.Entities.Interval", "rp": "Domain_Interval.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 12, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Domain.Entities.NotificationEmail", "rp": "Domain_NotificationEmail.html", "cl": 1, "ucl": 2, "cal": 3, "tl": 16, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.Entities.Preset", "rp": "Domain_Preset.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.Entities.Temperature", "rp": "Domain_Temperature.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Domain.Entities.Threshold", "rp": "Domain_Threshold.html", "cl": 4, "ucl": 1, "cal": 5, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -266,39 +266,39 @@ var assemblies = [
   {
     "name": "EfcDataAccess",
     "classes": [
-      { "name": "EfcDataAccess.Context", "rp": "EfcDataAccess_Context.html", "cl": 12, "ucl": 7, "cal": 19, "tl": 34, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "EfcDataAccess.Context", "rp": "EfcDataAccess_Context.html", "cl": 12, "ucl": 7, "cal": 19, "tl": 32, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "EfcDataAccess.DAOs.CO2EfcDao", "rp": "EfcDataAccess_CO2EfcDao.html", "cl": 36, "ucl": 0, "cal": 36, "tl": 66, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "EfcDataAccess.DAOs.EmailEfcDao", "rp": "EfcDataAccess_EmailEfcDao.html", "cl": 30, "ucl": 0, "cal": 30, "tl": 55, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "EfcDataAccess.DAOs.HumidityEfcDao", "rp": "EfcDataAccess_HumidityEfcDao.html", "cl": 36, "ucl": 0, "cal": 36, "tl": 60, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "EfcDataAccess.DAOs.PresetEfcDao", "rp": "EfcDataAccess_PresetEfcDao.html", "cl": 93, "ucl": 39, "cal": 132, "tl": 211, "cb": 15, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "EfcDataAccess.DAOs.PresetEfcDao", "rp": "EfcDataAccess_PresetEfcDao.html", "cl": 90, "ucl": 41, "cal": 131, "tl": 210, "cb": 16, "tb": 18, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "EfcDataAccess.DAOs.ScheduleEfcDao", "rp": "EfcDataAccess_ScheduleEfcDao.html", "cl": 53, "ucl": 35, "cal": 88, "tl": 130, "cb": 5, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "EfcDataAccess.DAOs.TemperatureEfcDao", "rp": "EfcDataAccess_TemperatureEfcDao.html", "cl": 37, "ucl": 0, "cal": 37, "tl": 64, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "EfcDataAccess.DAOs.TemperatureEfcDao", "rp": "EfcDataAccess_TemperatureEfcDao.html", "cl": 37, "ucl": 0, "cal": 37, "tl": 65, "cb": 6, "tb": 6, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "EfcDataAccess.DAOs.UserEfcDao", "rp": "EfcDataAccess_UserEfcDao.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 20, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "EfcDataAccess.DAOs.WateringSystemDao", "rp": "EfcDataAccess_WateringSystemDao.html", "cl": 0, "ucl": 33, "cal": 33, "tl": 64, "cb": 0, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "EfcDataAccess.DAOs.WateringSystemDao", "rp": "EfcDataAccess_WateringSystemDao.html", "cl": 26, "ucl": 7, "cal": 33, "tl": 57, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "SocketClient",
     "classes": [
       { "name": "SocketClient.RunWebSocket", "rp": "SocketClient_RunWebSocket.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 56, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "SocketClient.WebSocketClient", "rp": "SocketClient_WebSocketClient.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 119, "cb": 0, "tb": 50, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "SocketClient.WebSocketClient", "rp": "SocketClient_WebSocketClient.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 118, "cb": 0, "tb": 50, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "SocketServer",
     "classes": [
-      { "name": "SocketServer.WebSocketServer", "rp": "SocketServer_WebSocketServer.html", "cl": 10, "ucl": 29, "cal": 39, "tl": 67, "cb": 1, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "SocketServer.WebSocketServer", "rp": "SocketServer_WebSocketServer.html", "cl": 32, "ucl": 7, "cal": 39, "tl": 67, "cb": 1, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "WebAPI",
     "classes": [
-      { "name": "Program", "rp": "WebAPI_Program.html", "cl": 0, "ucl": 54, "cal": 54, "tl": 88, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "WebAPI.Controllers.AuthController", "rp": "WebAPI_AuthController.html", "cl": 0, "ucl": 39, "cal": 39, "tl": 75, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "WebAPI.Controllers.CO2Controller", "rp": "WebAPI_CO2Controller.html", "cl": 23, "ucl": 0, "cal": 23, "tl": 48, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Program", "rp": "WebAPI_Program.html", "cl": 0, "ucl": 53, "cal": 53, "tl": 86, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "WebAPI.Controllers.AuthController", "rp": "WebAPI_AuthController.html", "cl": 0, "ucl": 43, "cal": 43, "tl": 80, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "WebAPI.Controllers.CO2Controller", "rp": "WebAPI_CO2Controller.html", "cl": 26, "ucl": 1, "cal": 27, "tl": 62, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "WebAPI.Controllers.EmailController", "rp": "WebAPI_EmailController.html", "cl": 25, "ucl": 0, "cal": 25, "tl": 51, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "WebAPI.Controllers.HumidityController", "rp": "WebAPI_HumidityController.html", "cl": 14, "ucl": 0, "cal": 14, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "WebAPI.Controllers.PresetController", "rp": "WebAPI_PresetController.html", "cl": 52, "ucl": 21, "cal": 73, "tl": 138, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "WebAPI.Controllers.ScheduleController", "rp": "WebAPI_ScheduleController.html", "cl": 29, "ucl": 22, "cal": 51, "tl": 88, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "WebAPI.Controllers.TemperatureController", "rp": "WebAPI_TemperatureController.html", "cl": 15, "ucl": 0, "cal": 15, "tl": 34, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "WebAPI.Controllers.WateringSystemController", "rp": "WebAPI_WateringSystemController.html", "cl": 17, "ucl": 5, "cal": 22, "tl": 48, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "WebAPI.Controllers.HumidityController", "rp": "WebAPI_HumidityController.html", "cl": 17, "ucl": 1, "cal": 18, "tl": 42, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "WebAPI.Controllers.PresetController", "rp": "WebAPI_PresetController.html", "cl": 56, "ucl": 45, "cal": 101, "tl": 172, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "WebAPI.Controllers.ScheduleController", "rp": "WebAPI_ScheduleController.html", "cl": 29, "ucl": 41, "cal": 70, "tl": 114, "cb": 2, "tb": 4, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "WebAPI.Controllers.TemperatureController", "rp": "WebAPI_TemperatureController.html", "cl": 15, "ucl": 3, "cal": 18, "tl": 41, "cb": 1, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "WebAPI.Controllers.WateringSystemController", "rp": "WebAPI_WateringSystemController.html", "cl": 17, "ucl": 13, "cal": 30, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
 ];
 
@@ -315,11 +315,6 @@ var riskHotspots = [
     "assembly": "SocketClient", "class": "SocketClient.WebSocketClient", "reportPath": "SocketClient_WebSocketClient.html", "methodName": "ConnectAndListen()", "methodShortName": "ConnectAndListen()", "fileIndex": 0, "line": 44,
     "metrics": [
       { "value": 50, "exceeded": true },
-    ]},
-  {
-    "assembly": "Application", "class": "Application.Logic.ScheduleLogic", "reportPath": "Application_ScheduleLogic.html", "methodName": "CreateAsync()", "methodShortName": "CreateAsync()", "fileIndex": 0, "line": 20,
-    "metrics": [
-      { "value": 32, "exceeded": true },
     ]},
 ];
 
