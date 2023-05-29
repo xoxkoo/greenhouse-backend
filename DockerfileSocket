@@ -1,8 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 
-ENV DB_CONNECTION="Host=mouse.db.elephantsql.com; Database=jqemjlmp; Username=jqemjlmp; Password=rI4AvZl09COcyjAfPF-ap0vYtn_Qktji; MaxPoolSize=1"
-
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["Domain/Domain.csproj", "Domain/"]
