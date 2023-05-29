@@ -10,7 +10,12 @@ jobs:
     uses: ./.github/workflows/unit_test.yaml
     secrets: inherit
   docker_compose:
-    name: Docker Compose
-    run: |
-      docker-compose -f docker-compose.yaml build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Build and Push Docker Images
+        run: |
+          docker-compose -f docker-compose.yaml build
       
