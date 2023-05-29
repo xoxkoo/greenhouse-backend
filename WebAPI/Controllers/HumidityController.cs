@@ -1,9 +1,11 @@
 using Application.LogicInterfaces;
 using Domain.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("measurements/humidity")]
 public class HumidityController:ControllerBase

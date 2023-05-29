@@ -185,7 +185,7 @@ public class Converter : IConverter
 	    }
 	    result.Append(IntToBinaryLeft((int)temperatureThreshold.Min*10 + 500, 11));
 	    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
-	    
+
 	    //Humidity range - 14 bits
 	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.ToLower().Equals("humidity"));
 	    if (humidityThreshold == null)
@@ -198,7 +198,7 @@ public class Converter : IConverter
 	    }
 	    result.Append(IntToBinaryLeft((int)humidityThreshold.Min, 7));
 	    result.Append(IntToBinaryLeft((int)humidityThreshold.Max, 7));
-	
+
 
 
 	    //CO2 range - 24 bits
@@ -211,8 +211,9 @@ public class Converter : IConverter
 	    {
 		    throw new ArgumentOutOfRangeException( co2Threshold.Type,"The value of the co2 is out of range 0 to 4095");
 	    }
-	    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 12));
-	    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 12));
+
+	    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 13));
+	    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 13));
 
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }

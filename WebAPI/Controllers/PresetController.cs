@@ -1,8 +1,10 @@
 ﻿using Application.LogicInterfaces;
 using Domain.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace WebAPI.Controllers;
 
+[Authorize]
 [ApiController]
 public class PresetController : ControllerBase
 {
