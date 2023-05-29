@@ -40,7 +40,7 @@ This results in particular set of functionalities that include (but are not limi
 
 - **NuGet packages:**\
   Set of NuGet packages that are needed to run the project, if not installed.\
-  ![Extensions](docs/images/nuget_packages.png)
+  ![Extensions](docs/images/NuGet_packages.png)
 
 # Setup project
 
@@ -50,7 +50,7 @@ This results in particular set of functionalities that include (but are not limi
 ```bash 
 git clone https://github.com/xoxkoo/greenhouse-backend.git
 ```
-5. Build the project: Change directory into the cloned repository, using following command:
+4. Build the project: Change directory into the cloned repository, using following command:
 ```bash 
 cd greenhouse-backend
 ```
@@ -58,7 +58,7 @@ Then run this command:
 ```bash 
 dotnet build
 ```
-6. In the project directory create a file named ".nev" and paste there following code:
+5. In the project directory create a file named ".nev" and paste there following code:
 ```bash 
 Up to discoussion
 ```
