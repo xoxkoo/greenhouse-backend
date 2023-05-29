@@ -17,7 +17,6 @@ public class ScheduleIntegrationTest : DbTestBase
 {
     private IScheduleDao dao;
     private IScheduleLogic logic;
-    private IConverter converter;
 
     [TestInitialize]
     public void TestInitialize()
@@ -30,10 +29,9 @@ public class ScheduleIntegrationTest : DbTestBase
 	    // Register services from the Startup class
 	    var startup = new Startup();
 	    startup.ConfigureServices(services);
-        converter = services.BuildServiceProvider().GetService<IConverter>();
 
-        dao = new ScheduleEfcDao(DbContext);
-        logic = new ScheduleLogic(dao, converter);
+	    dao = new ScheduleEfcDao(DbContext);
+        logic = new ScheduleLogic(dao);
     }
 
     [TestMethod]

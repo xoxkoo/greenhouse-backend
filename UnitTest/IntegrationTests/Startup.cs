@@ -23,6 +23,8 @@ public class Startup
 		services.AddScoped<ICO2Logic, CO2Logic>();
 		services.AddScoped<ICO2Dao, CO2EfcDao>();
 		services.AddScoped<IHumidityLogic, HumidityLogic>();
+		services.AddScoped<IValveLogic, ValveLogic>();
+		services.AddScoped<IWateringSystemDao, WateringSystemDao>();
 		services.AddScoped<IHumidityDao, HumidityEfcDao>();
 		services.AddScoped<IEmailLogic, EmailLogic>();
 		services.AddScoped<IEmailDao, EmailEfcDao>();

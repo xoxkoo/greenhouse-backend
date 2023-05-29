@@ -13,14 +13,12 @@ public class ScheduleLogicTest
 {
     public Mock<IScheduleDao> dao;
     private IScheduleLogic logic;
-    private Mock<IConverter> converter;
 
     [TestInitialize]
     public void TestInitialize()
     {
-	    converter = new Mock<IConverter>();
-        dao = new Mock<IScheduleDao>();
-        logic = new ScheduleLogic(dao.Object, converter.Object);
+	    dao = new Mock<IScheduleDao>();
+        logic = new ScheduleLogic(dao.Object);
     }
 
     //CreateAsync() tests
@@ -49,7 +47,7 @@ public class ScheduleLogicTest
                 EndTime = new TimeSpan(17, 0, 0)
             }
         };
-        
+
 
         dao
             .Setup(x => x.CreateAsync(It.IsAny<IEnumerable<Interval>>()))
@@ -90,7 +88,7 @@ public class ScheduleLogicTest
                 EndTime = new TimeSpan(18, 0, 0)
             }
         };
-        
+
         dao
             .Setup(x => x.CreateAsync(It.IsAny<IEnumerable<Interval>>()))
             .ReturnsAsync(intervals);
@@ -194,7 +192,7 @@ public class ScheduleLogicTest
         //Act and Assert
         await Assert.ThrowsExceptionAsync<ArgumentException>(() => logic.CreateAsync(intervals));
     }
-    
+
     //GetAsync() tests
     [TestMethod]
     public async Task TestGetSchedules_ReturnsSchedulesFromDao()
@@ -289,7 +287,7 @@ public class ScheduleLogicTest
         Assert.AreEqual(interval.StartTime, intervalDto.StartTime);
         Assert.AreEqual(interval.EndTime, intervalDto.EndTime);
     }
-    
+
     [TestMethod]
     public async Task GetScheduleForDay_ReturnsCorrectData()
     {
@@ -322,8 +320,8 @@ public class ScheduleLogicTest
         // Assert
         dao.Verify(x => x.GetScheduleForDay(dayOfWeek), Times.Once);
     }
-    
-    
+
+
     // PutAsync() tests
     // Z - Zero
     [TestMethod]
@@ -341,7 +339,7 @@ public class ScheduleLogicTest
         dao
             .Setup(x => x.CreateAsync(It.IsAny<IEnumerable<Interval>>()))
             .Callback<IEnumerable<Interval>>(intervals => createdIntervals = intervals);
-        
+
         // Act & Assert
         await Assert.ThrowsExceptionAsync<NullReferenceException>(() => logic.PutAsync(intervalDto));
     }

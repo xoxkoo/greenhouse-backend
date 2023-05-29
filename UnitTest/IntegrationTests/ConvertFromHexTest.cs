@@ -86,17 +86,57 @@ public class ConvertFromHexTest : DbTestBase
 	    await DbContext.NotificationEmails.AddAsync(notificationEmail);
 	    await DbContext.Presets.AddAsync(preset);
 	    await DbContext.SaveChangesAsync();
+	    var valve = DbContext.ValveState;
+
 	    string result = await _converter.ConvertFromHex("07817b0707f0");
 
 	    // Check if records were created in the database
 	    var temperatureRecord = await DbContext.Temperatures.FirstOrDefaultAsync();
 	    var co2Record = await DbContext.CO2s.FirstOrDefaultAsync();
 	    var humidityRecord = await DbContext.Humidities.FirstOrDefaultAsync();
+	    var state = await valve.FirstOrDefaultAsync();
 
 	    Assert.IsNotNull(temperatureRecord);
 	    Assert.IsNotNull(co2Record);
 	    Assert.IsNotNull(humidityRecord);
 	    Assert.AreEqual("25.8, 5, 2032", result);
+	    Assert.AreEqual(false, state.Toggle);
+    }
+
+    [TestMethod]
+    public async Task ConvertFromHex_ValveStateOpen()
+    {
+
+	    string result = await _converter.ConvertFromHex("04047b0707f0");
+	    var valve = await DbContext.ValveState.FirstOrDefaultAsync();
+	    Assert.AreEqual(true, valve.Toggle);
+    }
+
+    [TestMethod]
+    public async Task ConvertFromHex_ValveStateClose()
+    {
+
+	    string result = await _converter.ConvertFromHex("04017b0707f0");
+	    var valve = await DbContext.ValveState.FirstOrDefaultAsync();
+	    Assert.AreEqual(false, valve.Toggle);
+    }
+
+    [TestMethod]
+    public async Task ConvertFromHex_ValveStateOpenThenClose()
+    {
+
+	    // open
+	    await _converter.ConvertFromHex("04047b0707f0");
+
+	    var valve = await DbContext.ValveState.FirstOrDefaultAsync();
+	    Assert.AreEqual(true, valve.Toggle);
+
+	    //close
+	    await _converter.ConvertFromHex("04017b0707f0");
+	    var valve2 = await DbContext.ValveState.FirstOrDefaultAsync();
+	    Console.WriteLine(valve2.Toggle);
+
+	    Assert.AreEqual(false, valve2.Toggle);
     }
 
     [TestMethod]

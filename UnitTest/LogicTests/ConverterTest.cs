@@ -17,19 +17,19 @@ public class ConverterTest : DbTestBase
 	private readonly Mock<ITemperatureLogic> tempLogic;
 	private readonly Mock<IHumidityLogic> humidityLogic;
 	private readonly Mock<ICO2Logic> co2logic;
-	private readonly Mock<IWateringSystemLogic> waterLogic;
+	private readonly Mock<IValveLogic> waterLogic;
 	private readonly Mock<IEmailLogic> emailLogic;
 	private readonly IConverter converter;
 
 
-    public ConverterTest()
+	public ConverterTest()
     {
 	    tempLogic = new Mock<ITemperatureLogic>();
 	    co2logic = new Mock<ICO2Logic>();
 	    humidityLogic = new Mock<IHumidityLogic>();
-	    waterLogic = new Mock<IWateringSystemLogic>();
+	    waterLogic = new Mock<IValveLogic>();
 	    emailLogic = new Mock<IEmailLogic>();
-        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, emailLogic.Object);
+        converter = new Converter(tempLogic.Object, co2logic.Object, humidityLogic.Object, emailLogic.Object, waterLogic.Object);
     }
 
     [TestMethod]
@@ -55,7 +55,7 @@ public class ConverterTest : DbTestBase
     [TestMethod]
     public async Task THCPayload_IncorrectMeasurementSensor()
     {
-	    await converter.ConvertFromHex("04017b0707f0");
+	    await converter.ConvertFromHex("04047b0707f0");
 
         // Assert
         // values shouldn't be saved
