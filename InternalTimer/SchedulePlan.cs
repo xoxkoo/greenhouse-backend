@@ -20,6 +20,7 @@ public class SchedulePlan : IJob
 			// number of intervals we want to send
 			int maxIntervals = 5;
 			var intervals = await scheduleLogic?.GetScheduleForDay(DateTime.Now.DayOfWeek)!;
+			// Console.WriteLine(intervals.Count());
 
 			await socket?.Connect();
 
@@ -35,6 +36,7 @@ public class SchedulePlan : IJob
 				// clear all previous intervals
 				var intervalsToSend = intervals.Take(maxIntervals);
 				string? hexPayload = converter?.ConvertIntervalToHex( intervalsToSend , true);
+				socket.Send(hexPayload);
 
 				// Send remaining intervals in groups of 5
 				for (int i = maxIntervals; i < intervals.Count(); i += maxIntervals)
