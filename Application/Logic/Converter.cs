@@ -174,59 +174,48 @@ public class Converter : IConverter
 	    }
 
 	    //Temperature range - 22 bits
-	    ThresholdDto temperatureThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("temperature"));
+	    ThresholdDto temperatureThreshold = thresholds.FirstOrDefault(t => t.Type.ToLower().Equals("temperature"));
 	    if (temperatureThreshold == null)
 	    {
-		    result.Append("00000000000");
-		    result.Append("00000000000");
+		    throw new Exception($"Thresholds for temperature was not found for {dto.Id}");
 	    }
-	    else
+	    if (temperatureThreshold.Min < -50 || temperatureThreshold.Max > 60)
 	    {
-		    if (temperatureThreshold.Min < -50 || temperatureThreshold.Max > 60)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the temperature is out of range -50 to 60");
-		    }
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Min*10 + 500, 11));
-		    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
+			    throw new ArgumentOutOfRangeException(temperatureThreshold.Type, "The value of the temperature is out of range -50 to 60");
 	    }
-
+	    result.Append(IntToBinaryLeft((int)temperatureThreshold.Min*10 + 500, 11));
+	    result.Append(IntToBinaryLeft((int)temperatureThreshold.Max*10 + 500, 11));
 
 	    //Humidity range - 14 bits
-	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.Equals("humidity"));
+	    ThresholdDto humidityThreshold = thresholds.FirstOrDefault(t => t.Type.ToLower().Equals("humidity"));
 	    if (humidityThreshold == null)
 	    {
-		    result.Append("0000000");
-		    result.Append("0000000");
+		    throw new Exception($"Thresholds for humidity was not found for {dto.Id}");
 	    }
-	    else
+	    if (humidityThreshold.Min < 0 || humidityThreshold.Max > 100)
 	    {
-		    if (humidityThreshold.Min < 0 || humidityThreshold.Max > 100)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the humidity is out of range 0 to 100");
-
-		    }
-		    result.Append(IntToBinaryLeft((int)humidityThreshold.Min, 7));
-		    result.Append(IntToBinaryLeft((int)humidityThreshold.Max, 7));
+		    throw new ArgumentOutOfRangeException(humidityThreshold.Type, "The value of the humidity is out of range 0 to 100");
 	    }
+	    result.Append(IntToBinaryLeft((int)humidityThreshold.Min, 7));
+	    result.Append(IntToBinaryLeft((int)humidityThreshold.Max, 7));
+
 
 
 	    //CO2 range - 24 bits
-	    ThresholdDto co2Threshold = thresholds.FirstOrDefault(t => t.Type.Equals("co2"));
+	    ThresholdDto co2Threshold = thresholds.FirstOrDefault(t => t.Type.ToLower().Equals("co2"));
 	    if (co2Threshold == null)
 	    {
-		    result.Append("000000000000");
-		    result.Append("000000000000");
+		    throw new Exception($"Thresholds for co2 was not found for {dto.Id}");
 	    }
-	    else
+	    if (co2Threshold.Min < 0 || co2Threshold.Max > 4095)
 	    {
-		    if (co2Threshold.Min < 0 || co2Threshold.Max > 4095)
-		    {
-			    throw new ArgumentOutOfRangeException("The value of the co2 is out of range 0 to 4095");
-		    }
-		    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 12));
-		    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 12));
+		    throw new ArgumentOutOfRangeException( co2Threshold.Type,"The value of the co2 is out of range 0 to 4095");
 	    }
 
+	    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 13));
+	    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 13));
+
+	    BinaryStringToHex(result.ToString()).ToLower();
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }
 
@@ -239,6 +228,8 @@ public class Converter : IConverter
         string co2 = data.Substring(29, 13);
 
         float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
+        int humValue = (Convert.ToInt32(humidity, 2)) / 10;
+        int co2Value = Convert.ToInt32(co2, 2);
 
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
@@ -249,12 +240,12 @@ public class Converter : IConverter
         CO2CreateDto co2Dto = new CO2CreateDto
         {
             Date = DateTime.Now,
-            Value = Convert.ToInt32(co2, 2)
+            Value = co2Value
         };
         HumidityCreationDto humidityDto = new HumidityCreationDto
         {
             Date = DateTime.Now,
-            Value = Convert.ToInt32(humidity, 2)
+            Value = humValue
         };
 
 

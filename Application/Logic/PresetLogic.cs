@@ -114,9 +114,16 @@ public class PresetLogic : IPresetLogic
         {
             throw new Exception($"Preset with id {id} not found");
         }
+
+        foreach (var VARIABLE in presetToSend.Thresholds)
+        {
+	        Console.WriteLine(VARIABLE.Type + " " + VARIABLE.Min + " " + VARIABLE.Max);
+        }
+
         //Change the value isCurrent to be true in database
         await _presetDao.ApplyAsync(id);
         string payload = _converter.ConvertPresetToHex(presetToSend);
+
         await _socketServer.Connect();
         await _socketServer.Send(payload);
         await _socketServer.Disconnect();

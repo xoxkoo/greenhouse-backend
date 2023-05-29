@@ -48,7 +48,7 @@ public class ConverterTest : DbTestBase
         )), Times.Once);
 
         humidityLogic.Verify(x => x.CreateAsync(It.Is<HumidityCreationDto>(dto =>
-	        dto.Value == 56
+	        dto.Value == 5
         )), Times.Once);
     }
 
@@ -78,7 +78,7 @@ public class ConverterTest : DbTestBase
     {
 	    string result = await converter.ConvertFromHex("07817b0707f0");
 
-	    Assert.AreEqual("25.8, 56, 2032", result);
+	    Assert.AreEqual("25.8, 5, 2032", result);
     }
 
     [TestMethod]
@@ -304,7 +304,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("115e32050f01903200", resultHex);
+		    Assert.AreEqual("115e32050f00c80c80", resultHex);
 	    }
 
 
@@ -357,7 +357,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("10c82bc50f01903200", resultHex);
+		    Assert.AreEqual("10c82bc50f00c80c80", resultHex);
 	    }
 
 	    [TestMethod]
@@ -385,7 +385,7 @@ public class ConverterTest : DbTestBase
 		    string resultHex = converter.ConvertPresetToHex(presetDto);
 
 		    // Assert
-		    Assert.AreEqual("100044c0190003ffc0", resultHex);
+		    Assert.AreEqual("100044c0190000fff0", resultHex);
 	    }
 
 

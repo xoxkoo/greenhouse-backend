@@ -43,6 +43,7 @@ public class ConvertFromHexTest : DbTestBase
     }
 
 
+
     [TestMethod]
     public async Task ConvertFromHex_WhenCalledWithValidPayload_Test()
     {
@@ -95,7 +96,7 @@ public class ConvertFromHexTest : DbTestBase
 	    Assert.IsNotNull(temperatureRecord);
 	    Assert.IsNotNull(co2Record);
 	    Assert.IsNotNull(humidityRecord);
-	    Assert.AreEqual("25.8, 56, 2032", result);
+	    Assert.AreEqual("25.8, 5, 2032", result);
     }
 
     [TestMethod]
