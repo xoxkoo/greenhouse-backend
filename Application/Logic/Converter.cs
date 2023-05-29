@@ -227,7 +227,9 @@ public class Converter : IConverter
         string co2 = data.Substring(29, 13);
 
         float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
-
+        int humValue = (Convert.ToInt32(humidity, 2)) / 10;
+        int co2Value = Convert.ToInt32(co2, 2);
+        
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
             Date = DateTime.Now,
@@ -237,12 +239,12 @@ public class Converter : IConverter
         CO2CreateDto co2Dto = new CO2CreateDto
         {
             Date = DateTime.Now,
-            Value = Convert.ToInt32(co2, 2)
+            Value = co2Value
         };
         HumidityCreationDto humidityDto = new HumidityCreationDto
         {
             Date = DateTime.Now,
-            Value = Convert.ToInt32(humidity, 2)
+            Value = humValue
         };
 
 
