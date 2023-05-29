@@ -9,13 +9,11 @@ namespace Application.Logic;
 public class ScheduleLogic : IScheduleLogic
 {
     private readonly IScheduleDao _scheduleDao;
-    private readonly IConverter _converter;
 
 
-    public ScheduleLogic(IScheduleDao scheduleDao, IConverter converter)
+    public ScheduleLogic(IScheduleDao scheduleDao)
     {
         _scheduleDao = scheduleDao;
-        _converter = converter;
     }
 
     public async Task<IEnumerable<IntervalDto>> CreateAsync(IEnumerable<IntervalDto> dto)
