@@ -1,5 +1,4 @@
 ﻿name: Test Coverage Deployment
-
 on:
   push:
     branches:
@@ -13,10 +12,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build and run tests
+        env:
+          EMAIL_USERNAME: ${{ secrets.EMAIL }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
           dotnet build
           dotnet test --collect:"XPlat Code Coverage" --results-directory:"./UnitTest/TestResults"
-          
+
       - name: Generate coverage report
         run: |
           dotnet tool install -g dotnet-reportgenerator-globaltool
