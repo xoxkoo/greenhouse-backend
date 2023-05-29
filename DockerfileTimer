@@ -11,6 +11,7 @@ COPY ["Application/Application.csproj", "Application/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["SocketServer/SocketServer.csproj", "SocketServer/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
+
 RUN dotnet restore "InternalTimer/InternalTimer.csproj"
 COPY . .
 WORKDIR "/src/InternalTimer"

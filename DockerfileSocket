@@ -8,7 +8,6 @@ WORKDIR /src
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["Application/Application.csproj", "Application/"]
 COPY ["WebAPI/WebAPI.csproj", "WebAPI/"]
-COPY ["UnitTest/UnitTest.csproj", "UnitTest/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
 COPY ["SocketClient/SocketClient.csproj", "SocketClient/"]
 COPY . .
