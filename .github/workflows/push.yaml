@@ -9,7 +9,3 @@ jobs:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
     secrets: inherit
-  publish:
-    name: Publish
-    uses: ./.github/workflows/deploy_to_gcr.yaml
-    secrets: inherit
