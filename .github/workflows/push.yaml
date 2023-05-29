@@ -9,3 +9,10 @@ jobs:
     name: Unit Test
     uses: ./.github/workflows/unit_test.yaml
     secrets: inherit
+  docker_compose:
+    name: Docker Compose
+    uses: docker-compose.yaml
+    run: |
+      docker-compose build
+      docker-compose up
+      
