@@ -25,8 +25,10 @@ static class RunInternalTimer
 		services.AddSingleton<ICO2Dao, CO2EfcDao>();
 		services.AddSingleton<IEmailDao, EmailEfcDao>();
 		services.AddSingleton<IPresetDao, PresetEfcDao>();
+		services.AddSingleton<IWateringSystemDao, WateringSystemDao>();
 
 		services.AddScoped<IConverter, Converter>();
+		services.AddScoped<IValveLogic, ValveLogic>();
 		services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 		services.AddScoped<IEmailLogic, EmailLogic>();
 		services.AddScoped<IPresetLogic, PresetLogic>();
@@ -61,10 +63,13 @@ static class RunInternalTimer
 		// string runAtHours = DateTime.Now.Hour.ToString();
 		// string runAtMinutes = DateTime.Now.Minute.ToString();
 		// string runAtSeconds = DateTime.Now.AddSeconds(5).Second.ToString();
+		var runAtHours = 23;
+		var runAtMinutes = 55;
+		var runAtSeconds = 00;
 
 		var trigger = TriggerBuilder.Create()
 			.WithIdentity("myTrigger")
-			.WithCronSchedule($@"{00} {55} {23} * * ?") // fire every day at 23:55:00
+			.WithCronSchedule($@"{runAtSeconds} {runAtMinutes} {runAtHours} * * ?") // fire every day at 23:55:00
 			.Build();
 
 		// schedule the job with the trigger
