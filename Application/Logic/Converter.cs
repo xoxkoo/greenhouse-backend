@@ -33,12 +33,15 @@ public class Converter : IConverter
     private ICO2Logic co2Logic;
     private IHumidityLogic humidityLogic;
     private IEmailLogic emailLogic;
-    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IEmailLogic emailLogic)
+    private IValveLogic valveLogic;
+
+    public Converter(ITemperatureLogic temperatureLogic, ICO2Logic co2Logic, IHumidityLogic humidityLogic, IEmailLogic emailLogic, IValveLogic valveLogic)
     {
         this.temperatureLogic = temperatureLogic;
         this.co2Logic = co2Logic;
         this.humidityLogic = humidityLogic;
         this.emailLogic = emailLogic;
+        this.valveLogic = valveLogic;
     }
 
     public async Task<string> ConvertFromHex(string payload)
@@ -215,6 +218,7 @@ public class Converter : IConverter
 	    result.Append(IntToBinaryLeft((int)co2Threshold.Min, 13));
 	    result.Append(IntToBinaryLeft((int)co2Threshold.Max, 13));
 
+	    BinaryStringToHex(result.ToString()).ToLower();
 	    return BinaryStringToHex(result.ToString()).ToLower();
     }
 
@@ -229,7 +233,7 @@ public class Converter : IConverter
         float tmpValue = ((float)Convert.ToInt32(temperature, 2)) / 10 - 50;
         int humValue = (Convert.ToInt32(humidity, 2)) / 10;
         int co2Value = Convert.ToInt32(co2, 2);
-        
+
         TemperatureCreateDto tempDto = new TemperatureCreateDto()
         {
             Date = DateTime.Now,
@@ -257,6 +261,12 @@ public class Converter : IConverter
 
         if (Int32.Parse(flags.Substring(2,1)) == 1)
 			await co2Logic.CreateAsync(co2Dto);
+
+        // check for valve state
+        if (Int32.Parse(flags.Substring(7, 1)) == 1)
+	        await valveLogic.SetAsync(new ValveStateCreationDto(){State = true});
+        else
+	        await valveLogic.SetAsync(new ValveStateCreationDto(){State = false});
 
         await emailLogic.CheckIfInRange(tempDto.Value, humidityDto.Value, co2Dto.Value);
 

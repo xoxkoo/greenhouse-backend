@@ -42,6 +42,17 @@ public class WateringSystemLogic : IWateringSystemLogic
         return await _wateringSystemDao.CreateAsync(entity);
     }
 
+    public async Task<ValveStateDto> SetAsync(ValveStateCreationDto dto)
+    {
+	    Validate(dto);
+	    var entity = new ValveState()
+	    {
+		    Toggle = dto.State
+	    };
+
+	    return await _wateringSystemDao.CreateAsync(entity);
+    }
+
     private void Validate(ValveStateCreationDto dto)
     {
 	    if (dto.duration.Equals(null))
