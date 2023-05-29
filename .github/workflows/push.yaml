@@ -11,7 +11,6 @@ jobs:
     secrets: inherit
   docker_compose:
     name: Docker Compose
-    uses: docker/compose-action@v1
     run: |
       docker-compose -f docker-compose.yaml build
       
