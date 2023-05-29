@@ -39,6 +39,7 @@ public class WateringSystemLogic : IWateringSystemLogic
         await _socketServer.Send(payload);
         await _socketServer.Disconnect();
 
+        // maybe we shouldn't save here
         return await _wateringSystemDao.CreateAsync(entity);
     }
 
