@@ -11,7 +11,11 @@ jobs:
     secrets: inherit
   publish:
     name: Publish
-    uses: ./.github/workflows/deploy_to_gcr.yaml
+    uses: ./.github/workflows/push_to_gcr.yaml
     secrets: inherit
+  publish_test_coverage:
+    name: Publish coverage
+    uses: ./.github/workflows/publish-coverage.yaml
+    
 
 
