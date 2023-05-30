@@ -17,19 +17,6 @@ public class WateringSystemDao : IWateringSystemDao
 
     public async Task<ValveStateDto> CreateAsync(ValveState valveState)
     {
-        ValveState existingState = await _context.ValveState.FirstOrDefaultAsync();
-        if (existingState != null)
-        {
-            existingState.Toggle = valveState.Toggle;
-            await _context.SaveChangesAsync();
-            ValveStateDto dto = new ValveStateDto()
-            {
-                State = valveState.Toggle
-            };
-            return dto;
-        }
-        else
-        {
             EntityEntry<ValveState> entity = await _context.ValveState.AddAsync(valveState);
             await _context.SaveChangesAsync();
             ValveStateDto dto = new ValveStateDto()
@@ -37,7 +24,6 @@ public class WateringSystemDao : IWateringSystemDao
                 State = entity.Entity.Toggle
             };
             return dto;
-        }
     }
 
 
