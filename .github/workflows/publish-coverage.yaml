@@ -23,7 +23,7 @@ jobs:
       - name: Generate coverage report
         run: |
           dotnet tool install -g dotnet-reportgenerator-globaltool
-          reportgenerator "-reports:./Tests/TestResults/**/coverage.cobertura.xml" "-targetdir:./Tests/TestResults/coverage-report" -reporttypes:Html_Light
+          reportgenerator "-reports:./Tests/TestResults/**/coverage.cobertura.xml" "-targetdir:./Tests/TestResults/coverage-report" -classfilters:'-SocketClient.*;-Program' -reporttypes:Html_Light
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
