@@ -20,9 +20,7 @@ public class WateringSystemDao : IWateringSystemDao
         ValveState existingState = await _context.ValveState.FirstOrDefaultAsync();
         if (existingState != null)
         {
-	        _context.ValveState.Remove(existingState); // remove the existing entity
-            await _context.SaveChangesAsync();
-            EntityEntry<ValveState> entity = await _context.ValveState.AddAsync(valveState); // add the new entity
+            EntityEntry<ValveState> entity = _context.ValveState.Update(valveState); // add the new entity
             await _context.SaveChangesAsync();
             ValveStateDto dto = new ValveStateDto()
             {

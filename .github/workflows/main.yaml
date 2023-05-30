@@ -3,7 +3,7 @@ name: main
 on:
   push:
     branches:
-    - main
+    - dev-create_automated_deployment
 jobs:
   unit_test:
     name: Unit Test
