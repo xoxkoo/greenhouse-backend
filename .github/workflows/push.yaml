@@ -11,7 +11,6 @@ jobs:
     secrets: inherit
   docker_compose:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
