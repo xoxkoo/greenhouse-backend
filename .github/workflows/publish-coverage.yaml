@@ -1,9 +1,7 @@
 ﻿name: Test Coverage Deployment
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
   deploy:
