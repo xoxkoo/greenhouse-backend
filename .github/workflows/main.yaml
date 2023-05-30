@@ -16,6 +16,6 @@ jobs:
   publish_test_coverage:
     name: Publish coverage
     uses: ./.github/workflows/publish-coverage.yaml
-    
+    secrets: inherit
 
 
