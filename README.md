@@ -4,7 +4,7 @@
 ![Push_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/push.yaml/badge.svg)
 ![Main_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/main.yaml/badge.svg)
 ![Generate_Tag_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/generate-tag.yaml/badge.svg)
-![Deploy_To_GCR_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/deploy_to_gcr.yaml/badge.svg)
+![Deploy_To_GCR_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/push_to_gcr.yaml/badge.svg)
 ![Publish_Coverage_Workflow](https://github.com/xoxkoo/greenhouse-backend/actions/workflows/publish-coverage.yaml/badge.svg)
 
 # Introduction
@@ -58,10 +58,10 @@ Then run this command:
 ```bash 
 dotnet build
 ```
-5. In the project directory create a file named ".env" and paste there following code:
+<!-- 5. In the project directory create a file named ".env" and paste there following code:
 ```bash 
 Up to discoussion
-```
+``` -->
 
 # Run application locally
 
@@ -77,6 +77,7 @@ https://localhost:7071/swagger
 ```
 5. Database can be accessed inside Rider. Click "Database" button in most left column of the application. Tables can be found in root as image shows:
    ![Database](docs/images/database.png)
+6. Credentials can be found in the appendices.
 
 # Run application on Docker
 
