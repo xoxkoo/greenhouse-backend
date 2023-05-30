@@ -1,9 +1,6 @@
 FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
 WORKDIR /app
 
-ENV DB_CONNECTION="Host=mouse.db.elephantsql.com; Database=jqemjlmp; Username=jqemjlmp; Password=rI4AvZl09COcyjAfPF-ap0vYtn_Qktji; MaxPoolSize=1"
-
-
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["InternalTimer/InternalTimer.csproj", "InternalTimer/"]
@@ -11,6 +8,7 @@ COPY ["Application/Application.csproj", "Application/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["SocketServer/SocketServer.csproj", "SocketServer/"]
 COPY ["EfcDataAccess/EfcDataAccess.csproj", "EfcDataAccess/"]
+
 RUN dotnet restore "InternalTimer/InternalTimer.csproj"
 COPY . .
 WORKDIR "/src/InternalTimer"
