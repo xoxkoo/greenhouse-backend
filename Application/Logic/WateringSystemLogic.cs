@@ -28,13 +28,18 @@ public class WateringSystemLogic : IWateringSystemLogic
     {
        Validate(dto);
 
+       var entity = new ValveState()
+       {
+	       Toggle = dto.State
+       };
+
        string payload = _converter.ConvertActionsPayloadToHex(dto);
 
         await _socketServer.Connect();
         await _socketServer.Send(payload);
         await _socketServer.Disconnect();
 
-        return new ValveStateDto() { State = dto.State };
+        return await _wateringSystemDao.CreateAsync(entity);
     }
 
     public async Task<ValveStateDto> SetAsync(ValveStateCreationDto dto)
