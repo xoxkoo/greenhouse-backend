@@ -222,13 +222,14 @@ var assemblies = [
     "name": "Application",
     "classes": [
       { "name": "Application.Logic.CO2Logic", "rp": "Application_CO2Logic.html", "cl": 39, "ucl": 4, "cal": 43, "tl": 69, "cb": 20, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.Converter", "rp": "Application_Converter.html", "cl": 178, "ucl": 21, "cal": 199, "tl": 354, "cb": 60, "tb": 76, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.EmailLogic", "rp": "Application_EmailLogic.html", "cl": 81, "ucl": 4, "cal": 85, "tl": 124, "cb": 10, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.Converter", "rp": "Application_Converter.html", "cl": 182, "ucl": 21, "cal": 203, "tl": 363, "cb": 62, "tb": 78, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.EmailLogic", "rp": "Application_EmailLogic.html", "cl": 83, "ucl": 2, "cal": 85, "tl": 124, "cb": 11, "tb": 12, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Application.Logic.HumidityLogic", "rp": "Application_HumidityLogic.html", "cl": 36, "ucl": 2, "cal": 38, "tl": 67, "cb": 15, "tb": 16, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Application.Logic.PresetLogic", "rp": "Application_PresetLogic.html", "cl": 158, "ucl": 19, "cal": 177, "tl": 266, "cb": 48, "tb": 64, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.ScheduleLogic", "rp": "Application_ScheduleLogic.html", "cl": 70, "ucl": 38, "cal": 108, "tl": 177, "cb": 39, "tb": 66, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.ScheduleLogic", "rp": "Application_ScheduleLogic.html", "cl": 69, "ucl": 38, "cal": 107, "tl": 175, "cb": 39, "tb": 66, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Application.Logic.TemperatureLogic", "rp": "Application_TemperatureLogic.html", "cl": 41, "ucl": 4, "cal": 45, "tl": 70, "cb": 20, "tb": 22, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "Application.Logic.WateringSystemLogic", "rp": "Application_WateringSystemLogic.html", "cl": 28, "ucl": 4, "cal": 32, "tl": 66, "cb": 6, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.ValveLogic", "rp": "Application_ValveLogic.html", "cl": 11, "ucl": 0, "cal": 11, "tl": 26, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
+      { "name": "Application.Logic.WateringSystemLogic", "rp": "Application_WateringSystemLogic.html", "cl": 28, "ucl": 12, "cal": 40, "tl": 77, "cb": 6, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "Application.Services.AuthLogic", "rp": "Application_AuthLogic.html", "cl": 31, "ucl": 19, "cal": 50, "tl": 92, "cb": 8, "tb": 8, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
@@ -279,8 +280,6 @@ var assemblies = [
   {
     "name": "SocketClient",
     "classes": [
-      { "name": "SocketClient.RunWebSocket", "rp": "SocketClient_RunWebSocket.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 56, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
-      { "name": "SocketClient.WebSocketClient", "rp": "SocketClient_WebSocketClient.html", "cl": 0, "ucl": 64, "cal": 64, "tl": 118, "cb": 0, "tb": 50, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "SocketServer",
@@ -290,7 +289,6 @@ var assemblies = [
   {
     "name": "WebAPI",
     "classes": [
-      { "name": "Program", "rp": "WebAPI_Program.html", "cl": 0, "ucl": 53, "cal": 53, "tl": 86, "cb": 0, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "WebAPI.Controllers.AuthController", "rp": "WebAPI_AuthController.html", "cl": 0, "ucl": 43, "cal": 43, "tl": 80, "cb": 0, "tb": 0, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "WebAPI.Controllers.CO2Controller", "rp": "WebAPI_CO2Controller.html", "cl": 26, "ucl": 1, "cal": 27, "tl": 62, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
       { "name": "WebAPI.Controllers.EmailController", "rp": "WebAPI_EmailController.html", "cl": 25, "ucl": 0, "cal": 25, "tl": 51, "cb": 2, "tb": 2, "cm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "hc": [], "metrics": { } },
@@ -307,15 +305,9 @@ var metrics = [{ "name": "Cyclomatic complexity", "abbreviation": "cc", "explana
 var historicCoverageExecutionTimes = [];
 
 var riskHotspotMetrics = [
-      { "name": "Cyclomatic complexity", "explanationUrl": "https://en.wikipedia.org/wiki/Cyclomatic_complexity" },
 ];
 
 var riskHotspots = [
-  {
-    "assembly": "SocketClient", "class": "SocketClient.WebSocketClient", "reportPath": "SocketClient_WebSocketClient.html", "methodName": "ConnectAndListen()", "methodShortName": "ConnectAndListen()", "fileIndex": 0, "line": 44,
-    "metrics": [
-      { "value": 50, "exceeded": true },
-    ]},
 ];
 
 var branchCoverageAvailable = true;
