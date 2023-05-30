@@ -1,4 +1,5 @@
 ﻿name: Test Coverage Deployment
+
 on:
   push:
     branches:
@@ -17,16 +18,16 @@ jobs:
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         run: |
           dotnet build
-          dotnet test --collect:"XPlat Code Coverage" --results-directory:"./UnitTest/TestResults"
+          dotnet test --collect:"XPlat Code Coverage" --results-directory:"./Tests/TestResults"
 
       - name: Generate coverage report
         run: |
           dotnet tool install -g dotnet-reportgenerator-globaltool
-          reportgenerator "-reports:./UnitTest/TestResults/**/coverage.cobertura.xml" "-targetdir:./UnitTest/TestResults/coverage-report" -reporttypes:Html_Light
+          reportgenerator "-reports:./Tests/TestResults/**/coverage.cobertura.xml" "-targetdir:./Tests/TestResults/coverage-report" -reporttypes:Html_Light
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.CR_PAT }}
-          publish_dir: ./UnitTest/TestResults/coverage-report
+          publish_dir: ./Tests/TestResults/coverage-report
           publish_branch: gh-pages

@@ -21,8 +21,10 @@ static class RunWebSocket
 		services.AddSingleton<ICO2Dao, CO2EfcDao>();
 		services.AddSingleton<IEmailDao, EmailEfcDao>();
 		services.AddSingleton<IPresetDao, PresetEfcDao>();
+		services.AddScoped<IWateringSystemDao, WateringSystemDao>();
 
 		services.AddScoped<IConverter, Converter>();
+		services.AddScoped<IValveLogic, ValveLogic>();
 		services.AddScoped<ITemperatureLogic, TemperatureLogic>();
 		services.AddScoped<IEmailLogic, EmailLogic>();
 		services.AddScoped<IPresetLogic, PresetLogic>();

@@ -39,7 +39,19 @@ public class WateringSystemLogic : IWateringSystemLogic
         await _socketServer.Send(payload);
         await _socketServer.Disconnect();
 
+        // maybe we shouldn't save here
         return await _wateringSystemDao.CreateAsync(entity);
+    }
+
+    public async Task<ValveStateDto> SetAsync(ValveStateCreationDto dto)
+    {
+	    Validate(dto);
+	    var entity = new ValveState()
+	    {
+		    Toggle = dto.State
+	    };
+
+	    return await _wateringSystemDao.CreateAsync(entity);
     }
 
     private void Validate(ValveStateCreationDto dto)
