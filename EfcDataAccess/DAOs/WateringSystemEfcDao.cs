@@ -33,6 +33,7 @@ public class WateringSystemDao : IWateringSystemDao
     {
         IQueryable<ValveState> tempQuery = _context.ValveState.AsQueryable();
         ValveStateDto? resultDto = await tempQuery
+            .OrderByDescending(v=>v.Id)
             .Select(v => new ValveStateDto() { State = v.Toggle })
             .FirstOrDefaultAsync();
         return resultDto ?? new ValveStateDto(); // return a new instance of ValveStateDto if resultDto is null
