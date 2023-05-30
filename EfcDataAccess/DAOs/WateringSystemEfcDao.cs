@@ -20,11 +20,11 @@ public class WateringSystemDao : IWateringSystemDao
         ValveState existingState = await _context.ValveState.FirstOrDefaultAsync();
         if (existingState != null)
         {
-            EntityEntry<ValveState> entity = _context.ValveState.Update(valveState); // add the new entity
+            existingState.Toggle = valveState.Toggle;
             await _context.SaveChangesAsync();
             ValveStateDto dto = new ValveStateDto()
             {
-                State = entity.Entity.Toggle
+                State = valveState.Toggle
             };
             return dto;
         }
