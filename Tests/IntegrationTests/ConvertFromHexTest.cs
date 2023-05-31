@@ -1,5 +1,6 @@
 ﻿using Application.DaoInterfaces;
 using Application.LogicInterfaces;
+using Domain.DTOs;
 using Domain.Entities;
 using EfcDataAccess;
 using Microsoft.EntityFrameworkCore;
@@ -125,15 +126,18 @@ public class ConvertFromHexTest : DbTestBase
 	    // open
 	    await _converter.ConvertFromHex("04047b0707f0");
 
-	    var valve = await DbContext.ValveState.FirstOrDefaultAsync();
-	    Assert.AreEqual(true, valve.Toggle);
+	    var valve = await DbContext.ValveState.OrderByDescending(v=>v.Id).Select(v => new ValveStateDto() { State = v.Toggle })
+		    .FirstOrDefaultAsync();
+	    Assert.AreEqual(true, valve.State);
 
 	    //close
 	    await _converter.ConvertFromHex("04017b0707f0");
-	    var valve2 = await DbContext.ValveState.FirstOrDefaultAsync();
-	    Console.WriteLine(valve2.Toggle);
+	    var valve2 = await DbContext.ValveState.OrderByDescending(v=>v.Id).Select(v => new ValveStateDto() { State = v.Toggle })
+		    .FirstOrDefaultAsync();
+	    Assert.AreEqual(true, valve.State);
+	    Console.WriteLine(valve2.State);
 
-	    Assert.AreEqual(false, valve2.Toggle);
+	    Assert.AreEqual(false, valve2.State);
     }
 
     [TestMethod]

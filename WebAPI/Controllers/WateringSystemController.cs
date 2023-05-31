@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
 
-[Authorize]
+
 [ApiController]
 [Route("watering-system/toggle")]
 public class WateringSystemController:ControllerBase
